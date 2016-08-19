@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/details_linear"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <View
+        android:id="@+id/view"
+        android:background="@android:color/holo_blue_dark"
+        android:layout_width="200dp"
+        android:layout_height="200dp"/>
+
+    <!--<ImageView xmlns:android="http://schemas.android.com/apk/res/android"-->
+        <!--android:layout_width="wrap_content" android:layout_height="wrap_content"-->
+        <!--android:src="@drawable/definit_icon_bs">-->
+
+    <!--</ImageView>-->
+
+</LinearLayout>

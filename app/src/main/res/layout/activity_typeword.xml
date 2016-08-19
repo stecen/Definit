@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    >
+
+    <!--android:background="@android:color/transparent"-->
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:layout_marginBottom="16dp">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+    
+    
+    <LinearLayout android:id="@+id/ll_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/app_bar_layout"
+        android:orientation="horizontal"
+
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginRight="16dp">
+
+
+        <EditText android:id="@+id/word_edit"
+            android:layout_width="0dp"
+            android:layout_weight="9"
+            android:layout_height="wrap_content"
+
+            android:layout_centerVertical="true"
+
+            android:hint="Enter a word..."/>
+
+
+    </LinearLayout>
+
+
+    <RelativeLayout android:id="@+id/relative_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/ll_1"
+
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_marginRight="16dp">
+
+        <ImageView android:id="@+id/record_image_button"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_mic_black_24dp"
+            android:layout_toLeftOf="@+id/paste_image_button"
+
+            android:onClick="recognizeSpeech"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:background="?attr/selectableItemBackgroundBorderless"
+             />
+
+
+
+        <ImageView android:id="@id/paste_image_button"
+
+            android:contentDescription="hi"
+
+            android:layout_toLeftOf="@+id/checkmark_image_button"
+
+            android:src="@drawable/ic_content_paste_black_24dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+
+            android:onClick="pasteIntoEdit"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginLeft="32dp"
+            />
+
+
+
+
+        <ImageView android:id="@id/checkmark_image_button"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_send_black_24dp"
+            android:layout_alignParentRight="true"
+
+            android:onClick="showDefPopup"
+            android:background="?attr/selectableItemBackgroundBorderless"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="32dp"/>
+
+    </RelativeLayout>
+
+
+
+</RelativeLayout>

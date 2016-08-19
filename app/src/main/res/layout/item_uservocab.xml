@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="0dp"
+    android:layout_margin="0dp"
+
+    android:background="?android:attr/selectableItemBackground"
+    android:foreground="?android:attr/selectableItemBackground">
+
+    <TextView android:id="@+id/word_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="0dp"
+
+        android:textColor="#000"
+        android:alpha=".87"
+
+        android:textSize="20sp"/>
+    
+    <TextView android:id="@+id/def1_text"
+        android:layout_below="@id/word_text"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginTop="4dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginBottom="16dp"
+
+        android:alpha=".75"
+
+        />
+
+    <!--<TextView android:id="@+id/def2_text"-->
+        <!--android:layout_below="@id/def1_text"-->
+
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+
+        <!--android:layout_marginTop="4dp"-->
+        <!--android:layout_marginRight="16dp"-->
+        <!--android:layout_marginLeft="16dp"-->
+        <!--android:layout_marginBottom="16dp"-->
+
+        <!--android:alpha=".75"-->
+
+        <!--/>-->
+
+    <!--<TextView android:id="@+id/def3_text"-->
+        <!--android:layout_below="@id/def2_text"-->
+
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+
+        <!--android:layout_marginTop="4dp"-->
+        <!--android:layout_marginLeft="16dp"-->
+        <!--android:layout_marginRight="16dp"-->
+        <!--android:layout_marginBottom="16dp"-->
+
+        <!--android:alpha=".75"-->
+
+        <!--/>-->
+    
+    
+    <View
+        android:id="@+id/filler"
+        android:layout_below="@id/def1_text"
+        android:layout_width="wrap_content"
+        android:layout_height="64dp"/>
+
+</RelativeLayout>

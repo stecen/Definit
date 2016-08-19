@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:focusable="true"
+    android:clickable="true">
+
+
+    <!--alphas-->
+    <!--https://material.google.com/style/color.html#color-text-background-colors-->
+
+    <RelativeLayout
+        android:id="@+id/color_view"
+        android:background="#AAAAAA"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_margin="0dp"
+        android:padding="0dp" >
+
+
+        <TextView android:id="@+id/definition_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="definition"
+
+            android:layout_margin="16dp"
+
+            android:textSize="16sp"
+
+            android:longClickable="false"
+            android:clickable="false"
+
+            android:alpha=".87"/>
+
+        <TextView android:id="@+id/example_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:text="example"
+
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp"
+            android:textSize="16sp"
+
+            android:layout_below="@id/definition_text"
+
+            android:longClickable="false"
+            android:clickable="false"
+
+            android:alpha=".54"/>
+        
+        <TextView
+            android:id="@+id/filler"
+            android:clickable="false"
+            android:longClickable="false"
+            android:text=" "
+            android:layout_marginBottom="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+    </RelativeLayout>
+
+</RelativeLayout>

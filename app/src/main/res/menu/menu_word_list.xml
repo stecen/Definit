@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".WordListActivity">
+    <item android:id="@+id/action_settings" android:title="@string/action_settings"
+        android:orderInCategory="1" app:showAsAction="never" />
+
+    <item android:id="@+id/drop_table" android:title="Drop Table"
+        android:icon="@drawable/ic_delete_sweep_white_24dp"
+        android:orderInCategory="100" app:showAsAction="always"/>
+
+    <item android:id="@+id/add_word" android:title="Add Word"
+        android:icon="@android:drawable/btn_plus"
+        android:orderInCategory="2" android:showAsAction="always"/>
+</menu>
