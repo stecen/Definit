@@ -205,14 +205,15 @@ public class UserVocabActivity extends AppCompatActivity implements RecyclerView
 
         //todo: figure out why this thing still shows up in the backstack
         Intent typeWordIntent = new Intent(getApplicationContext(), TypeWordPopupActivity.class);
-//        typeWordIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK /*| Intent.FLAG_ACTIVITY_NO_HISTORY*/);
+        typeWordIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK /*| Intent.FLAG_ACTIVITY_NO_HISTORY*/);
         typeWordIntent.putExtra(TypeWordPopupActivity.KEY_RECOG_NOW, TypeWordPopupActivity.NO);
-        PendingIntent typeWordPendingIntent = PendingIntent.getActivity(this, 0, typeWordIntent, PendingIntent.FLAG_ONE_SHOT);
+        typeWordIntent.setAction(Long.toString(System.currentTimeMillis()));
+        PendingIntent typeWordPendingIntent = PendingIntent.getActivity(this, 0, typeWordIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 //        Notification.Action stopAction =new Notification.Action(android.R.drawable.arrow_up_float, "Custom", stopPendingIntent);
 
         Intent pasteTypeWordIntent = new Intent(getApplicationContext(), ClipboardInputService.class);
         pasteTypeWordIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP); //todo: revise flags
-        PendingIntent pendingPasteInt = PendingIntent.getService(this, 1, pasteTypeWordIntent, PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pendingPasteInt = PendingIntent.getService(this, 1, pasteTypeWordIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         int pasteIconInt;
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) { // because the background on kitkat notifications is black, use white icons
             pasteIconInt = R.drawable.ic_content_paste_white_24dp;
@@ -223,7 +224,7 @@ public class UserVocabActivity extends AppCompatActivity implements RecyclerView
                 .build();
 
         Intent speechIntent = new Intent(getApplicationContext(), TypeWordPopupActivity.class);
-//        speechIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //todo: revise flags
+        speechIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //todo: revise flags
         speechIntent.putExtra(TypeWordPopupActivity.KEY_RECOG_NOW, TypeWordPopupActivity.YES);
         speechIntent.setFlags(/*Intent.FLAG_ACTIVITY_NEW_TASK | */Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent pendingSpeechIntent = PendingIntent.getActivity(this, 2, speechIntent, PendingIntent.FLAG_UPDATE_CURRENT);

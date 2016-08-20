@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.steven.android.vocabkeepernew.R;
-import com.steven.android.vocabkeepernew.get.PearsonAsyncTask;
 import com.steven.android.vocabkeepernew.input.UserVocabInsertService;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocab;
 import com.steven.android.vocabkeepernew.utility.PearsonAnswer;
@@ -30,7 +29,7 @@ import java.util.HashMap;
 //todo: swirling loading button
 public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHolder> {
     private DisplayDefinitionPopupActivity displayDefinitionPopupActivity;
-    private ArrayList<PearsonAnswer.DefinitionExamples> unsortedDataSet, sortedPearsonDataSet;
+    public ArrayList<PearsonAnswer.DefinitionExamples> unsortedDataSet, sortedPearsonDataSet;
     private RecyclerViewClickListener itemListener;
     private boolean mySelected[] = new boolean[500];
     private String mainWord; // main word, without stem changes
@@ -211,12 +210,13 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
 
 
         String defText = number + form + sortedPearsonDataSet.get(position).definition + part;
-        String htmlDefText = "<strong> " + number + form + "</strong>" + sortedPearsonDataSet.get(position).definition + "<i> " + part + "</i>";
+        boolean isValid = sortedPearsonDataSet.get(position).definition.trim().equals(PearsonAnswer.DEFAULT_NO_DEFINITION);
+        String htmlDefText = "<strong> " + ((!isValid) ? number : "") + form + "</strong>" + sortedPearsonDataSet.get(position).definition + "<i> " + part + "</i>";
 //            Log.e("html", htmlDefText);
 
         holder.definitionText.setText(Html.fromHtml(htmlDefText));
         boolean hasExample = false;
-        if ((sortedPearsonDataSet.get(position).examples.get(0).equals(PearsonAsyncTask.DEFAULT_NO_EXAMPLE))) { // if no example
+        if ((sortedPearsonDataSet.get(position).examples.get(0).equals(PearsonAnswer.DEFAULT_NO_EXAMPLE))) { // if no example
             ViewGroup parent = ((ViewGroup) (holder.exampleText.getParent()));
             if (parent != null) {
                 parent.removeView(holder.exampleText); // remove example text view

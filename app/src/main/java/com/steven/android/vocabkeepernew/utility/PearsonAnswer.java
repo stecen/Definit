@@ -1,15 +1,19 @@
 package com.steven.android.vocabkeepernew.utility;
 
-import com.steven.android.vocabkeepernew.get.DefinitionAsyncTask;
+import com.steven.android.vocabkeepernew.get.glosbe.GlosbeAsyncTask;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 
 /**
  * Created by Steven on 8/3/2016.
  */
 public class PearsonAnswer {
+
+    public final static String DEFAULT_NO_DEFINITION = "No definition found";
+    public final static String DEFAULT_NO_EXAMPLE = "No example found";
+
     public ArrayList<DefinitionExamples> definitionExamplesList;
+
     public String word;
 
     public PearsonAnswer() {
@@ -31,7 +35,7 @@ public class PearsonAnswer {
 
         public DefinitionExamples () {
             partOfSpeech = "---";
-            definition = DefinitionAsyncTask.DEFAULT_NO_DEFINITION;
+            definition = GlosbeAsyncTask.DEFAULT_NO_DEFINITION;
             examples = new ArrayList<>();
             ipa = new ArrayList<>();
         }

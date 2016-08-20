@@ -11,11 +11,11 @@ import java.util.ArrayList;
 /**
  * Created by Steven on 7/16/2016.
  */
-public class DefinitionPackage {
+public class GlosbePackage {
     public String word;
     public ArrayList<String> localDef, onlineDef, examples;
 
-    public DefinitionPackage() {
+    public GlosbePackage() {
         Log.e("y tho", "constructor called");
         // make sure the strings and array lists are nwewed..
 

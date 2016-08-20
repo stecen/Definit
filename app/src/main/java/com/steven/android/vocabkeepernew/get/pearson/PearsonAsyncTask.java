@@ -1,4 +1,4 @@
-package com.steven.android.vocabkeepernew.get;
+package com.steven.android.vocabkeepernew.get.pearson;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -43,13 +43,10 @@ import javax.net.ssl.HttpsURLConnection;
  * */
 
 public class PearsonAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
-    Context ctx;
-    String wordToDefine;
-
     public final static String PEARSON_QUERY = "https://api.pearson.com/v2/dictionaries/ldoce5/entries?apikey=rsGRiugAUCRGAkIGXfAnzkMcBTcuKKtM&headword=";
 
-    public final static String DEFAULT_NO_DEFINITION = "No definition found";
-    public final static String DEFAULT_NO_EXAMPLE = "No example found";
+    Context ctx;
+    String wordToDefine;
 
     public PearsonResponseInterface pearsonResponseInterface = null;
 
@@ -172,10 +169,10 @@ public class PearsonAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
                                         if (definitions.length() > 0) {
                                             definitionExamples.definition = definitions.getString(0);
                                         } else {
-                                            definitionExamples.definition = DEFAULT_NO_DEFINITION;
+                                            definitionExamples.definition = PearsonAnswer.DEFAULT_NO_DEFINITION;
                                         }
                                     } else {
-                                        definitionExamples.definition = DEFAULT_NO_DEFINITION;
+                                        definitionExamples.definition = PearsonAnswer.DEFAULT_NO_DEFINITION;
                                     }
 
                                     if (sense0.has("examples") && !sense0.isNull("examples")) {
@@ -184,27 +181,27 @@ public class PearsonAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
                                             if (examples.getJSONObject(0).has("text") && !examples.getJSONObject(0).isNull("text")) {
                                                 definitionExamples.examples.add(examples.getJSONObject(0).getString("text"));
                                             } else {
-                                                definitionExamples.examples.add(DEFAULT_NO_EXAMPLE);
+                                                definitionExamples.examples.add(PearsonAnswer.DEFAULT_NO_EXAMPLE);
                                             }
                                         } else {
-                                            definitionExamples.examples.add(DEFAULT_NO_EXAMPLE);
+                                            definitionExamples.examples.add(PearsonAnswer.DEFAULT_NO_EXAMPLE);
                                         }
                                     } else {
-                                        definitionExamples.examples.add(DEFAULT_NO_EXAMPLE);
+                                        definitionExamples.examples.add(PearsonAnswer.DEFAULT_NO_EXAMPLE);
                                     }
 
 
                                 } else {
-                                    definitionExamples.wordForm = DEFAULT_NO_DEFINITION;
-                                    definitionExamples.definition = DEFAULT_NO_DEFINITION;
-                                    definitionExamples.examples.add(DEFAULT_NO_EXAMPLE);
+                                    definitionExamples.wordForm = PearsonAnswer.DEFAULT_NO_DEFINITION;
+                                    definitionExamples.definition = PearsonAnswer.DEFAULT_NO_DEFINITION;
+                                    definitionExamples.examples.add(PearsonAnswer.DEFAULT_NO_EXAMPLE);
                                 }
 
                                 pearsonAnswer.definitionExamplesList.add(definitionExamples);
                             } else {
-                                definitionExamples.wordForm = DEFAULT_NO_DEFINITION;
-                                definitionExamples.definition = DEFAULT_NO_DEFINITION;
-                                definitionExamples.examples.add(DEFAULT_NO_EXAMPLE);
+                                definitionExamples.wordForm = PearsonAnswer.DEFAULT_NO_DEFINITION;
+                                definitionExamples.definition = PearsonAnswer.DEFAULT_NO_DEFINITION;
+                                definitionExamples.examples.add(PearsonAnswer.DEFAULT_NO_EXAMPLE);
                                 definitionExamples.partOfSpeech = "---";
 
                                 pearsonAnswer.definitionExamplesList.add(definitionExamples);
@@ -216,18 +213,18 @@ public class PearsonAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
 
                     } else {
                         PearsonAnswer.DefinitionExamples definitionExamples = new PearsonAnswer.DefinitionExamples();
-                        definitionExamples.wordForm = DEFAULT_NO_DEFINITION;
-                        definitionExamples.definition = DEFAULT_NO_DEFINITION;
-                        definitionExamples.examples.add(DEFAULT_NO_EXAMPLE);
+                        definitionExamples.wordForm = PearsonAnswer.DEFAULT_NO_DEFINITION;
+                        definitionExamples.definition = PearsonAnswer.DEFAULT_NO_DEFINITION;
+                        definitionExamples.examples.add(PearsonAnswer.DEFAULT_NO_EXAMPLE);
                         definitionExamples.partOfSpeech = "---";
 
                         pearsonAnswer.definitionExamplesList.add(definitionExamples);
                     }
                 } else {
                     PearsonAnswer.DefinitionExamples definitionExamples = new PearsonAnswer.DefinitionExamples();
-                    definitionExamples.wordForm = DEFAULT_NO_DEFINITION;
-                    definitionExamples.definition = DEFAULT_NO_DEFINITION;
-                    definitionExamples.examples.add(DEFAULT_NO_EXAMPLE);
+                    definitionExamples.wordForm = PearsonAnswer.DEFAULT_NO_DEFINITION;
+                    definitionExamples.definition = PearsonAnswer.DEFAULT_NO_DEFINITION;
+                    definitionExamples.examples.add(PearsonAnswer.DEFAULT_NO_EXAMPLE);
                     definitionExamples.partOfSpeech = "---";
 
                     pearsonAnswer.definitionExamplesList.add(definitionExamples); //same

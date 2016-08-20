@@ -8,6 +8,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.speech.RecognizerIntent;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -24,9 +25,11 @@ import com.steven.android.vocabkeepernew.R;
 import com.steven.android.vocabkeepernew.show.DisplayDefinitionPopupActivity;
 import com.steven.android.vocabkeepernew.showuservocab.UserVocabActivity;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocab;
+import com.steven.android.vocabkeepernew.utility.CallbackAsyncTask;
 
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.logging.LogRecord;
 
 /**
  * Created by Steven on 11/30/2015.
@@ -41,6 +44,7 @@ public class TypeWordPopupActivity extends AppCompatActivity {
     public static final String NO = "no";
 
     boolean isFromSpeech = false; // if isfromspeech, dont show keyboard (since this activity is being used mainly for speech recognition)
+    int countResume = 0;
 
     @Override
     public void onNewIntent (Intent intent) { // from recognize speech action of notification
@@ -48,7 +52,7 @@ public class TypeWordPopupActivity extends AppCompatActivity {
         if (intent != null && intent.hasExtra(KEY_RECOG_NOW)) {
             String shouldSpeech = intent.getStringExtra(KEY_RECOG_NOW);
             Log.e("type", "shouldspeech received " + shouldSpeech);
-            if (shouldSpeech.equals(YES)) {
+            if (shouldSpeech.equals(YES) && ++countResume <= 1) {
                 recognizeSpeech();
                 isFromSpeech = true;
             }
@@ -61,6 +65,12 @@ public class TypeWordPopupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_typeword);
+
+        wordEdit = (EditText)findViewById(R.id.word_edit);
+
+        wordEdit.setFocusable(true);
+        wordEdit.setFocusableInTouchMode(true);
+        wordEdit.requestFocus();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
@@ -83,7 +93,7 @@ public class TypeWordPopupActivity extends AppCompatActivity {
 
         typeWordPopupActivity = this;
 
-        wordEdit = (EditText)findViewById(R.id.word_edit);
+
 
         //region enter listener
 //        if (edittext != null) {
@@ -114,10 +124,9 @@ public class TypeWordPopupActivity extends AppCompatActivity {
 //        }
 
 
-        if (isFromSpeech) {
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.showSoftInput(wordEdit, InputMethodManager.SHOW_IMPLICIT);
-        }
+//        if (!isFromSpeech) {
+            showKeyboardAndHighlight();
+//        }
 
 
 //        showKeyboard(wordEdit, this);
@@ -137,6 +146,26 @@ public class TypeWordPopupActivity extends AppCompatActivity {
 ////        dialog.show();
 
 
+    }
+
+
+    public void showKeyboardAndHighlight() {
+//        Toast.makeText(this, "wtfffffffffffffffffffffff", Toast.LENGTH_SHORT).show();
+
+//        for (int i = 0; i < 1000;i ++) {
+            wordEdit.requestFocus();
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(wordEdit, InputMethodManager.SHOW_IMPLICIT);
+//        }
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(wordEdit, InputMethodManager.SHOW_IMPLICIT);
+            }
+        }, 50);
     }
 
     // Add the word into the database--take from the input text
@@ -202,7 +231,9 @@ public class TypeWordPopupActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
-        Log.e("speech", "onResume");
+        Log.e("speech", "onResume" + isFromSpeech);
+
+        showKeyboardAndHighlight();
 
 //        if (!DisplayDefinitionPopupActivity.shouldShowPreviousTypeWordPopup) {
 //            DisplayDefinitionPopupActivity.shouldShowPreviousTypeWordPopup = true;
@@ -211,15 +242,15 @@ public class TypeWordPopupActivity extends AppCompatActivity {
 
             //get keyboard
 
-//
+////
 //            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 //            inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-//
-//            inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+////
+////            inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+//        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//        imm.showSoftInput(wordEdit, InputMethodManager.SHOW_FORCED);
+        if (!isFromSpeech) {
 
-        if (isFromSpeech) {
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.showSoftInput(wordEdit, InputMethodManager.SHOW_IMPLICIT);
         }
 
 //        }
@@ -255,10 +286,11 @@ public class TypeWordPopupActivity extends AppCompatActivity {
         Log.e("speech", "pausing");
 
         //hide keyboard
-        if (isFromSpeech) {
+//        if (isFromSpeech) {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(wordEdit.getWindowToken(), 0);
-        }
+//        }
+        isFromSpeech = false;
         super.onPause();
     }
 

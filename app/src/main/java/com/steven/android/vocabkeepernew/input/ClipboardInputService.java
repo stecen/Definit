@@ -29,7 +29,7 @@ public class ClipboardInputService extends IntentService {
 
                 Intent popupIntent = new Intent(ClipboardInputService.this, DisplayDefinitionPopupActivity.class);
                 popupIntent.putExtra(DisplayDefinitionPopupActivity.SENT_WORD, word);
-                popupIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                popupIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(popupIntent);
 
                 Intent it = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS); // close notification panels

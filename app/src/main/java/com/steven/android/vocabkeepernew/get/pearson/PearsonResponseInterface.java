@@ -1,4 +1,4 @@
-package com.steven.android.vocabkeepernew.get;
+package com.steven.android.vocabkeepernew.get.pearson;
 
 import com.steven.android.vocabkeepernew.utility.PearsonAnswer;
 

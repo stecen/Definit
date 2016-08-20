@@ -1,9 +1,5 @@
 package com.steven.android.vocabkeepernew.utility;
 
-import android.util.Log;
-
-import com.steven.android.vocabkeepernew.get.PearsonAsyncTask;
-
 import java.util.Comparator;
 
 /**
@@ -29,8 +25,8 @@ public class PearsonComparator implements Comparator<PearsonAnswer.DefinitionExa
             return 1;
         }
         if (e1 && e2) {
-            boolean h1 = (de1.examples.get(0).equals(PearsonAsyncTask.DEFAULT_NO_EXAMPLE));
-            boolean h2 = (de2.examples.get(0).equals(PearsonAsyncTask.DEFAULT_NO_EXAMPLE));
+            boolean h1 = (de1.examples.get(0).equals(PearsonAnswer.DEFAULT_NO_EXAMPLE));
+            boolean h2 = (de2.examples.get(0).equals(PearsonAnswer.DEFAULT_NO_EXAMPLE));
 
             if (h1 && !h2) {
                 return -1;

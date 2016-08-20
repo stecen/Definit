@@ -13,7 +13,7 @@ import android.database.sqlite.SQLiteQuery;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.steven.android.vocabkeepernew.utility.DefinitionPackage;
+import com.steven.android.vocabkeepernew.utility.GlosbePackage;
 import com.steven.android.vocabkeepernew.show.DisplayDefinitionPopupActivity;
 import com.steven.android.vocabkeepernew.get.sqlite.DictionaryDatabaseHelper;
 
@@ -98,7 +98,7 @@ public class VocabService extends IntentService {
                 Log.d("lol", "You pressed it and have pasted \"" + textToDefine + "\"");
 
 //                String d1 = VocabService.getDefinition(textToDefine.replace("\\", "").trim(), this); // it gets trimmed later but why not
-                DefinitionPackage defPackage = getDefinition(textToDefine.replace("\\", "").trim(), this);
+                GlosbePackage defPackage = getDefinition(textToDefine.replace("\\", "").trim(), this);
 
                 //insertIntoDatabase(textToDefine, d1); // todo : reneable database entry
 
@@ -118,7 +118,7 @@ public class VocabService extends IntentService {
             String textToDefine = intent.getStringExtra(SENT_WORD);
 //            String d1 = VocabService.getDefinition(textToDefine.replace("\\", "").trim(), this); // todo: get from sent...it gets trimmed later but why not
 
-            DefinitionPackage defPackage = getDefinition(textToDefine.replace("\\", "").trim(), this);
+            GlosbePackage defPackage = getDefinition(textToDefine.replace("\\", "").trim(), this);
 //            insertIntoDatabase(textToDefine, d1);
 
             if (popup) {
@@ -129,7 +129,7 @@ public class VocabService extends IntentService {
 
     }
 
-    private void createPopup(DefinitionPackage defPackage) {
+    private void createPopup(GlosbePackage defPackage) {
         Intent disDefIntent = new Intent(getApplicationContext(), DisplayDefinitionPopupActivity.class);
         disDefIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_HISTORY);
 
@@ -173,11 +173,11 @@ public class VocabService extends IntentService {
     }
 
     // todo: return not a string, but a collection of words and definitions and examples
-    public DefinitionPackage getDefinition(String wordText, Context context) {
+    public GlosbePackage getDefinition(String wordText, Context context) {
         String localDefinition = getDefinitionLocal(wordText, context);
         String onlineDefinition = getDefinitionOnline(wordText); //todo: dont leak databases
 
-        DefinitionPackage returnPackage = new DefinitionPackage();
+        GlosbePackage returnPackage = new GlosbePackage();
         if (returnPackage != null) {
             Log.e("rekt", "i am not null");
 

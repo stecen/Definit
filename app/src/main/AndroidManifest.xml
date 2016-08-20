@@ -34,24 +34,28 @@
         <activity android:name=".input.TypeWordPopupActivity"
             android:label="Define word"
 
-            android:taskAffinity=""
+        android:taskAffinity=""
 
 
-            android:launchMode="singleTask"
+        android:launchMode="singleTask"
             android:theme="@style/TypeDialogTheme"
             android:windowSoftInputMode="stateVisible"
               />
+
+        <!--android:noHistory="true"-->
         <!--android:excludeFromRecents="true"-->
         <!--http://stackoverflow.com/questions/3282204/android-open-dialogue-activity-without-opening-main-activity-behind-it-->
 
 
 
-        <!--android:noHistory="true"-->
+
 
         <activity android:name=".show.DisplayDefinitionPopupActivity"
             android:theme="@style/VocabDialogTheme"
             android:label="Definition"
             android:configChanges="orientation|keyboardHidden|screenSize"
+
+
             android:noHistory="true"
             android:excludeFromRecents="true"
 
@@ -59,6 +63,14 @@
             android:windowSoftInputMode="stateHidden"
 
             />
+
+        <!--android:launchMode="singleTask"-->
+        <!--android:taskAffinity=""-->
+
+        <!--android:noHistory="true"-->
+        <!--android:excludeFromRecents="true"-->
+
+
         <!--android:noHistory="true"-->
         <!--android:taskAffinity=""-->
     <!--             http://stackoverflow.com/questions/1979369/android-activity-as-a-dialog-->
