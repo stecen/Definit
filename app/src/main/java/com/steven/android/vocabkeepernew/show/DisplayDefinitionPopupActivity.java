@@ -196,7 +196,7 @@ public class DisplayDefinitionPopupActivity extends AppCompatActivity implements
         selectedCount = 0;
 
 //        fab.requestLayout();
-        fab.setVisibility(View.GONE);
+        fab.setVisibility(View.INVISIBLE);
 
 ////        // Hide keyboard
 //        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
@@ -577,7 +577,46 @@ public class DisplayDefinitionPopupActivity extends AppCompatActivity implements
     public void afterPearsonDefine(PearsonAnswer pearsonAnswer) {
         pA = pearsonAnswer;
 
-        recyclerAdapter = new PearsonAdapter(this, pearsonAnswer.definitionExamplesList, this, pearsonAnswer.word);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //todo FUCK
+
+
+
+
+
+
+
+
+
+
+
+//        recyclerAdapter = new PearsonAdapter(this, pearsonAnswer.definitionExamplesList, this, pearsonAnswer.word);
         defExRecycler.setAdapter(recyclerAdapter);
 
         //region idk

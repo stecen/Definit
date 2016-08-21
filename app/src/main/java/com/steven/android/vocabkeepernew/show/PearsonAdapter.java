@@ -28,7 +28,7 @@ import java.util.HashMap;
  */ //todo: animation for adding elements
 //todo: swirling loading button
 public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHolder> {
-    private DisplayDefinitionPopupActivity displayDefinitionPopupActivity;
+    private SearchAndShow searchAndShowActivity;
     public ArrayList<PearsonAnswer.DefinitionExamples> unsortedDataSet, sortedPearsonDataSet;
     private RecyclerViewClickListener itemListener;
     private boolean mySelected[] = new boolean[500];
@@ -37,8 +37,8 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
     public boolean surpressGray; // when finishing activiting only.
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public PearsonAdapter(DisplayDefinitionPopupActivity displayDefinitionPopupActivity, ArrayList<PearsonAnswer.DefinitionExamples> myDataset, RecyclerViewClickListener listener, String word) {
-        this.displayDefinitionPopupActivity = displayDefinitionPopupActivity;
+    public PearsonAdapter(SearchAndShow searchAndShow, ArrayList<PearsonAnswer.DefinitionExamples> myDataset, RecyclerViewClickListener listener, String word) {
+        this.searchAndShowActivity = searchAndShow;
         unsortedDataSet = myDataset;
 
         Log.e("pearson constructor", unsortedDataSet.size() + "  vs " + myDataset.size());
@@ -91,6 +91,11 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
 //            dataSet.add(position, item);
 //            notifyItemInserted(position);
 //        }
+
+    public void clearAll() { // for when the user requests and new definition
+        sortedPearsonDataSet = new ArrayList<>();
+        notifyDataSetChanged();
+    }
 
     public void remove(PearsonAnswer.DefinitionExamples item) {
         int position = sortedPearsonDataSet.indexOf(item);
@@ -149,10 +154,10 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
         if (listToSend.isEmpty()) {
             Log.e("wat", "listToSend is empty");
         } else {
-            Intent insertIntent = new Intent(displayDefinitionPopupActivity.getApplicationContext(), UserVocabInsertService.class);
+            Intent insertIntent = new Intent(searchAndShowActivity.getApplicationContext(), UserVocabInsertService.class);
             Log.e("listToSend", (new Gson()).toJson(listToSend));
             insertIntent.putExtra(UserVocabInsertService.JSON_KEY, (new Gson()).toJson(listToSend));
-            displayDefinitionPopupActivity.startService(insertIntent);
+            searchAndShowActivity.startService(insertIntent);
         }
 
     }
@@ -162,7 +167,7 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
                 Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f);
         translateAnimation.setDuration(DisplayDefinitionPopupActivity.REMOVE_DURATION + 50);
 
-        View rootView = (displayDefinitionPopupActivity.defExRecycler.getLayoutManager().findViewByPosition(idx));
+        View rootView = (searchAndShowActivity.defExRecycler.getLayoutManager().findViewByPosition(idx));
         if (rootView != null) {
             TextView defText = (TextView) rootView.findViewById(R.id.definition_text);
             defText.startAnimation(translateAnimation);
@@ -240,7 +245,7 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
 //            });
 
         if (position == 0) { // add space above because of send button
-            ViewUtility.setMargins(16f, 36f, 16f, (hasExample) ? 16f : 16f, holder.definitionText, displayDefinitionPopupActivity.getApplicationContext());
+            ViewUtility.setMargins(16f, 36f, 16f, (hasExample) ? 16f : 16f, holder.definitionText, searchAndShowActivity.getApplicationContext());
         }
 
         if (sortedPearsonDataSet.get(position).wordForm.trim().equals(mainWord)) { // if they are perfect matches, add more botttom margin
@@ -257,10 +262,10 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
             Log.e("color", "setting " + Integer.toString(pos) + " pressed");
             holder.colorView.setBackgroundColor(Color.parseColor(DisplayDefinitionPopupActivity.COLOR_PRESSED));
 
-            if (displayDefinitionPopupActivity.doChangeFont) {
-                holder.definitionText.setTextSize(displayDefinitionPopupActivity.SMALL_FONT);
+            if (searchAndShowActivity.doChangeFont) {
+                holder.definitionText.setTextSize(searchAndShowActivity.SMALL_FONT);
                 if (holder.exampleText != null) {
-                    holder.exampleText.setTextSize(displayDefinitionPopupActivity.SMALL_FONT);
+                    holder.exampleText.setTextSize(searchAndShowActivity.SMALL_FONT);
                 }
             }
 
@@ -268,10 +273,10 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
             holder.colorView.setBackgroundColor(Color.parseColor(DisplayDefinitionPopupActivity.COLOR_NEUTRAL));
             Log.e("color", "setting " + Integer.toString(pos) + " neutral");
 
-            if (displayDefinitionPopupActivity.doChangeFont) {
-                holder.definitionText.setTextSize(displayDefinitionPopupActivity.BIG_FONT);
+            if (searchAndShowActivity.doChangeFont) {
+                holder.definitionText.setTextSize(searchAndShowActivity.BIG_FONT);
                 if (holder.exampleText != null) {
-                    holder.exampleText.setTextSize(displayDefinitionPopupActivity.BIG_FONT);
+                    holder.exampleText.setTextSize(searchAndShowActivity.BIG_FONT);
                 }
             }
         }

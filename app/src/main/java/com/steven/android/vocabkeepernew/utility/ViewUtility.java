@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.os.Build;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.widget.RelativeLayout;
@@ -20,9 +21,14 @@ public class ViewUtility {
         // previously invisible view
         final View myView = view;
 
+//        myView.setVisibility(View.VISIBLE);
+
+        Log.e("fab", "showing");
 
         // create the animator for this view (the start radius is zero)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+            myView.setVisibility(View.VISIBLE);
 
             // get the center for the clipping circle
             int cx = myView.getMeasuredWidth() / 2;
@@ -35,10 +41,10 @@ public class ViewUtility {
 
             anim.setDuration(CIRCLE_ANIM_DURATION);
 
-            myView.setVisibility(View.VISIBLE);
+
             anim.start();
         } else {
-            // make the view visible and start the animation
+        //    // make the view visible and start the animation
             myView.setVisibility(View.VISIBLE);
         }
     }
@@ -46,6 +52,8 @@ public class ViewUtility {
     public static void circleExit(View view) {
         // previously visible view
         final View myView = view;
+
+        Log.e("fab", "hiding");
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 

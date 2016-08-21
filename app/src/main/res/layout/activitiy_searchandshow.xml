@@ -51,6 +51,7 @@
                     android:layout_height="match_parent">
 
                     <ImageView
+                        android:id="@+id/nav_image"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_arrow_back_white_24dp"
@@ -104,7 +105,7 @@
             <android.support.v7.widget.RecyclerView android:id="@+id/definition_example_recycler"
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
-                android:background="#DFDFDF"
+
 
                 android:alpha="1"
 
@@ -113,7 +114,7 @@
 
                 android:layout_marginTop="112dp"
                 />
-
+            <!--android:background="#DFDFDF"-->
 
             <!--<ProgressBar-->
             <!--style="@style/Widget.AppCompat.ProgressBar"-->
@@ -125,24 +126,25 @@
 
         </LinearLayout>
 
-        <!--<android.support.design.widget.FloatingActionButton-->
-            <!--android:id="@+id/fab"-->
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
 
-            <!--android:alpha="1"-->
-
-
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="match_parent"-->
+            android:alpha="1"
 
 
-            <!--app:layout_anchor="@id/view_1"-->
-            <!--app:layout_anchorGravity="bottom|end"-->
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:visibility="visible"
 
-            <!--android:onClick="sendToDatabase"-->
+
+            app:layout_anchor="@id/view_1"
+            app:layout_anchorGravity="bottom|end"
+
+            android:onClick="sendToDatabase"
 
 
-            <!--android:layout_margin="@dimen/fab_margin"-->
-            <!--android:src="@drawable/ic_send_white_24dp" />-->
+            android:layout_margin="@dimen/fab_margin"
+            android:src="@drawable/ic_send_white_24dp" />
 
 
         <!--android:layout_gravity="bottom|end"-->
