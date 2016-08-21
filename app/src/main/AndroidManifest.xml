@@ -121,6 +121,7 @@
 
         <activity android:name=".input.RelaySpeechActivity"
             android:launchMode="singleInstance"
+            android:label="Speech"
             android:taskAffinity=""
             android:excludeFromRecents="true"
         android:theme="@style/Theme.Transparent"

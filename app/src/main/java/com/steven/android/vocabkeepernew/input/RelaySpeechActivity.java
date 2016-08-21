@@ -5,6 +5,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -17,7 +18,7 @@ import java.util.Locale;
 /**
  * Created by Steven on 8/21/2016.
  */
-public class RelaySpeechActivity extends Activity {
+public class RelaySpeechActivity extends ActionBarActivity {
     public final static int REQ_CODE_SPEECH_INPUT = 92;
 
     @Override
