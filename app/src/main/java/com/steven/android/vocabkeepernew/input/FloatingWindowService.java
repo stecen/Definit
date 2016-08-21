@@ -19,7 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.steven.android.vocabkeepernew.R;
-import com.steven.android.vocabkeepernew.show.DisplayDefinitionPopupActivity;
+import com.steven.android.vocabkeepernew.show.SearchAndShowActivity;
 import com.steven.android.vocabkeepernew.utility.ViewUtility;
 
 /**
@@ -89,8 +89,8 @@ public class FloatingWindowService extends Service {
             public void onClick(View view) {
                 isKilled = true;
 //                super.onClick(view);
-                Intent displayDefIntent = new Intent(getApplicationContext(), DisplayDefinitionPopupActivity.class);
-                displayDefIntent.putExtra(DisplayDefinitionPopupActivity.SENT_WORD, word);
+                Intent displayDefIntent = new Intent(getApplicationContext(), SearchAndShowActivity.class);
+                displayDefIntent.putExtra(SearchAndShowActivity.SENT_WORD, word);
                 displayDefIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(displayDefIntent);
 

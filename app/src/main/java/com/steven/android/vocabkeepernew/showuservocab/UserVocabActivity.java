@@ -27,10 +27,10 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.steven.android.vocabkeepernew.R;
 import com.steven.android.vocabkeepernew.get.sqlite.DictionaryDatabaseHelper;
-import com.steven.android.vocabkeepernew.input.ClipboardInputService;
 import com.steven.android.vocabkeepernew.input.ClipboardWatcherService;
-import com.steven.android.vocabkeepernew.input.TypeWordPopupActivity;
+import com.steven.android.vocabkeepernew.input.RelaySpeechActivity;
 import com.steven.android.vocabkeepernew.show.RecyclerViewClickListener;
+import com.steven.android.vocabkeepernew.show.SearchAndShowActivity;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocab;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocabHelper;
 import com.steven.android.vocabkeepernew.utility.DividerItemDecoration;
@@ -204,28 +204,28 @@ public class UserVocabActivity extends AppCompatActivity implements RecyclerView
 //        Notification.Action stopAction =new Notification.Action(android.R.drawable.ic_media_pause, "Stop", stopPendingIntent);
 
         //todo: figure out why this thing still shows up in the backstack
-        Intent typeWordIntent = new Intent(getApplicationContext(), TypeWordPopupActivity.class);
+        Intent typeWordIntent = new Intent(getApplicationContext(), SearchAndShowActivity.class);
         typeWordIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK /*| Intent.FLAG_ACTIVITY_NO_HISTORY*/);
-        typeWordIntent.putExtra(TypeWordPopupActivity.KEY_RECOG_NOW, TypeWordPopupActivity.NO);
-        typeWordIntent.setAction(Long.toString(System.currentTimeMillis()));
+//        typeWordIntent.putExtra(TypeWordPopupActivity.KEY_RECOG_NOW, TypeWordPopupActivity.NO);
+//        typeWordIntent.setAction(Long.toString(System.currentTimeMillis())); // for keeping extras
         PendingIntent typeWordPendingIntent = PendingIntent.getActivity(this, 0, typeWordIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 //        Notification.Action stopAction =new Notification.Action(android.R.drawable.arrow_up_float, "Custom", stopPendingIntent);
 
-        Intent pasteTypeWordIntent = new Intent(getApplicationContext(), ClipboardInputService.class);
-        pasteTypeWordIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP); //todo: revise flags
-        PendingIntent pendingPasteInt = PendingIntent.getService(this, 1, pasteTypeWordIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        int pasteIconInt;
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) { // because the background on kitkat notifications is black, use white icons
-            pasteIconInt = R.drawable.ic_content_paste_white_24dp;
-        } else {
-            pasteIconInt = R.drawable.ic_content_paste_black_24dp;
-        }
-        NotificationCompat.Action pasteAction = new NotificationCompat.Action.Builder(pasteIconInt, "Pasteboard", pendingPasteInt)
-                .build();
+//        Intent pasteTypeWordIntent = new Intent(getApplicationContext(), ClipboardInputService.class);
+//        pasteTypeWordIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP); //todo: revise flags
+//        PendingIntent pendingPasteInt = PendingIntent.getService(this, 1, pasteTypeWordIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        int pasteIconInt;
+//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) { // because the background on kitkat notifications is black, use white icons
+//            pasteIconInt = R.drawable.ic_content_paste_white_24dp;
+//        } else {
+//            pasteIconInt = R.drawable.ic_content_paste_black_24dp;
+//        }
+//        NotificationCompat.Action pasteAction = new NotificationCompat.Action.Builder(pasteIconInt, "Pasteboard", pendingPasteInt)
+//                .build();
 
-        Intent speechIntent = new Intent(getApplicationContext(), TypeWordPopupActivity.class);
+        Intent speechIntent = new Intent(getApplicationContext(), RelaySpeechActivity.class);
         speechIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //todo: revise flags
-        speechIntent.putExtra(TypeWordPopupActivity.KEY_RECOG_NOW, TypeWordPopupActivity.YES);
+//        speechIntent.putExtra(SearchAndShowActivity.KEY_RECOG_NOW, true);
         speechIntent.setFlags(/*Intent.FLAG_ACTIVITY_NEW_TASK | */Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent pendingSpeechIntent = PendingIntent.getActivity(this, 2, speechIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         int speechIconInt;
@@ -243,7 +243,7 @@ public class UserVocabActivity extends AppCompatActivity implements RecyclerView
                 .setContentTitle("Define a word")
                 .setSubText("Definit")
                 .setAutoCancel(false)
-                .addAction(pasteAction)
+//                .addAction(pasteAction)
                 .addAction(speechAction)
 //                .addAction(android.R.drawable.arrow_up_float, "Custom", typeWordPendingIntent) // use stop action
                 .setContentIntent(typeWordPendingIntent) // use add pending intent

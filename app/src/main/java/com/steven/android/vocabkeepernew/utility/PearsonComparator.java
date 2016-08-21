@@ -18,21 +18,21 @@ public class PearsonComparator implements Comparator<PearsonAnswer.DefinitionExa
         // sort by distance, but for the ones with the same text as mainWord, prioritize the ones with examples
         boolean e1 = de1.wordForm.trim().toLowerCase().equals(mainWord);
         boolean e2 = de2.wordForm.trim().toLowerCase().equals(mainWord);
-        if (e1 && !e2) {
+        if (e1 && !e2) { // one of them is the same as the mainword only
             return -1;
         }
-        if (!e1 && e2) {
+        if (!e1 && e2) { // one of them is the same as the mainword only
             return 1;
         }
-        if (e1 && e2) {
-            boolean h1 = (de1.examples.get(0).equals(PearsonAnswer.DEFAULT_NO_EXAMPLE));
+        if (e1 && e2) { // both are mainword
+            boolean h1 = (de1.examples.get(0).equals(PearsonAnswer.DEFAULT_NO_EXAMPLE)); // lol I should have done the opposite...
             boolean h2 = (de2.examples.get(0).equals(PearsonAnswer.DEFAULT_NO_EXAMPLE));
 
             if (h1 && !h2) {
-                return -1;
+                return 1;
             }
             if (h2 && !h1) {
-                return 1;
+                return -1;
             }
 
             return 0;

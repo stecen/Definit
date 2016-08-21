@@ -86,7 +86,7 @@
 
                         app:searchIcon="@null"
 
-                        android:layout_marginBottom="12dp"
+                        android:layout_marginBottom="0dp"
 
                         android:textSize="24dp"
                         android:layout_marginLeft="0dp"
@@ -173,16 +173,16 @@
             android:layout_height="match_parent"
             android:visibility="visible"
 
+        android:layout_gravity="bottom|end"
 
-            app:layout_anchor="@id/coordinator_layout"
-            app:layout_anchorGravity="bottom|right"
 
             android:onClick="sendToDatabase"
 
 
             android:layout_margin="@dimen/fab_margin"
             android:src="@drawable/ic_send_white_24dp" />
-
+        <!--app:layout_anchor="@id/definition_example_recycler"-->
+        <!--app:layout_anchorGravity="bottom|right"-->
 
         <!--android:layout_gravity="bottom|end"-->
 

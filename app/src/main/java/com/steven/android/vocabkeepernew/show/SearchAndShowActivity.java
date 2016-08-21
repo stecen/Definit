@@ -59,7 +59,7 @@ import jp.wasabeef.recyclerview.animators.FadeInRightAnimator;
 /**
  * Created by Steven on 8/20/2016.
  */
-public class SearchAndShow extends AppCompatActivity implements PearsonResponseInterface, GlosbeResponseInterface, RecyclerViewClickListener {
+public class SearchAndShowActivity extends AppCompatActivity implements PearsonResponseInterface, GlosbeResponseInterface, RecyclerViewClickListener {
 
     SearchView searchView;
     Intent comingIntent;
@@ -86,6 +86,8 @@ public class SearchAndShow extends AppCompatActivity implements PearsonResponseI
     public static final String SENT_WORD = "sent_word";
     //    public static final String SENT_DEF = "send_def";
     public static final String SENT_PACKAGE_JSON = "send_package_json";
+//    public static final String KEY_RECOG_NOW = "recognow";
+    public final static int REQ_CODE_SPEECH_INPUT = 92;
 
     private static final String PEARSON_JSON = "pearson_json";
 
@@ -153,27 +155,12 @@ public class SearchAndShow extends AppCompatActivity implements PearsonResponseI
         frameLinear.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         ViewUtility.setMarginsLinear(0f, 0f, 0f, 0f, frameLinear, getApplicationContext());
         frameLinear.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-//
-
-
-
-
-
-        comingIntent = getIntent();
-        Log.e("coming", "" + (comingIntent != null));
-        if (comingIntent != null && comingIntent.getAction().equals(Intent.ACTION_SEARCH)) {
-            String query = comingIntent.getStringExtra(SearchManager.QUERY);
-
-            getDefinition(query);
-
-            // hide keyboard
-        }
-        //endregion search
 
 
         //todo: change to include other things like multiple definitions, context, examples, other reminders, gifs
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setVisibility(View.GONE);
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
         defExRecycler = (RecyclerView) findViewById(R.id.definition_example_recycler);
         makeSpaceView = (View) findViewById(R.id.make_space_view);
@@ -238,7 +225,7 @@ public class SearchAndShow extends AppCompatActivity implements PearsonResponseI
 
 
         DisplayMetrics metrics = new DisplayMetrics();
-        SearchAndShow.this.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+        SearchAndShowActivity.this.getWindowManager().getDefaultDisplay().getMetrics(metrics);
 
         for (int i = 0; i < 500; i++) {
             selected[i] = false;
@@ -247,7 +234,28 @@ public class SearchAndShow extends AppCompatActivity implements PearsonResponseI
         selectedCount = 0;
 
 
-        fab.setVisibility(View.GONE);
+
+
+
+
+        comingIntent = getIntent();
+        Log.e("coming", "" + (comingIntent != null));
+        if (comingIntent != null && comingIntent.getAction() != null && comingIntent.getAction().equals(Intent.ACTION_SEARCH)) {
+            String query = comingIntent.getStringExtra(SearchManager.QUERY);
+
+            getDefinition(query);
+
+            // hide keyboard
+        } else if (comingIntent != null && comingIntent.hasExtra(SENT_WORD)) { //  manually sent from places
+            String query = comingIntent.getStringExtra(SENT_WORD).trim();
+            getDefinition(query);
+        } /*else if (comingIntent != null && comingIntent.hasExtra(KEY_RECOG_NOW)) {
+            recognizeSpeech();
+            // recognize speech
+        }*/
+        //endregion search
+
+
 
 
 ////        // Hide keyboard
@@ -266,7 +274,7 @@ public class SearchAndShow extends AppCompatActivity implements PearsonResponseI
 
     public void onNewIntent(Intent intent) {
         Log.e("coming", "onNewIntent");
-        if (intent.getAction().equals(Intent.ACTION_SEARCH)) {
+        if (intent.getAction() != null && intent.getAction().equals(Intent.ACTION_SEARCH)) {
             //hide keyboard
 
             String query = intent.getStringExtra(SearchManager.QUERY);
@@ -295,8 +303,42 @@ public class SearchAndShow extends AppCompatActivity implements PearsonResponseI
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
 
-        }
+        } else if (intent.hasExtra(SENT_WORD)) {
+            // wow
+            String word = intent.getStringExtra(SENT_WORD).trim();
+
+            Log.e("searchandshow", "wow u sent " + word);
+
+            if (lastWord == null || !lastWord.equals(word)) { // if not defining the same word
+
+                progressBar.setVisibility(View.VISIBLE); // clear the progress bar
+
+                recyclerAdapter.clearAll(); // clear the list
+                for (int i = 0; i < 500; i++) { // clear selections
+                    selected[i] = false;
+                    truthSelect(i, false);
+                    selectedCount = 0;
+                }
+
+
+                getDefinition(word);
+
+                lastWord = word;
+            }
+
+            //hide keyboard
+            View view = this.getCurrentFocus();
+            if (view != null) {
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
+        } /*else if (intent.hasExtra(KEY_RECOG_NOW)) {
+            recognizeSpeech();
+        }*/
     }
+
+
+
 
     public void setFrameHeight() {
 
@@ -341,7 +383,7 @@ public class SearchAndShow extends AppCompatActivity implements PearsonResponseI
         Log.e("searchomg", query);
         searchView.setQuery(query,false);
 
-        defExRecycler.invalidateItemDecorations();
+//        defExRecycler.invalidateItemDecorations(); //todo why is this null when oncreate is already called
 
 //        final Handler handler1 = new Handler();
 //        handler1.postDelayed(new Runnable() {
@@ -358,6 +400,22 @@ public class SearchAndShow extends AppCompatActivity implements PearsonResponseI
 
         pearsonAsyncTask = new PearsonAsyncTask(this, query, this);
         pearsonAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+        final SearchAndShowActivity searchAndShowActivity = this;
+
+        //hide keyboard again///////////// well thats annoying
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                View view = searchAndShowActivity.getCurrentFocus();
+                if (view != null) {
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
+            }
+        }, 50);
+
     }
 
 
@@ -629,6 +687,19 @@ public class SearchAndShow extends AppCompatActivity implements PearsonResponseI
         ArrayList<PearsonAnswer> list = new ArrayList<>();
         list.add(pearsonAnswer);
         addPearsonList(list.get(0).definitionExamplesList, true); // set false when there is no definition
+
+        final SearchAndShowActivity searchAndShowActivity = this; // hide keyboard -_-
+//        final Handler handler = new Handler();
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+                View view = searchAndShowActivity.getCurrentFocus();
+                if (view != null) {
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
+//            }
+//        }, 50);
     }
 
     // Set the pearson definitions through the listviews
@@ -671,6 +742,22 @@ public class SearchAndShow extends AppCompatActivity implements PearsonResponseI
 //            @Override
 //            public void waitCallback() {
 //                Log.e("callback", "GRASS MUD HORSE");
+
+            //hide keyboard again///////////// well thats annoying
+            final SearchAndShowActivity searchAndShowActivity = this;
+//            final Handler handler = new Handler();
+//            handler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+                    View view = searchAndShowActivity.getCurrentFocus();
+                    if (view != null) {
+                        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    }
+//                }
+//            }, 50);
+
+
             progressBar.setVisibility(View.INVISIBLE);
             //            }
             //        })).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);

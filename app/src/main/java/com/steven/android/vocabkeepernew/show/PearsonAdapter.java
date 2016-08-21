@@ -28,7 +28,7 @@ import java.util.HashMap;
  */ //todo: animation for adding elements
 //todo: swirling loading button
 public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHolder> {
-    private SearchAndShow searchAndShowActivity;
+    private SearchAndShowActivity searchAndShowActivity;
     public ArrayList<PearsonAnswer.DefinitionExamples> unsortedDataSet, sortedPearsonDataSet;
     private RecyclerViewClickListener itemListener;
     private boolean mySelected[] = new boolean[500];
@@ -39,8 +39,8 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
     public int contextIdx = -1;
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public PearsonAdapter(SearchAndShow searchAndShow, ArrayList<PearsonAnswer.DefinitionExamples> myDataset, RecyclerViewClickListener listener, String word) {
-        this.searchAndShowActivity = searchAndShow;
+    public PearsonAdapter(SearchAndShowActivity searchAndShowActivity, ArrayList<PearsonAnswer.DefinitionExamples> myDataset, RecyclerViewClickListener listener, String word) {
+        this.searchAndShowActivity = searchAndShowActivity;
         unsortedDataSet = myDataset;
 
         Log.e("pearson constructor", unsortedDataSet.size() + "  vs " + myDataset.size());
@@ -259,9 +259,9 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
 //                }
 //            });
 
-//        if (position == 0 || position == searchAndShowActivity.lastIdx) { // add space above because of send button
-//            ViewUtility.setMarginsRelative(16f, 36f, 16f, (hasExample) ? 16f : 16f, holder.definitionText, searchAndShowActivity.getApplicationContext());
-//        } else if (position == searchAndShowActivity.lastIdx) { // if it's the last one, add filler below to allow FAB to not obscure any text
+        if (position == 0/* || position == searchAndShowActivity.lastIdx*/) { // add space above because of send button
+            ViewUtility.setMarginsRelative(16f, 40f, 16f, (hasExample) ? 16f : 16f, holder.definitionText, searchAndShowActivity.getApplicationContext());
+        } // else if (position == searchAndShowActivity.lastIdx) { // if it's the last one, add filler below to allow FAB to not obscure any text
 ////            Log.e("position", position + " last one vs " + searchAndShowActivity.lastIdx);
 ////            if (!(sortedPearsonDataSet.get(position).examples.size() == 0 ||
 ////                    (sortedPearsonDataSet.get(position).examples.get(0).equals(PearsonAnswer.DEFAULT_NO_EXAMPLE)))) {
