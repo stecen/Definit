@@ -36,7 +36,6 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.steven.android.vocabkeepernew.get.glosbe.GlosbeAsyncTask;
-import com.steven.android.vocabkeepernew.utility.GlosbePackage;
 import com.steven.android.vocabkeepernew.utility.DividerItemDecoration;
 import com.steven.android.vocabkeepernew.utility.PearsonAnswer;
 import com.steven.android.vocabkeepernew.R;
@@ -449,7 +448,7 @@ public class DisplayDefinitionPopupActivity extends AppCompatActivity implements
         if (!endingActivity) { // if not already animating the finishing of activity
             final View outerView = v;
             final TextView defText = (TextView) v.findViewById(R.id.definition_text);
-            final TextView exText = (TextView) v.findViewById(R.id.example_text); // doesn't necessarily exist
+            final TextView exText = (TextView) v.findViewById(R.id.de_example_text); // doesn't necessarily exist
             final RelativeLayout colorView = (RelativeLayout) v.findViewById(R.id.color_view);
 
             if (!selected[position]) {
@@ -742,7 +741,7 @@ public class DisplayDefinitionPopupActivity extends AppCompatActivity implements
             }
             // Lookup view for data population
             TextView definitionText = (TextView) convertView.findViewById(R.id.definition_text);
-            TextView exampleText = (TextView) convertView.findViewById(R.id.example_text);
+            TextView exampleText = (TextView) convertView.findViewById(R.id.de_example_text);
             // Populate the data into the template view using the data object
             definitionText.setText(defEx.definition);
             exampleText.setText((defEx.examples.isEmpty())

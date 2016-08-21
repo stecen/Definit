@@ -36,6 +36,7 @@ public class PearsonAnswer {
         public DefinitionExamples () {
             partOfSpeech = "---";
             definition = GlosbeAsyncTask.DEFAULT_NO_DEFINITION;
+            wordForm = "";
             examples = new ArrayList<>();
             ipa = new ArrayList<>();
         }

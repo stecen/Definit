@@ -69,7 +69,7 @@
     
     
     <View
-        android:id="@+id/filler"
+        android:id="@+id/def_bottom_filler"
         android:layout_below="@id/def1_text"
         android:layout_width="wrap_content"
         android:layout_height="64dp"/>

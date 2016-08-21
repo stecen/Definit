@@ -14,10 +14,8 @@ import android.os.Handler;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -118,6 +116,7 @@ public class SearchAndShow extends AppCompatActivity implements PearsonResponseI
     // dialog activity's maximum height http://stackoverflow.com/questions/6624480/how-to-customize-the-width-and-height-when-show-an-activity-as-a-dialog
     // expanding toolbar https://github.com/chrisbanes/cheesesquare/tree/master/app/src/main/java/com/support/android/designlibdemo
 
+    public int lastIdx = -1;//for adapter to know where to add the bottom filler
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -371,7 +370,7 @@ public class SearchAndShow extends AppCompatActivity implements PearsonResponseI
 
 
 
-    public void addPearsonList(ArrayList<PearsonAnswer.DefinitionExamples> finalDataSet) {
+    public void addPearsonList(ArrayList<PearsonAnswer.DefinitionExamples> finalDataSet, boolean showExtraElement) {
         progressBar.setVisibility(View.INVISIBLE);
         if (makeSpaceView != null) {
 //            frame.removeView(makeSpaceView);
@@ -382,15 +381,23 @@ public class SearchAndShow extends AppCompatActivity implements PearsonResponseI
         final ArrayList<PearsonAnswer.DefinitionExamples> finalSorted = finalDataSet;
         /// guess I have to use recursion...
         if (finalSorted.size() > 0) { // add the definitionExamples gradually for the animation
+            lastIdx = finalSorted.size()-1;
+
             recyclerAdapter.add(finalSorted.get(0));
 
-            for (int i = 1; i < finalDataSet.size(); i++) { // stagger the additions
+            for (int i = 1; i < finalDataSet.size() /*+ ((showExtraElement)?1:0)*/; i++) { // stagger the additions.. PLUS ADD ONE FILLER if not come from glosbe.
                 final int idx = i;
 
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
+//                        if (idx == finalSorted.size()) {
+//                            addExtraElementContext(idx);
+//                            return;
+//                        }
+
+
                         recyclerAdapter.add(finalSorted.get(idx));
                         Log.e("callbackfk", idx + " " + finalSorted.size());
                         if (idx == finalSorted.size()-1) {
@@ -405,11 +412,23 @@ public class SearchAndShow extends AppCompatActivity implements PearsonResponseI
             }
             // if only one element, still have to readjust
             if (finalDataSet.size()== 1) {
+//                if (showExtraElement) {
+//                    //add another
+//                    addExtraElementContext(1);
+//                } else {
+//
+////                defExRecycler.addItemDecoration(dividerItemDecoration);
+//                }
                 readjustCoordHeight();
-//                defExRecycler.addItemDecoration(dividerItemDecoration);
             }
         }
         finishedGetting = true;
+    }
+
+    public void addExtraElementContext(int idx) {
+        PearsonAnswer.DefinitionExamples de=  new PearsonAnswer.DefinitionExamples();
+        de.definition = PearsonAdapter.EXTRA_CONTEXT;
+        recyclerAdapter.add(de); //filler
     }
 
     @Override
@@ -434,7 +453,7 @@ public class SearchAndShow extends AppCompatActivity implements PearsonResponseI
 
 
 //            DisplayDefinitionPopupActivity.shouldShowPreviousTypeWordPopup = false;
-            if (TypeWordPopupActivity.typeWordPopupActivity != null) {
+            if (TypeWordPopupActivity.typeWordPopupActivity != null) { // todo: delete this
                 TypeWordPopupActivity.typeWordPopupActivity.finishMe();
             }
 
@@ -480,13 +499,17 @@ public class SearchAndShow extends AppCompatActivity implements PearsonResponseI
 
     @Override
     public void recyclerViewListClicked(View v, int position){
+//        if (position == recyclerAdapter.contextIdx) { // can't select this!
+//            return;
+//        }
+
         if (!endingActivity) { // if not already animating the finishing of activity
             final View outerView = v;
             final TextView defText = (TextView) v.findViewById(R.id.definition_text);
-            final TextView exText = (TextView) v.findViewById(R.id.example_text); // doesn't necessarily exist
+            final TextView exText = (TextView) v.findViewById(R.id.de_example_text); // doesn't necessarily exist
             final RelativeLayout colorView = (RelativeLayout) v.findViewById(R.id.color_view);
 
-            if (!selected[position]) {
+            if (!selected[position]) { // that's for adding a context !!!
 //            selected[position] = true;
                 if (!(recyclerAdapter.sortedPearsonDataSet.get(position).definition.trim().equals(PearsonAnswer.DEFAULT_NO_DEFINITION))) { // make sure it's selectable
                     truthSelect(position, true);
@@ -605,7 +628,7 @@ public class SearchAndShow extends AppCompatActivity implements PearsonResponseI
     public void afterGlosbeDefine(PearsonAnswer pearsonAnswer) {
         ArrayList<PearsonAnswer> list = new ArrayList<>();
         list.add(pearsonAnswer);
-        addPearsonList(list.get(0).definitionExamplesList);
+        addPearsonList(list.get(0).definitionExamplesList, true); // set false when there is no definition
     }
 
     // Set the pearson definitions through the listviews
@@ -658,7 +681,7 @@ public class SearchAndShow extends AppCompatActivity implements PearsonResponseI
             Log.e("countlmao", "unsorted: " +Integer.toString(pearsonAnswer.definitionExamplesList.size()));
             Log.e("countlmao", "sorted: " +Integer.toString(finalDataSet.size()));
 
-            addPearsonList(finalDataSet);
+            addPearsonList(finalDataSet, true);
 
         } else { // get the glosbe package
 

@@ -35,6 +35,8 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
     private String mainWord; // main word, without stem changes
     public HashMap<String, String> abbr;
     public boolean surpressGray; // when finishing activiting only.
+    public static String EXTRA_CONTEXT = "PutExtraContextHerePleaseLmao";
+    public int contextIdx = -1;
 
     // Provide a suitable constructor (depends on the kind of dataset)
     public PearsonAdapter(SearchAndShow searchAndShow, ArrayList<PearsonAnswer.DefinitionExamples> myDataset, RecyclerViewClickListener listener, String word) {
@@ -60,16 +62,17 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView definitionText;
         TextView exampleText;
-        View fillerView;
+        View defFillerView, exFillerView;
         RelativeLayout colorView;
 //            RelativeLayout relativeLayout;
 
         public ViewHolder(View v) {
             super(v);
             definitionText = (TextView) v.findViewById(R.id.definition_text);
-            exampleText = (TextView) v.findViewById(R.id.example_text);
+            exampleText = (TextView) v.findViewById(R.id.de_example_text);
             colorView = (RelativeLayout) v.findViewById(R.id.color_view);
-            fillerView = v.findViewById(R.id.filler);
+            defFillerView = v.findViewById(R.id.def_bottom_filler);
+            exFillerView = v.findViewById(R.id.ex_bottom_filler);
 //                relativeLayout = (RelativeLayout) v;
             v.setOnClickListener(this);
         }
@@ -94,6 +97,7 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
 
     public void clearAll() { // for when the user requests and new definition
         sortedPearsonDataSet = new ArrayList<>();
+        contextIdx = -1; // index of the context input
         notifyDataSetChanged();
     }
 
@@ -173,7 +177,7 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
             defText.startAnimation(translateAnimation);
             defText.setVisibility(View.INVISIBLE);
 
-            TextView exText = (TextView) rootView.findViewById(R.id.example_text);
+            TextView exText = (TextView) rootView.findViewById(R.id.de_example_text);
             if (exText != null) {
                 exText.startAnimation(translateAnimation);
                 exText.setVisibility(View.INVISIBLE);
@@ -216,12 +220,22 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
 
         String defText = number + form + sortedPearsonDataSet.get(position).definition + part;
         boolean isValid = sortedPearsonDataSet.get(position).definition.trim().equals(PearsonAnswer.DEFAULT_NO_DEFINITION);
-        String htmlDefText = "<strong> " + ((!isValid) ? number : "") + form + "</strong>" + sortedPearsonDataSet.get(position).definition + "<i> " + part + "</i>";
+
+//        if (sortedPearsonDataSet.get(position).definition.trim().equals(EXTRA_CONTEXT)) {
+//            holder.definitionText.setText("Enter context here...");
+//            contextIdx = position;
+//            Log.e("contextIdx", "" + contextIdx);
+//        } else {
+            String htmlDefText = "<strong> " + ((!isValid) ? number : "") + form + "</strong>" + sortedPearsonDataSet.get(position).definition + "<i> " + part + "</i>";
 //            Log.e("html", htmlDefText);
 
-        holder.definitionText.setText(Html.fromHtml(htmlDefText));
+            holder.definitionText.setText(Html.fromHtml(htmlDefText));
+//        }
+
+        // if there is a context
         boolean hasExample = false;
-        if ((sortedPearsonDataSet.get(position).examples.get(0).equals(PearsonAnswer.DEFAULT_NO_EXAMPLE))) { // if no example
+        if (sortedPearsonDataSet.get(position).examples.size() == 0 ||
+                (sortedPearsonDataSet.get(position).examples.get(0).equals(PearsonAnswer.DEFAULT_NO_EXAMPLE))) { // if no example
             ViewGroup parent = ((ViewGroup) (holder.exampleText.getParent()));
             if (parent != null) {
                 parent.removeView(holder.exampleText); // remove example text view
@@ -236,6 +250,7 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
             hasExample = true;
         }
 
+        //todo: fix this viewholder mess  http://androidshenanigans.blogspot.com/2015/02/viewholder-pattern-common-mistakes.html
 //            region holder.exampleText.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View v) {
@@ -244,12 +259,32 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
 //                }
 //            });
 
-        if (position == 0) { // add space above because of send button
-            ViewUtility.setMarginsRelative(16f, 36f, 16f, (hasExample) ? 16f : 16f, holder.definitionText, searchAndShowActivity.getApplicationContext());
-        }
+//        if (position == 0 || position == searchAndShowActivity.lastIdx) { // add space above because of send button
+//            ViewUtility.setMarginsRelative(16f, 36f, 16f, (hasExample) ? 16f : 16f, holder.definitionText, searchAndShowActivity.getApplicationContext());
+//        } else if (position == searchAndShowActivity.lastIdx) { // if it's the last one, add filler below to allow FAB to not obscure any text
+////            Log.e("position", position + " last one vs " + searchAndShowActivity.lastIdx);
+////            if (!(sortedPearsonDataSet.get(position).examples.size() == 0 ||
+////                    (sortedPearsonDataSet.get(position).examples.get(0).equals(PearsonAnswer.DEFAULT_NO_EXAMPLE)))) {
+////                Log.e("position", "setting margins of example filler for " + position);
+//////                ViewUtility.setMarginsRelative(0f, 0f, 0f, 72f, holder.exFillerView, searchAndShowActivity.getApplicationContext());
+//////                holder.exFillerView.setPadding(0, 0, 0, 200);
+////                holder.exFillerView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+////                        Math.round(ViewUtility.convertDpToPixel(100f, searchAndShowActivity.getApplicationContext()))));
+////            } else {
+////                Log.e("position", "setting margins of def filler " + position);
+//////                ViewUtility.setMarginsRelative(0f, 0f, 0f, 72f, holder.defFillerView, searchAndShowActivity.getApplicationContext());
+//////                holder.defFillerView.setPadding(0, 0, 0 ,200 );
+////                holder.defFillerView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+////                        Math.round(ViewUtility.convertDpToPixel(100f, searchAndShowActivity.getApplicationContext()))));
+////            }
+//////            ViewUtility.setMarginsRelative(0f, 0f, 50f, 50f, holder.defFillerView, searchAndShowActivity.getApplicationContext());
+////
+//////            holder.defFillerView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+//////                    Math.round(ViewUtility.convertDpToPixel(24f, searchAndShowActivity.getApplicationContext()))));
+//        }
 
         if (sortedPearsonDataSet.get(position).wordForm.trim().equals(mainWord)) { // if they are perfect matches, add more botttom margin
-//                setMarginsRelative(0f, 0f, 0f, 200f, holder.fillerView);
+//                setMarginsRelative(0f, 0f, 0f, 200f, holder.defFillerView);
 
             ///fail
 

@@ -37,7 +37,7 @@
 
             android:alpha=".87"/>
 
-        <TextView android:id="@+id/example_text"
+        <TextView android:id="@+id/de_example_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
@@ -55,14 +55,36 @@
 
             android:alpha=".54"/>
         
-        <TextView
-            android:id="@+id/filler"
+        <View
+            android:id="@+id/def_bottom_filler"
             android:clickable="false"
             android:longClickable="false"
-            android:text=" "
-            android:layout_marginBottom="0dp"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"/>
+            android:layout_below="@id/definition_text"
+            android:background="#f88"
+
+            android:layout_marginTop="0dp"
+
+            android:alpha=".7"
+
+            android:layout_height="0dp"
+            android:layout_width="match_parent" />
+        <!--android:layout_marginBottom="100dp"-->
+
+        <View
+            android:id="@+id/ex_bottom_filler"
+            android:clickable="false"
+            android:longClickable="false"
+            android:layout_below="@id/de_example_text"
+            android:background="#88F"
+
+            android:layout_marginTop="0dp"
+
+            android:alpha=".7"
+
+            android:layout_height="0dp"
+            android:layout_width="match_parent" />
+        <!--android:layout_marginBottom="100dp"-->
+
     </RelativeLayout>
 
     <View
