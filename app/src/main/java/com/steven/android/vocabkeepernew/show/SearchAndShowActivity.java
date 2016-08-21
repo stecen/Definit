@@ -389,6 +389,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 //        handler1.postDelayed(new Runnable() {
 //            @Override
 //            public void run() {
+                progressBar.setVisibility(View.VISIBLE); // redundant sometimes
                 fab.setVisibility(View.GONE);
 //            }
 //        }, 100);

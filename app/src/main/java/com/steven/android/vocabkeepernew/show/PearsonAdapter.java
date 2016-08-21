@@ -18,6 +18,7 @@ import com.steven.android.vocabkeepernew.R;
 import com.steven.android.vocabkeepernew.input.UserVocabInsertService;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocab;
 import com.steven.android.vocabkeepernew.utility.PearsonAnswer;
+import com.steven.android.vocabkeepernew.utility.PearsonComparator;
 import com.steven.android.vocabkeepernew.utility.ViewUtility;
 
 import java.util.ArrayList;
@@ -31,7 +32,8 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
     private SearchAndShowActivity searchAndShowActivity;
     public ArrayList<PearsonAnswer.DefinitionExamples> unsortedDataSet, sortedPearsonDataSet;
     private RecyclerViewClickListener itemListener;
-    private boolean mySelected[] = new boolean[500];
+    private boolean mySelected[] = new boolean[500], disBig[] = new boolean[500]; // myselected is for saving to database, disbig is for remembering which ones to make big
+    private int disLen[] = new int[500];
     private String mainWord; // main word, without stem changes
     public HashMap<String, String> abbr;
     public boolean surpressGray; // when finishing activiting only.
@@ -55,6 +57,12 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
         abbr.put("verb", "v.");
         abbr.put("noun", "n.");
         abbr.put("adverb", "adv.");
+
+        for (int i = 0; i < 500; i++) {
+            disLen[i] = -1; // unvisited
+        }
+
+//        setHasStableIds(true);
 //            abbr.put("preposition", "prep.");
 //            abbr.put("conjunction", "conj.");
     }
@@ -98,6 +106,11 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
     public void clearAll() { // for when the user requests and new definition
         sortedPearsonDataSet = new ArrayList<>();
         contextIdx = -1; // index of the context input
+        for (int i = 0; i < 500; i ++) {
+            disBig[i] = false; // unused
+            disLen[i] = -1; // unvisited
+
+        }
         notifyDataSetChanged();
     }
 
@@ -259,30 +272,6 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
 //                }
 //            });
 
-        if (position == 0/* || position == searchAndShowActivity.lastIdx*/) { // add space above because of send button
-            ViewUtility.setMarginsRelative(16f, 40f, 16f, (hasExample) ? 16f : 16f, holder.definitionText, searchAndShowActivity.getApplicationContext());
-        } // else if (position == searchAndShowActivity.lastIdx) { // if it's the last one, add filler below to allow FAB to not obscure any text
-////            Log.e("position", position + " last one vs " + searchAndShowActivity.lastIdx);
-////            if (!(sortedPearsonDataSet.get(position).examples.size() == 0 ||
-////                    (sortedPearsonDataSet.get(position).examples.get(0).equals(PearsonAnswer.DEFAULT_NO_EXAMPLE)))) {
-////                Log.e("position", "setting margins of example filler for " + position);
-//////                ViewUtility.setMarginsRelative(0f, 0f, 0f, 72f, holder.exFillerView, searchAndShowActivity.getApplicationContext());
-//////                holder.exFillerView.setPadding(0, 0, 0, 200);
-////                holder.exFillerView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-////                        Math.round(ViewUtility.convertDpToPixel(100f, searchAndShowActivity.getApplicationContext()))));
-////            } else {
-////                Log.e("position", "setting margins of def filler " + position);
-//////                ViewUtility.setMarginsRelative(0f, 0f, 0f, 72f, holder.defFillerView, searchAndShowActivity.getApplicationContext());
-//////                holder.defFillerView.setPadding(0, 0, 0 ,200 );
-////                holder.defFillerView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-////                        Math.round(ViewUtility.convertDpToPixel(100f, searchAndShowActivity.getApplicationContext()))));
-////            }
-//////            ViewUtility.setMarginsRelative(0f, 0f, 50f, 50f, holder.defFillerView, searchAndShowActivity.getApplicationContext());
-////
-//////            holder.defFillerView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
-//////                    Math.round(ViewUtility.convertDpToPixel(24f, searchAndShowActivity.getApplicationContext()))));
-//        }
-
         if (sortedPearsonDataSet.get(position).wordForm.trim().equals(mainWord)) { // if they are perfect matches, add more botttom margin
 //                setMarginsRelative(0f, 0f, 0f, 200f, holder.defFillerView);
 
@@ -314,6 +303,99 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
                     holder.exampleText.setTextSize(searchAndShowActivity.BIG_FONT);
                 }
             }
+        }
+
+        // todo: make fade work
+
+
+        // OMG IT WORKS!!! YOU JUST HAVE TO SET THE OPPPOSTE
+        // set alpha based on lev distance
+//        if (sortedPearsonDataSet.size() > 1) { // don't do alpha if there's only one definition
+        int dis = PearsonComparator.computeLevenshteinDistance(sortedPearsonDataSet.get(position).wordForm, mainWord);
+//        int alphaInt = dis - 5; // 6 is an arbitrary number
+        if (dis < 7 ) {
+            if (holder.definitionText != null) {
+//                Log.e("levDis", "setting def alpha " + (.87f) + " " + sortedPearsonDataSet.get(position).wordForm + " vs " + mainWord + "... " + dis);
+                holder.definitionText.setAlpha(.87f);
+            }
+            if (holder.exampleText != null) {
+                holder.exampleText.setAlpha(.54f);
+            }
+        } else {
+            if (/*disBig[position] ||*/ (disLen[position] != -1 && disLen[position] >= 7) || dis >= 7) { // close enough to the actual wor
+//                disBig[position] = true;
+                disLen[position]= dis;
+                if (holder.definitionText != null) {
+                    Log.e("levDis", "setting def alpha " + (.6f * .87f) + " " + sortedPearsonDataSet.get(position).wordForm + " vs " + mainWord + "... " + dis);
+                    holder.definitionText.setAlpha(.6f * .87f);
+                }
+                if (holder.exampleText != null) {
+                    holder.exampleText.setAlpha(.6f * .54f);
+                }
+            }
+        }
+
+
+//        // set alpha based on lev distance
+//        int dis = PearsonComparator.computeLevenshteinDistance(sortedPearsonDataSet.get(position).wordForm, mainWord);
+//        int alphaInt = dis - 5; // 6 is an arbitrary number
+////        if (sortedPearsonDataSet.size() > 1) { // don't do alpha if there's only one definition
+//            int dis = PearsonComparator.computeLevenshteinDistance(sortedPearsonDataSet.get(position).wordForm, mainWord);
+//            int alphaInt = dis - 5; // 6 is an arbitrary number
+//            if (alphaInt < 0) { // close enough to the actual wor
+//                // do nothing
+//            } else { // alpha distance greater than 6... set alpha to tell user that the app is aware that this word is pretty far off
+//                float alpha = 1f - ((alphaInt > 15) ? 15f : (float)alphaInt) / 28f;// 20 is also arbitrary
+//                if (holder.definitionText != null) {
+//                    Log.e("levDis", "setting def alpha " + (alpha*.87f) + " " + sortedPearsonDataSet.get(position).wordForm + " vs " +mainWord + "... " + dis);
+//                    holder.definitionText.setAlpha(alpha * .87f);
+//                }
+//                if (holder.exampleText != null) {
+//                    holder.exampleText.setAlpha(alpha * .54f);
+//                }
+//            }
+////        }
+
+
+
+                /*if (position == 0*//* || position == searchAndShowActivity.lastIdx*//*) { // add space above because of send button
+            ViewUtility.setMarginsRelative(16f, 40f, 16f, (hasExample) ? 16f : 16f, holder.definitionText, searchAndShowActivity.getApplicationContext());
+        } else*/ if (position != searchAndShowActivity.lastIdx) { // reset margins
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0);
+            layoutParams.addRule(RelativeLayout.BELOW, R.id.de_example_text);
+            holder.exFillerView.setLayoutParams(layoutParams);
+            holder.defFillerView.setLayoutParams(layoutParams);
+        } else if (position == searchAndShowActivity.lastIdx) { // if it's the last one, add filler below to allow FAB to not obscure any text
+            Log.e("position", position + " last one vs " + searchAndShowActivity.lastIdx); //todo : why doesn't this work for "cool"?
+            if (!(sortedPearsonDataSet.get(position).examples.size() == 0 ||
+                    (sortedPearsonDataSet.get(position).examples.get(0).equals(PearsonAnswer.DEFAULT_NO_EXAMPLE)))) { // if no example
+                Log.e("position", "setting margins of example filler for " + position);
+                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Math.round(ViewUtility.convertDpToPixel(54f, searchAndShowActivity.getApplicationContext())));
+                layoutParams.addRule(RelativeLayout.BELOW, R.id.de_example_text);
+                holder.exFillerView.setLayoutParams(layoutParams);
+//                ViewUtility.setMarginsRelative(0f, 0f, 0f, 72f, holder.exFillerView, searchAndShowActivity.getApplicationContext());
+
+
+//                holder.exFillerView.setPadding(0, 0, 0, 200);
+//                holder.defFillerView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+//                        Math.round(ViewUtility.convertDpToPixel(100f, searchAndShowActivity.getApplicationContext()))));
+            } else { // is example
+                Log.e("position", "setting margins of def filler " + position);
+                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Math.round(ViewUtility.convertDpToPixel(54f, searchAndShowActivity.getApplicationContext())));
+                layoutParams.addRule(RelativeLayout.BELOW, R.id.definition_text);
+                holder.defFillerView.setLayoutParams(layoutParams);
+//                ViewUtility.setMarginsRelative(0f, 0f, 0f, 72f, holder.defFillerView, searchAndShowActivity.getApplicationContext());
+
+
+//                holder.defFillerView.setPadding(0, 0, 0 ,200 );
+
+//                holder.exFillerView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+//                        Math.round(ViewUtility.convertDpToPixel(100f, searchAndShowActivity.getApplicationContext()))));
+            }
+//            ViewUtility.setMarginsRelative(0f, 0f, 50f, 50f, holder.defFillerView, searchAndShowActivity.getApplicationContext());
+
+//            holder.defFillerView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+//                    Math.round(ViewUtility.convertDpToPixel(24f, searchAndShowActivity.getApplicationContext()))));
         }
 
     }

@@ -28,7 +28,10 @@
 
             android:text="definition"
 
-            android:layout_margin="16dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp"
 
             android:textSize="16sp"
 
@@ -60,29 +63,31 @@
             android:clickable="false"
             android:longClickable="false"
             android:layout_below="@id/definition_text"
-            android:background="#f88"
 
+            android:background="#fff"
             android:layout_marginTop="0dp"
 
-            android:alpha=".7"
+            android:alpha="0"
 
             android:layout_height="0dp"
             android:layout_width="match_parent" />
         <!--android:layout_marginBottom="100dp"-->
+        <!--android:background="#f88"-->
 
         <View
             android:id="@+id/ex_bottom_filler"
             android:clickable="false"
             android:longClickable="false"
             android:layout_below="@id/de_example_text"
-            android:background="#88F"
+            android:background="#fff"
 
             android:layout_marginTop="0dp"
 
-            android:alpha=".7"
+            android:alpha="0"
 
             android:layout_height="0dp"
             android:layout_width="match_parent" />
+        <!--android:background="#88F"-->
         <!--android:layout_marginBottom="100dp"-->
 
     </RelativeLayout>
