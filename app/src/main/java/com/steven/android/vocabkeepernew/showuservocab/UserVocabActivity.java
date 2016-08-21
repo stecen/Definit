@@ -3,6 +3,7 @@ package com.steven.android.vocabkeepernew.showuservocab;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.RemoteInput;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
+import android.support.v4.app.NotificationBuilderWithBuilderAccessor;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -223,36 +225,93 @@ public class UserVocabActivity extends AppCompatActivity implements RecyclerView
 //        NotificationCompat.Action pasteAction = new NotificationCompat.Action.Builder(pasteIconInt, "Pasteboard", pendingPasteInt)
 //                .build();
 
-        Intent speechIntent = new Intent(getApplicationContext(), RelaySpeechActivity.class);
-        speechIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //todo: revise flags
-//        speechIntent.putExtra(SearchAndShowActivity.KEY_RECOG_NOW, true);
-        speechIntent.setFlags(/*Intent.FLAG_ACTIVITY_NEW_TASK | */Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent pendingSpeechIntent = PendingIntent.getActivity(this, 2, speechIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        int speechIconInt;
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) { // because the background on kitkat notifications is black, use white icons
-            speechIconInt = R.drawable.ic_mic_white_24dp;
-        } else {
-            speechIconInt = R.drawable.ic_mic_black_24dp;
-        }
-        NotificationCompat.Action speechAction = new NotificationCompat.Action.Builder(speechIconInt, "Speech", pendingSpeechIntent)
-                .build();
-
-
-
-        Notification n = new NotificationCompat.Builder(this)
-                .setContentTitle("Define a word")
-                .setSubText("Definit")
-                .setAutoCancel(false)
+        // quick reply :D
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) { // TODO!!! CENTRALIZE WITH NOTIFICAITON CREATION IN SEARCHANDSHOWACTIVITY
+            Notification.Builder builder = new Notification.Builder(this)
+                    .setContentTitle("Define a word...")
+                    .setSubText("Definit")
+                    .setAutoCancel(false)
 //                .addAction(pasteAction)
-                .addAction(speechAction)
 //                .addAction(android.R.drawable.arrow_up_float, "Custom", typeWordPendingIntent) // use stop action
-                .setContentIntent(typeWordPendingIntent) // use add pending intent
-                .setSmallIcon(R.drawable.definit_icon_bs)
-                .setPriority(Notification.PRIORITY_LOW)
-                .build();
+                    .setContentIntent(typeWordPendingIntent) // use add pending intent
+                    .setSmallIcon(R.drawable.definit_icon_bs)
+                    .setPriority(Notification.PRIORITY_LOW);
+
+            Intent speechIntent = new Intent(getApplicationContext(), RelaySpeechActivity.class);
+            speechIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //todo: revise flags
+//        speechIntent.putExtra(SearchAndShowActivity.KEY_RECOG_NOW, true);
+            speechIntent.setFlags(/*Intent.FLAG_ACTIVITY_NEW_TASK | */Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            PendingIntent pendingSpeechIntent = PendingIntent.getActivity(this, 2, speechIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            int speechIconInt;
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) { // because the background on kitkat notifications is black, use white icons
+                speechIconInt = R.drawable.ic_mic_white_24dp;
+            } else {
+                speechIconInt = R.drawable.ic_mic_black_24dp;
+            }
+            Notification.Action speechAction = new Notification.Action.Builder(speechIconInt, "Speech", pendingSpeechIntent)
+                    .build();
+            builder.addAction(speechAction);
+
+
+            Intent replyIntent = new Intent(getApplicationContext(), SearchAndShowActivity.class);
+            replyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //todo: revise flags
+//        speechIntent.putExtra(SearchAndShowActivity.KEY_RECOG_NOW, true);
+            replyIntent.setFlags(/*Intent.FLAG_ACTIVITY_NEW_TASK | */Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            PendingIntent pendingReplyIntent = PendingIntent.getActivity(this, 2, replyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
+            String replyLabel = "Define inline";//getResources().getString(R.string.reply_label);
+
+            RemoteInput remoteInput = new RemoteInput.Builder(SearchAndShowActivity.KEY_TEXT_REPLY)
+                    .setLabel(replyLabel)
+                    .build();
+
+            Notification.Action replyAction =
+                    new Notification.Action.Builder(R.drawable.ic_send_white_24dp,
+                            "Define inline", pendingReplyIntent)
+                            .addRemoteInput(remoteInput)
+                            .build();
+
+            builder.addAction(replyAction);
+
+            Notification n = builder.build();
+
+            nm.notify(NOTIF_ID, n);
+
+        } else {
+            android.support.v4.app.NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+                    .setContentTitle("Define a word")
+                    .setSubText("Definit")
+                    .setAutoCancel(false)
+//                .addAction(pasteAction)
+//                .addAction(android.R.drawable.arrow_up_float, "Custom", typeWordPendingIntent) // use stop action
+                    .setContentIntent(typeWordPendingIntent) // use add pending intent
+                    .setSmallIcon(R.drawable.definit_icon_bs)
+                    .setPriority(Notification.PRIORITY_LOW);
+
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
+                Intent speechIntent = new Intent(getApplicationContext(), RelaySpeechActivity.class);
+                speechIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //todo: revise flags
+//        speechIntent.putExtra(SearchAndShowActivity.KEY_RECOG_NOW, true);
+                speechIntent.setFlags(/*Intent.FLAG_ACTIVITY_NEW_TASK | */Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                PendingIntent pendingSpeechIntent = PendingIntent.getActivity(this, 2, speechIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                int speechIconInt;
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) { // because the background on kitkat notifications is black, use white icons
+                    speechIconInt = R.drawable.ic_mic_white_24dp;
+                } else {
+                    speechIconInt = R.drawable.ic_mic_black_24dp;
+                }
+                NotificationCompat.Action speechAction = new NotificationCompat.Action.Builder(speechIconInt, "Speech", pendingSpeechIntent)
+                        .build();
+                builder.addAction(speechAction);
+
+            }
+
+            Notification n = builder.build();
 //        n.flags |= Notification.FLAG_NO_CLEAR; // sticky todo: un sticky this
 
-        nm.notify(NOTIF_ID, n);
+            nm.notify(NOTIF_ID, n);
+        }
     }
 
     public void startTrackingFromButton(View view) {

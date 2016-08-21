@@ -2,6 +2,10 @@ package com.steven.android.vocabkeepernew.show;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.RemoteInput;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -44,7 +48,9 @@ import com.steven.android.vocabkeepernew.get.glosbe.GlosbeAsyncTask;
 import com.steven.android.vocabkeepernew.get.glosbe.GlosbeResponseInterface;
 import com.steven.android.vocabkeepernew.get.pearson.PearsonAsyncTask;
 import com.steven.android.vocabkeepernew.get.pearson.PearsonResponseInterface;
+import com.steven.android.vocabkeepernew.input.RelaySpeechActivity;
 import com.steven.android.vocabkeepernew.input.TypeWordPopupActivity;
+import com.steven.android.vocabkeepernew.showuservocab.UserVocabActivity;
 import com.steven.android.vocabkeepernew.utility.DividerItemDecoration;
 import com.steven.android.vocabkeepernew.utility.PearsonAnswer;
 import com.steven.android.vocabkeepernew.utility.PearsonComparator;
@@ -87,6 +93,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
     //    public static final String SENT_DEF = "send_def";
     public static final String SENT_PACKAGE_JSON = "send_package_json";
 //    public static final String KEY_RECOG_NOW = "recognow";
+    public static final String KEY_TEXT_REPLY = "KEYTEXTreply";
     public final static int REQ_CODE_SPEECH_INPUT = 92;
 
     private static final String PEARSON_JSON = "pearson_json";
@@ -245,11 +252,36 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 
             getDefinition(query);
 
+            lastWord= query;
+
             // hide keyboard
         } else if (comingIntent != null && comingIntent.hasExtra(SENT_WORD)) { //  manually sent from places
             String query = comingIntent.getStringExtra(SENT_WORD).trim();
             getDefinition(query);
-        } /*else if (comingIntent != null && comingIntent.hasExtra(KEY_RECOG_NOW)) {
+
+            lastWord= query;
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && comingIntent != null) { //quick reply
+            Bundle remoteInput = RemoteInput.getResultsFromIntent(comingIntent);
+            if (remoteInput != null) {
+                String replyQuery = ((String)remoteInput.getCharSequence(KEY_TEXT_REPLY));
+                Log.e("quickreply", "received for " + replyQuery);
+                if (replyQuery != null) {
+                    getDefinition(replyQuery.toLowerCase());
+                    lastWord= replyQuery;
+                }
+
+
+
+
+                View view = this.getCurrentFocus();
+                if (view != null) {
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                }
+                 // HIDE 2.0
+            }
+        }/*else if (comingIntent != null && comingIntent.hasExtra(KEY_RECOG_NOW)) {
             recognizeSpeech();
             // recognize speech
         }*/
@@ -332,7 +364,39 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
                 InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
-        } /*else if (intent.hasExtra(KEY_RECOG_NOW)) {
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) { //quick reply
+            progressBar.setVisibility(View.VISIBLE); // clear the progress bar
+            recyclerAdapter.clearAll(); // clear the list
+            for (int i = 0; i < 500; i++) { // clear selections
+                selected[i] = false;
+                truthSelect(i, false);
+                selectedCount = 0;
+            }
+
+
+            Bundle remoteInput = RemoteInput.getResultsFromIntent(intent);
+            if (remoteInput != null) {
+                String replyQuery = ((String)remoteInput.getCharSequence(KEY_TEXT_REPLY));
+                Log.e("quickreply", "onnew received for " + replyQuery);
+                getDefinition(replyQuery);
+
+                lastWord = replyQuery;
+            }
+
+            View view = this.getCurrentFocus();
+            if (view != null) {
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
+
+            // Hide 2.0
+
+
+
+
+        }
+
+        /*else if (intent.hasExtra(KEY_RECOG_NOW)) {
             recognizeSpeech();
         }*/
     }
@@ -685,6 +749,8 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 
     @Override
     public void afterGlosbeDefine(PearsonAnswer pearsonAnswer) {
+        finishReplyInputNotif(); //
+
         ArrayList<PearsonAnswer> list = new ArrayList<>();
         list.add(pearsonAnswer);
         addPearsonList(list.get(0).definitionExamplesList, true); // set false when there is no definition
@@ -699,8 +765,22 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
                     InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 }
+//
 //            }
 //        }, 50);
+
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                View view = searchAndShowActivity.getCurrentFocus();
+                if (view != null) {
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
+            }
+        }, 50);
     }
 
     // Set the pearson definitions through the listviews
@@ -745,6 +825,9 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 //                Log.e("callback", "GRASS MUD HORSE");
 
             //hide keyboard again///////////// well thats annoying
+
+            finishReplyInputNotif();
+
             final SearchAndShowActivity searchAndShowActivity = this;
 //            final Handler handler = new Handler();
 //            handler.postDelayed(new Runnable() {
@@ -755,13 +838,29 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
                         InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                     }
-//                }
+
+            // Hide 2.0
 //            }, 50);
 
 
+            // -_- DESTROY KEYBOARD!!!!!!!!!!
+            final Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    View view = searchAndShowActivity.getCurrentFocus();
+                    if (view != null) {
+                        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    }
+                    // Hide 2.0
+
+                }
+            }, 50);
+
+
             progressBar.setVisibility(View.INVISIBLE);
-            //            }
-            //        })).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
 
             Collections.sort(finalDataSet, new PearsonComparator(pearsonAnswer.word.trim()));
 
@@ -811,6 +910,71 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
         selected[idx] = sel;
         recyclerAdapter.updateSelect(idx, sel);
 //        }
+    }
+
+
+    // android N exclusive
+    public void finishReplyInputNotif () { // todo: make centralized with the notification creation in UserVocabActivity
+
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+
+            NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            Intent typeWordIntent = new Intent(getApplicationContext(), SearchAndShowActivity.class);
+            typeWordIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK /*| Intent.FLAG_ACTIVITY_NO_HISTORY*/);
+//        typeWordIntent.putExtra(TypeWordPopupActivity.KEY_RECOG_NOW, TypeWordPopupActivity.NO);
+//        typeWordIntent.setAction(Long.toString(System.currentTimeMillis())); // for keeping extras
+            PendingIntent typeWordPendingIntent = PendingIntent.getActivity(this, 0, typeWordIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            Notification.Builder builder = new Notification.Builder(this)
+                    .setContentTitle("Define a word...")
+                    .setSubText("Definit")
+                    .setAutoCancel(false)
+//                .addAction(pasteAction)
+//                .addAction(android.R.drawable.arrow_up_float, "Custom", typeWordPendingIntent) // use stop action
+                    .setContentIntent(typeWordPendingIntent) // use add pending intent
+                    .setSmallIcon(R.drawable.definit_icon_bs)
+                    .setPriority(Notification.PRIORITY_LOW);
+
+            Intent speechIntent = new Intent(getApplicationContext(), RelaySpeechActivity.class);
+            speechIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //todo: revise flags
+//        speechIntent.putExtra(SearchAndShowActivity.KEY_RECOG_NOW, true);
+            speechIntent.setFlags(/*Intent.FLAG_ACTIVITY_NEW_TASK | */Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            PendingIntent pendingSpeechIntent = PendingIntent.getActivity(this, 2, speechIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            int speechIconInt;
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) { // because the background on kitkat notifications is black, use white icons
+                speechIconInt = R.drawable.ic_mic_white_24dp;
+            } else {
+                speechIconInt = R.drawable.ic_mic_black_24dp;
+            }
+            Notification.Action speechAction = new Notification.Action.Builder(speechIconInt, "Speech", pendingSpeechIntent)
+                    .build();
+            builder.addAction(speechAction);
+
+
+            Intent replyIntent = new Intent(getApplicationContext(), SearchAndShowActivity.class);
+            replyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //todo: revise flags
+//        speechIntent.putExtra(SearchAndShowActivity.KEY_RECOG_NOW, true);
+            replyIntent.setFlags(/*Intent.FLAG_ACTIVITY_NEW_TASK | */Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            PendingIntent pendingReplyIntent = PendingIntent.getActivity(this, 2, replyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            String replyLabel = "Define...";//getResources().getString(R.string.reply_label);
+            RemoteInput remoteInputNotif = new RemoteInput.Builder(SearchAndShowActivity.KEY_TEXT_REPLY)
+                    .setLabel(replyLabel)
+                    .build();
+            Notification.Action replyAction =
+                    new Notification.Action.Builder(R.drawable.ic_send_white_24dp,
+                            "Define inline", pendingReplyIntent)
+                            .addRemoteInput(remoteInputNotif)
+                            .build();
+            builder.addAction(replyAction);
+            Notification n = builder.build();
+            nm.notify(UserVocabActivity.NOTIF_ID, n);
+
+
+                        Intent it = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+            this.sendBroadcast(it);
+
+        }
     }
 
 }

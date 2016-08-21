@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.speech.RecognizerIntent;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.steven.android.vocabkeepernew.R;
@@ -18,13 +20,34 @@ import java.util.Locale;
 /**
  * Created by Steven on 8/21/2016.
  */
-public class RelaySpeechActivity extends ActionBarActivity {
+public class RelaySpeechActivity extends Activity {
     public final static int REQ_CODE_SPEECH_INPUT = 92;
+    LinearLayout linearLayout;
+    View view;
+    boolean hasReocgnized =false;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_relay);
+
+//        linearLayout = (LinearLayout) findViewById(R.id.relay_linear);
+//        linearLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Log.e("speechlol", "finish me");
+//            }
+//        });
+//        view = findViewById(R.id.relay_view);
+//        view.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Log.e("speechlol", "finish me");
+//                finish();
+//            }
+//        });
+
+
 
 //        final Handler handler = new Handler();
 //        handler.postDelayed(new Runnable() {
@@ -40,7 +63,7 @@ public class RelaySpeechActivity extends ActionBarActivity {
         Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Say something!");
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "Speak now");
         try {
             startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);
         } catch (ActivityNotFoundException a) {
@@ -48,6 +71,15 @@ public class RelaySpeechActivity extends ActionBarActivity {
                     Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    @Override
+    public void onResume() {
+        Log.e("speechlol", "onResume...");
+        if (hasReocgnized) {
+            finish();
+        }
+        super.onResume();
     }
 
     @Override
@@ -59,6 +91,8 @@ public class RelaySpeechActivity extends ActionBarActivity {
         switch (requestCode) {
             case REQ_CODE_SPEECH_INPUT: {
                 if (resultCode == RESULT_OK && null != data) {
+
+                    hasReocgnized = true;
 
                     ArrayList<String> result = data
                             .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
@@ -78,6 +112,11 @@ public class RelaySpeechActivity extends ActionBarActivity {
 
         }
     }
+//
+//    public void finishMe(View v) { // touch linear layout
+//        Log.e("speechlol", "finish me");
+//        finish();
+//    }
 
     @Override
     protected  void onDestroy() {
