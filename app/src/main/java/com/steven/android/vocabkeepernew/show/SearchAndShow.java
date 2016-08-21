@@ -14,25 +14,28 @@ import android.os.Handler;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Display;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -126,11 +129,36 @@ public class SearchAndShow extends AppCompatActivity implements PearsonResponseI
 
         setContentView(R.layout.activitiy_searchandshow);
 
+
+
+
+
         //region search
         searchView = (SearchView) findViewById(R.id.toolbar_text);
         SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setIconifiedByDefault(false);
+        EditText searchText = (EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+//        searchText.setBackgroundColor(Color.parseColor("#ffffff"));
+//        ViewUtility.setMarginsLinear(0f, 0f, 0f, 0f, (View) searchText, getApplicationContext());
+        searchText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 21f);
+
+//
+        LinearLayout searchLinear = (LinearLayout) searchView.findViewById(android.support.v7.appcompat.R.id.search_bar);
+        int childcount = searchLinear.getChildCount();
+        for (int i=0; i < childcount; i++){
+            View v = searchLinear.getChildAt(i);
+            Log.e("viewll", "i" + v.toString());
+        }
+        LinearLayout frameLinear = (LinearLayout) searchLinear.findViewById(android.support.v7.appcompat.R.id.search_edit_frame);
+        frameLinear.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        ViewUtility.setMarginsLinear(0f, 0f, 0f, 0f, frameLinear, getApplicationContext());
+        frameLinear.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+//
+
+
+
+
 
         comingIntent = getIntent();
         Log.e("coming", "" + (comingIntent != null));
@@ -150,7 +178,7 @@ public class SearchAndShow extends AppCompatActivity implements PearsonResponseI
         coordinatorLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
         defExRecycler = (RecyclerView) findViewById(R.id.definition_example_recycler);
         makeSpaceView = (View) findViewById(R.id.make_space_view);
-        navImage = (ImageView) findViewById(R.id.nav_image); // testing view gone
+//        navImage = (ImageView) findViewById(R.id.nav_image); // testing view gone
 
         defExRecycler.setLayoutManager(new LinearLayoutManager(this));
         dividerItemDecoration = new DividerItemDecoration(this);
@@ -220,7 +248,7 @@ public class SearchAndShow extends AppCompatActivity implements PearsonResponseI
         selectedCount = 0;
 
 
-        fab.setVisibility(View.INVISIBLE);
+        fab.setVisibility(View.GONE);
 
 
 ////        // Hide keyboard
@@ -272,6 +300,7 @@ public class SearchAndShow extends AppCompatActivity implements PearsonResponseI
     }
 
     public void setFrameHeight() {
+
         //set frame layout height
         final WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         final FrameLayout fview = frame;
@@ -315,16 +344,16 @@ public class SearchAndShow extends AppCompatActivity implements PearsonResponseI
 
         defExRecycler.invalidateItemDecorations();
 
-        final Handler handler1 = new Handler();
-        handler1.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                fab.setVisibility(View.INVISIBLE);
-            }
-        }, 100);
+//        final Handler handler1 = new Handler();
+//        handler1.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+                fab.setVisibility(View.GONE);
+//            }
+//        }, 100);
+//        ViewUtility.circleExit(fab);
 
-        makeSpaceView.setVisibility(View.VISIBLE);
-        setFrameHeight();
+//        makeSpaceView.setVisibility(View.VISIBLE);
 
         //clear Adapter and set progress bar
 
@@ -583,6 +612,8 @@ public class SearchAndShow extends AppCompatActivity implements PearsonResponseI
     @Override
     public void afterPearsonDefine(PearsonAnswer pearsonAnswer) {
         pA = pearsonAnswer;
+
+        setFrameHeight();
 
         recyclerAdapter = new PearsonAdapter(this, pearsonAnswer.definitionExamplesList, this, pearsonAnswer.word); //todo: update adapter, not new one
         defExRecycler.setAdapter(recyclerAdapter);

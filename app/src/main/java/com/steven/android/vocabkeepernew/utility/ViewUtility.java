@@ -9,6 +9,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewAnimationUtils;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 /**
@@ -75,19 +76,30 @@ public class ViewUtility {
                 @Override
                 public void onAnimationEnd(Animator animation) {
                     super.onAnimationEnd(animation);
-                    myView.setVisibility(View.INVISIBLE);
+                    myView.setVisibility(View.GONE);
                 }
             });
 
             // start the animation
             anim.start();
         } else {
-            myView.setVisibility(View.INVISIBLE);
+            myView.setVisibility(View.GONE);
         }
     }
 
-    public static View setMargins(float l, float t, float r, float b, View textView, Context context) {
+    public static View setMarginsRelative(float l, float t, float r, float b, View textView, Context context) {
         RelativeLayout.LayoutParams llp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+        llp.setMargins(Math.round(convertDpToPixel(l, context)),
+                Math.round(convertDpToPixel(t, context)),
+                Math.round(convertDpToPixel(r, context)),
+                Math.round(convertDpToPixel(b, context)));
+        textView.setLayoutParams(llp);
+
+        return textView;
+    }
+
+    public static View setMarginsLinear(float l, float t, float r, float b, View textView, Context context) {
+        LinearLayout.LayoutParams llp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         llp.setMargins(Math.round(convertDpToPixel(l, context)),
                 Math.round(convertDpToPixel(t, context)),
                 Math.round(convertDpToPixel(r, context)),

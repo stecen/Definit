@@ -28,7 +28,7 @@
 
 
     <style name="CircularProgress" parent="Theme.AppCompat.Light">
-        <item name="colorAccent">#888</item>
+        <item name="colorAccent">#fff</item>
     </style>
 
     <!--<style name="VocabDialogTheme" parent="Theme.AppCompat.Light.Dialog">-->

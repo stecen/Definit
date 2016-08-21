@@ -245,11 +245,11 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
 //            });
 
         if (position == 0) { // add space above because of send button
-            ViewUtility.setMargins(16f, 36f, 16f, (hasExample) ? 16f : 16f, holder.definitionText, searchAndShowActivity.getApplicationContext());
+            ViewUtility.setMarginsRelative(16f, 36f, 16f, (hasExample) ? 16f : 16f, holder.definitionText, searchAndShowActivity.getApplicationContext());
         }
 
         if (sortedPearsonDataSet.get(position).wordForm.trim().equals(mainWord)) { // if they are perfect matches, add more botttom margin
-//                setMargins(0f, 0f, 0f, 200f, holder.fillerView);
+//                setMarginsRelative(0f, 0f, 0f, 200f, holder.fillerView);
 
             ///fail
 
