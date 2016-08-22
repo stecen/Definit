@@ -126,6 +126,15 @@
             android:excludeFromRecents="true"
         android:theme="@style/Theme.Transparent"
             />
+        
+        <activity android:name=".showuservocab.SheetHistorySavedActivity"
+            android:launchMode="singleInstance"
+            android:taskAffinity=""
+            android:excludeFromRecents="true"
+android:theme="@style/VocabDialogTheme"
+            />
+        <!--android:theme="@style/ThemeAppCompat.Transparent"-->
+        <!--android:theme="@style/Theme.Transparent"-->
 
     </application>
 

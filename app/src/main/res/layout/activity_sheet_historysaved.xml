@@ -63,17 +63,17 @@
                         android:id="@+id/nav_image"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:src="@drawable/ic_arrow_back_white_24dp"
+                        android:src="@drawable/ic_content_paste_black_24dp"
                         android:layout_marginTop="16dp"
                         android:background="?attr/selectableItemBackgroundBorderless"/>
 
                     <!--<android.support.v7.widget.SearchView-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
 
 
-                        <!--android:textColor="#FFFFFF"-->
-                        <!--android:id="@+id/toolbar_text" />-->
+                    <!--android:textColor="#FFFFFF"-->
+                    <!--android:id="@+id/toolbar_text" />-->
 
 
 
@@ -160,20 +160,20 @@
                 android:textSize="16sp"/>
         </android.support.v4.widget.NestedScrollView>
         <!--<LinearLayout-->
-            <!--android:orientation="vertical"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content">-->
-    <!--</LinearLayout>-->
+        <!--android:orientation="vertical"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content">-->
+        <!--</LinearLayout>-->
 
-            <!--android:background="#DFDFDF"-->
+        <!--android:background="#DFDFDF"-->
 
-            <!--<ProgressBar-->
-            <!--style="@style/Widget.AppCompat.ProgressBar"-->
-            <!--android:theme="@style/CircularProgress"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"/>-->
+        <!--<ProgressBar-->
+        <!--style="@style/Widget.AppCompat.ProgressBar"-->
+        <!--android:theme="@style/CircularProgress"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"/>-->
 
-            <!--android:paddingTop="132dp"-->
+        <!--android:paddingTop="132dp"-->
 
 
 
@@ -187,7 +187,7 @@
             android:layout_height="match_parent"
             android:visibility="visible"
 
-        android:layout_gravity="bottom|end"
+            android:layout_gravity="bottom|end"
 
 
             android:onClick="sendToDatabase"
@@ -206,15 +206,15 @@
     <!--android:theme="@style/CircularProgress"-->
 
     <!--<ProgressBar android:id="@+id/progress_bar"-->
-        <!--android:layout_marginTop="148dp"-->
-        <!--style="?android:attr/progressBarStyleSmall"-->
+    <!--android:layout_marginTop="148dp"-->
+    <!--style="?android:attr/progressBarStyleSmall"-->
     <!--android:theme="@style/CircularProgress"-->
-        <!--android:alpha="0.4"-->
+    <!--android:alpha="0.4"-->
 
 
-        <!--android:layout_gravity="center_horizontal"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"/>-->
+    <!--android:layout_gravity="center_horizontal"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"/>-->
     <!--&lt;!&ndash;style="@style/Widget.AppCompat.ProgressBar"&ndash;&gt;-->
 
 </FrameLayout>

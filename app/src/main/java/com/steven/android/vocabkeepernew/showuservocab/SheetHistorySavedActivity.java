@@ -1,7 +1,8 @@
-package com.steven.android.vocabkeepernew.show;
+package com.steven.android.vocabkeepernew.showuservocab;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -15,11 +16,11 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -51,8 +52,9 @@ import com.steven.android.vocabkeepernew.get.pearson.PearsonAsyncTask;
 import com.steven.android.vocabkeepernew.get.pearson.PearsonResponseInterface;
 import com.steven.android.vocabkeepernew.input.RelaySpeechActivity;
 import com.steven.android.vocabkeepernew.input.TypeWordPopupActivity;
-import com.steven.android.vocabkeepernew.showuservocab.SheetHistorySavedActivity;
-import com.steven.android.vocabkeepernew.showuservocab.UserVocabActivity;
+import com.steven.android.vocabkeepernew.show.PearsonAdapter;
+import com.steven.android.vocabkeepernew.show.RecyclerViewClickListener;
+import com.steven.android.vocabkeepernew.show.SearchAndShowActivity;
 import com.steven.android.vocabkeepernew.utility.DividerItemDecoration;
 import com.steven.android.vocabkeepernew.utility.PearsonAnswer;
 import com.steven.android.vocabkeepernew.utility.PearsonComparator;
@@ -62,16 +64,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Locale;
 
-import jp.wasabeef.recyclerview.animators.FadeInDownAnimator;
 import jp.wasabeef.recyclerview.animators.FadeInRightAnimator;
-import jp.wasabeef.recyclerview.animators.FadeInUpAnimator;
-import jp.wasabeef.recyclerview.animators.LandingAnimator;
-import jp.wasabeef.recyclerview.animators.OvershootInRightAnimator;
 
 /**
- * Created by Steven on 8/20/2016.
+ * Created by Steven on 8/22/2016.
  */
-public class SearchAndShowActivity extends AppCompatActivity implements PearsonResponseInterface, GlosbeResponseInterface, RecyclerViewClickListener {
+public class SheetHistorySavedActivity extends AppCompatActivity implements PearsonResponseInterface, GlosbeResponseInterface, RecyclerViewClickListener {
 
     SearchView searchView;
     Intent comingIntent;
@@ -83,7 +81,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
     FrameLayout frame;
     ProgressBar progressBar;
     ImageView navImage;
-//    BottomSheetBehavior bottomSheetBehavior;
+        BottomSheetBehavior bottomSheetBehavior;
     View makeSpaceView;
     CoordinatorLayout coordinatorLayout;
     int coordHeight;
@@ -101,7 +99,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
     public static final String SENT_WORD = "sent_word";
     //    public static final String SENT_DEF = "send_def";
     public static final String SENT_PACKAGE_JSON = "send_package_json";
-//    public static final String KEY_RECOG_NOW = "recognow";
+    //    public static final String KEY_RECOG_NOW = "recognow";
     public static final String KEY_TEXT_REPLY = "KEYTEXTreply";
     public final static int REQ_CODE_SPEECH_INPUT = 92;
 
@@ -145,7 +143,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL, WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH, WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH); // don't watch outside
 
-        setContentView(R.layout.activitiy_searchandshow);
+        setContentView(R.layout.activity_sheet_historysaved);
 
 
 
@@ -182,21 +180,21 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
         defExRecycler = (RecyclerView) findViewById(R.id.definition_example_recycler);
         makeSpaceView = (View) findViewById(R.id.make_space_view);
 
-//        View bottomSheetView = findViewById(R.id.bottom_sheet);
-//        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetView);
-//        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-//        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-//            @Override
-//            public void onStateChanged(View bottomSheet, int newState) {
-//                if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
-//                    bottomSheetBehavior.setPeekHeight(0);
-//                }
-//            }
-//
-//            @Override
-//            public void onSlide(View bottomSheet, float slideOffset) {
-//            }
-//        });
+        View bottomSheetView = findViewById(R.id.bottom_sheet);
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetView);
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(View bottomSheet, int newState) {
+                if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
+                    bottomSheetBehavior.setPeekHeight(0);
+                }
+            }
+
+            @Override
+            public void onSlide(View bottomSheet, float slideOffset) {
+            }
+        });
         navImage = (ImageView) findViewById(R.id.nav_image); // testing view gone // todo: replace with history button
 //        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         navImage.setOnClickListener(new View.OnClickListener() {
@@ -259,81 +257,81 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
         frame.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
 
-        //todo : remove this, and instead in the future just update the adapter
-        recyclerAdapter = new PearsonAdapter(this ,new ArrayList<PearsonAnswer.DefinitionExamples>(), this, "Word");
-        defExRecycler.setAdapter(recyclerAdapter);
-
-
-        DisplayMetrics metrics = new DisplayMetrics();
-        SearchAndShowActivity.this.getWindowManager().getDefaultDisplay().getMetrics(metrics);
-
-        for (int i = 0; i < 500; i++) {
-            selected[i] = false;
-        } //redundant
-
-        selectedCount = 0;
-
-
-
-
-
-
-        comingIntent = getIntent();
-        Log.e("coming", "" + (comingIntent != null));
-        if (comingIntent != null && comingIntent.getAction() != null && comingIntent.getAction().equals(Intent.ACTION_SEARCH)) {
-            String query = comingIntent.getStringExtra(SearchManager.QUERY);
-
-            getDefinition(query);
-
-            lastWord= query;
-
-            // hide keyboard
-        } else if (comingIntent != null && comingIntent.hasExtra(SENT_WORD)) { //  manually sent from places
-            String query = comingIntent.getStringExtra(SENT_WORD).trim();
-            getDefinition(query);
-
-            lastWord= query;
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && comingIntent != null) { //quick reply
-            Bundle remoteInput = RemoteInput.getResultsFromIntent(comingIntent);
-            if (remoteInput != null) {
-                String replyQuery = ((String)remoteInput.getCharSequence(KEY_TEXT_REPLY));
-                Log.e("quickreply", "received for " + replyQuery);
-                if (replyQuery != null) {
-                    getDefinition(replyQuery.toLowerCase());
-                    lastWord= replyQuery;
-                }
-
-
-
-
-                View view = this.getCurrentFocus();
-                if (view != null) {
-                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-                }
-                 // HIDE 2.0
-            }
-        }/*else if (comingIntent != null && comingIntent.hasExtra(KEY_RECOG_NOW)) {
-            recognizeSpeech();
-            // recognize speech
-        }*/
-        //endregion search
-
-
-
-
-////        // Hide keyboard
-//        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-//        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0); // hide
-        View view = this.getCurrentFocus();
-        if (view != null) {
-            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
-
-
-//        setFrameHeight();
+//        //todo : remove this, and instead in the future just update the adapter
+//        recyclerAdapter = new PearsonAdapter(this ,new ArrayList<PearsonAnswer.DefinitionExamples>(), this, "Word");
+//        defExRecycler.setAdapter(recyclerAdapter);
+//
+//
+//        DisplayMetrics metrics = new DisplayMetrics();
+//        SearchAndShowActivity.this.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+//
+//        for (int i = 0; i < 500; i++) {
+//            selected[i] = false;
+//        } //redundant
+//
+//        selectedCount = 0;
+//
+//
+//
+//
+//
+//
+//        comingIntent = getIntent();
+//        Log.e("coming", "" + (comingIntent != null));
+//        if (comingIntent != null && comingIntent.getAction() != null && comingIntent.getAction().equals(Intent.ACTION_SEARCH)) {
+//            String query = comingIntent.getStringExtra(SearchManager.QUERY);
+//
+//            getDefinition(query);
+//
+//            lastWord= query;
+//
+//            // hide keyboard
+//        } else if (comingIntent != null && comingIntent.hasExtra(SENT_WORD)) { //  manually sent from places
+//            String query = comingIntent.getStringExtra(SENT_WORD).trim();
+//            getDefinition(query);
+//
+//            lastWord= query;
+//        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && comingIntent != null) { //quick reply
+//            Bundle remoteInput = RemoteInput.getResultsFromIntent(comingIntent);
+//            if (remoteInput != null) {
+//                String replyQuery = ((String)remoteInput.getCharSequence(KEY_TEXT_REPLY));
+//                Log.e("quickreply", "received for " + replyQuery);
+//                if (replyQuery != null) {
+//                    getDefinition(replyQuery.toLowerCase());
+//                    lastWord= replyQuery;
+//                }
+//
+//
+//
+//
+//                View view = this.getCurrentFocus();
+//                if (view != null) {
+//                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+//                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+//                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+//                }
+//                // HIDE 2.0
+//            }
+//        }/*else if (comingIntent != null && comingIntent.hasExtra(KEY_RECOG_NOW)) {
+//            recognizeSpeech();
+//            // recognize speech
+//        }*/
+//        //endregion search
+//
+//
+//
+//
+//////        // Hide keyboard
+////        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+////        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0); // hide
+//        View view = this.getCurrentFocus();
+//        if (view != null) {
+//            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+//            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+//        }
+//
+//
+////        setFrameHeight();
 
     }
 
@@ -486,8 +484,8 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 //        handler1.postDelayed(new Runnable() {
 //            @Override
 //            public void run() {
-                progressBar.setVisibility(View.VISIBLE); // redundant sometimes
-                fab.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE); // redundant sometimes
+        fab.setVisibility(View.GONE);
 //            }
 //        }, 100);
 //        ViewUtility.circleExit(fab);
@@ -499,27 +497,27 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
         pearsonAsyncTask = new PearsonAsyncTask(this, query, this);
         pearsonAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
-        final SearchAndShowActivity searchAndShowActivity = this;
-
-
-        View view = searchAndShowActivity.getCurrentFocus();
-        if (view != null) {
-            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
-
-        //hide keyboard again///////////// well thats annoying
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                View view = searchAndShowActivity.getCurrentFocus();
-                if (view != null) {
-                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                }
-            }
-        }, 25);
+//        final SearchAndShowActivity searchAndShowActivity = this;
+//
+//
+//        View view = searchAndShowActivity.getCurrentFocus();
+//        if (view != null) {
+//            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+//            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+//        }
+//
+//        //hide keyboard again///////////// well thats annoying
+//        final Handler handler = new Handler();
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                View view = searchAndShowActivity.getCurrentFocus();
+//                if (view != null) {
+//                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+//                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+//                }
+//            }
+//        }, 25);
 
     }
 
@@ -843,7 +841,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
         list.add(pearsonAnswer);
         addPearsonList(list.get(0).definitionExamplesList, true); // set false when there is no definition
 
-        final SearchAndShowActivity searchAndShowActivity = this; // hide keyboard -_-
+//        final SearchAndShowActivity searchAndShowActivity = this; // hide keyboard -_-
 //        final Handler handler = new Handler();
 //        handler.postDelayed(new Runnable() {
 //            @Override
@@ -881,105 +879,105 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
     // Set the pearson definitions through the listviews
     @Override
     public void afterPearsonDefine(PearsonAnswer pearsonAnswer) {
-        pA = pearsonAnswer;
-
-        setFrameHeight();
+//        pA = pearsonAnswer;
 //
-        recyclerAdapter = new PearsonAdapter(this, pearsonAnswer.definitionExamplesList, this, pearsonAnswer.word); //todo: update adapter, not new one
-        defExRecycler.setAdapter(recyclerAdapter); // set a new adapter.. but don't do this
-
-        recyclerAdapter.updateMainWord(pearsonAnswer.word);
-
-        //region idk
-        final ArrayList<PearsonAnswer.DefinitionExamples> finalDataSet = new ArrayList<>();
-        for (int i = 0; i < pearsonAnswer.definitionExamplesList.size(); i++) {
-            finalDataSet.add(pearsonAnswer.definitionExamplesList.get(i)); // duplicate the list
-        }
-
-        ArrayList<Integer> removeIdx = new ArrayList<>();
-        for (int i = 0; i < finalDataSet.size(); i++) {  // remove blanks
-            Log.e("removeIdx", "testing " + "(" + finalDataSet.get(i).definition.trim() + ")" + " "+ PearsonAnswer.DEFAULT_NO_DEFINITION + i);
-            if (finalDataSet.get(i).definition.trim().equals(PearsonAnswer.DEFAULT_NO_DEFINITION)) {
-                Log.e("removeIdx", "yBYEEEEEEEEEEEEEEEEEE");
-                removeIdx.add(i);
-            }
-        }
-        Collections.sort(removeIdx);
-        Collections.reverse(removeIdx);
-        for (int i = 0; i < removeIdx.size(); i++) {
-            Log.e("removeIdx", "aaa removing " + removeIdx.get(i));
-            finalDataSet.remove((int) removeIdx.get(i));
-        }
-
-        // if the data set has definitions to display
-        if (!(finalDataSet.isEmpty())) { // do glosbe asynctask
-//        AlphaAnimation alphaAnimation = new AlphaAnimation(1.0f, 0.0f); // remove progress bar
-//        alphaAnimation.setDuration(120);
-//        progressBar.startAnimation(alphaAnimation);
-//        (new CallbackAsyncTask(120, new CallbackAsyncInterface() {
-//            @Override
-//            public void waitCallback() {
-//                Log.e("callback", "GRASS MUD HORSE");
-
-            //hide keyboard again///////////// well thats annoying
-
-            finishReplyInputNotif(); // android N only
-
-            final SearchAndShowActivity searchAndShowActivity = this;
-//            final Handler handler = new Handler();
-//            handler.postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-
-
-
-//                    // hwanhee
-//                    View view = searchAndShowActivity.getCurrentFocus();
-//                    if (view != null) {
-//                        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-//                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-//                    }
-
-
-
-
-            // Hide 2.0
-//            }, 50);
-
-
-            // -_- DESTROY KEYBOARD!!!!!!!!!!
-            ////hwanhee
-//            final Handler handler = new Handler();
-//            handler.postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    View view = searchAndShowActivity.getCurrentFocus();
-//                    if (view != null) {
-//                        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-//                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-//                    }
-//                    // Hide 2.0
+//        setFrameHeight();
+////
+//        recyclerAdapter = new PearsonAdapter(this, pearsonAnswer.definitionExamplesList, this, pearsonAnswer.word); //todo: update adapter, not new one
+//        defExRecycler.setAdapter(recyclerAdapter); // set a new adapter.. but don't do this
 //
-//                }
-//            }, 50);
-
-
-            progressBar.setVisibility(View.INVISIBLE);
-
-
-            Collections.sort(finalDataSet, new PearsonComparator(pearsonAnswer.word.trim()));
-
-            Log.e("lolsorted", (new Gson()).toJson(finalDataSet));
-            Log.e("countlmao", "unsorted: " +Integer.toString(pearsonAnswer.definitionExamplesList.size()));
-            Log.e("countlmao", "sorted: " +Integer.toString(finalDataSet.size()));
-
-            addPearsonList(finalDataSet, true);
-
-        } else { // get the glosbe package
-
-            glosbeAsyncTask = new GlosbeAsyncTask(this, pearsonAnswer.word, this); // fui
-            glosbeAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR); // todo: change to normal .execute()?
-        }
+//        recyclerAdapter.updateMainWord(pearsonAnswer.word);
+//
+//        //region idk
+//        final ArrayList<PearsonAnswer.DefinitionExamples> finalDataSet = new ArrayList<>();
+//        for (int i = 0; i < pearsonAnswer.definitionExamplesList.size(); i++) {
+//            finalDataSet.add(pearsonAnswer.definitionExamplesList.get(i)); // duplicate the list
+//        }
+//
+//        ArrayList<Integer> removeIdx = new ArrayList<>();
+//        for (int i = 0; i < finalDataSet.size(); i++) {  // remove blanks
+//            Log.e("removeIdx", "testing " + "(" + finalDataSet.get(i).definition.trim() + ")" + " "+ PearsonAnswer.DEFAULT_NO_DEFINITION + i);
+//            if (finalDataSet.get(i).definition.trim().equals(PearsonAnswer.DEFAULT_NO_DEFINITION)) {
+//                Log.e("removeIdx", "yBYEEEEEEEEEEEEEEEEEE");
+//                removeIdx.add(i);
+//            }
+//        }
+//        Collections.sort(removeIdx);
+//        Collections.reverse(removeIdx);
+//        for (int i = 0; i < removeIdx.size(); i++) {
+//            Log.e("removeIdx", "aaa removing " + removeIdx.get(i));
+//            finalDataSet.remove((int) removeIdx.get(i));
+//        }
+//
+//        // if the data set has definitions to display
+//        if (!(finalDataSet.isEmpty())) { // do glosbe asynctask
+////        AlphaAnimation alphaAnimation = new AlphaAnimation(1.0f, 0.0f); // remove progress bar
+////        alphaAnimation.setDuration(120);
+////        progressBar.startAnimation(alphaAnimation);
+////        (new CallbackAsyncTask(120, new CallbackAsyncInterface() {
+////            @Override
+////            public void waitCallback() {
+////                Log.e("callback", "GRASS MUD HORSE");
+//
+//            //hide keyboard again///////////// well thats annoying
+//
+//            finishReplyInputNotif(); // android N only
+//
+//            final SearchAndShowActivity searchAndShowActivity = this;
+////            final Handler handler = new Handler();
+////            handler.postDelayed(new Runnable() {
+////                @Override
+////                public void run() {
+//
+//
+//
+////                    // hwanhee
+////                    View view = searchAndShowActivity.getCurrentFocus();
+////                    if (view != null) {
+////                        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+////                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+////                    }
+//
+//
+//
+//
+//            // Hide 2.0
+////            }, 50);
+//
+//
+//            // -_- DESTROY KEYBOARD!!!!!!!!!!
+//            ////hwanhee
+////            final Handler handler = new Handler();
+////            handler.postDelayed(new Runnable() {
+////                @Override
+////                public void run() {
+////                    View view = searchAndShowActivity.getCurrentFocus();
+////                    if (view != null) {
+////                        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+////                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+////                    }
+////                    // Hide 2.0
+////
+////                }
+////            }, 50);
+//
+//
+//            progressBar.setVisibility(View.INVISIBLE);
+//
+//
+//            Collections.sort(finalDataSet, new PearsonComparator(pearsonAnswer.word.trim()));
+//
+//            Log.e("lolsorted", (new Gson()).toJson(finalDataSet));
+//            Log.e("countlmao", "unsorted: " +Integer.toString(pearsonAnswer.definitionExamplesList.size()));
+//            Log.e("countlmao", "sorted: " +Integer.toString(finalDataSet.size()));
+//
+//            addPearsonList(finalDataSet, true);
+//
+//        } else { // get the glosbe package
+//
+//            glosbeAsyncTask = new GlosbeAsyncTask(this, pearsonAnswer.word, this); // fui
+//            glosbeAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR); // todo: change to normal .execute()?
+//        }
 
     }
 
@@ -1076,7 +1074,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
             nm.notify(UserVocabActivity.NOTIF_ID, n);
 
 
-                        Intent it = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+            Intent it = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
             this.sendBroadcast(it);
 
         }
