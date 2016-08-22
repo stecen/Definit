@@ -60,7 +60,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Locale;
 
+import jp.wasabeef.recyclerview.animators.FadeInDownAnimator;
 import jp.wasabeef.recyclerview.animators.FadeInRightAnimator;
+import jp.wasabeef.recyclerview.animators.FadeInUpAnimator;
+import jp.wasabeef.recyclerview.animators.LandingAnimator;
+import jp.wasabeef.recyclerview.animators.OvershootInRightAnimator;
 
 /**
  * Created by Steven on 8/20/2016.
@@ -87,6 +91,8 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 
     CollapsingToolbarLayout collapsingToolbarLayout = null;
 
+    boolean iAlreadyExist  = false; // solely for the sake of not displaying the circular reveal animation when it's onNewIntent
+
     public static boolean shouldShowPreviousTypeWordPopup = true; // self explanatory. but the only time this activity finishes when this is true is when the user presses the system back button
 
     public static final String SENT_WORD = "sent_word";
@@ -111,6 +117,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 
     public static final int TOUCH_OUTSIDE = 1; // for outsideclick
     public static final int TOUCH_SEND = 2;
+    public static final int TOUCH_FRAME = 3;
 
     protected boolean selected[] = new boolean[500]; // keeps track of which definitionExamples are clicked in the recyclerview to send to database / show color
     protected int selectedCount = 0; // count to show FAB or not
@@ -178,6 +185,9 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 
         //region oldanim
         defExRecycler.setItemAnimator(new FadeInRightAnimator());
+        defExRecycler.getItemAnimator().setAddDuration(150);
+
+//        defExRecycler.setItemAnimator(new );
 //        defExRecycler.getItemAnimator().setRemoveDuration(REMOVE_DURATION);
         //endregion
 
@@ -199,7 +209,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
                 @Override
                 public void onClick(View view) {
                     Log.e("frame", "clicked");
-                    touchHandler(TOUCH_OUTSIDE);
+                    touchHandler(TOUCH_FRAME);
                 }
             });
         }
@@ -468,6 +478,13 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 
         final SearchAndShowActivity searchAndShowActivity = this;
 
+
+        View view = searchAndShowActivity.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+
         //hide keyboard again///////////// well thats annoying
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -479,7 +496,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 }
             }
-        }, 50);
+        }, 25);
 
     }
 
@@ -502,9 +519,9 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 
 
         final ArrayList<PearsonAnswer.DefinitionExamples> finalSorted = finalDataSet;
-        /// guess I have to use recursion...
+
         if (finalSorted.size() > 0) { // add the definitionExamples gradually for the animation
-            lastIdx = finalSorted.size()-1;
+            lastIdx = finalSorted.size()-1; // communicate to the adapter, which one is the last one?
 
             recyclerAdapter.add(finalSorted.get(0));
 
@@ -558,6 +575,8 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
     protected void onDestroy(){
         Log.e("display", "onDestroy");
 
+        iAlreadyExist = false; // idk if it's necessary
+
         // :(( according to this stack overflow guy http://stackoverflow.com/questions/3282204/android-open-dialogue-activity-without-opening-main-activity-behind-it
 
 //        Intent mainIntent = new Intent(this, DisplayDefinitionPopupActivity.class);
@@ -584,6 +603,10 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 //            CallbackAsyncTask callbackAsyncTask = new CallbackAsyncTask(REMOVE_DURATION + 50, this); // wait 300 milliseconds for moving animations to finish
 //            callbackAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
+
+//            ViewUtility.circleExit(coordinatorLayout, 100);
+
+
             final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
@@ -593,11 +616,14 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
             }, REMOVE_DURATION+50);
 
 
-        } else  if (source == TOUCH_OUTSIDE && finishedGetting) {
+        } else  if (source == TOUCH_OUTSIDE) {
             if (TypeWordPopupActivity.typeWordPopupActivity != null) {
                 TypeWordPopupActivity.typeWordPopupActivity.finishMe();
             }
-            Log.e("touch", "touching outside");
+            Log.e("touch", "2 touching outside");
+            finish();
+        } else if (source == TOUCH_FRAME && finishedGetting) {
+            Log.e("touch", "2 frame");
             finish();
         }
 
@@ -606,6 +632,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (MotionEvent.ACTION_OUTSIDE == event.getAction()) {
+            Log.e("touch", "touching outside");
             touchHandler(TOUCH_OUTSIDE);
             return true;
         }
@@ -613,10 +640,47 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
         return super.onTouchEvent(event); // Delegate everything else to Activity.
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+
+//        coordinatorLayout.setVisibility(View.INVISIBLE);
+//        ViewUtility.circleReveal(frame); // lmfao
+//        DisplayDefinitionPopupActivity.shouldShowPreviousTypeWordPopup = true; // reset to true, in case
+    }
 
     @Override
     public void onResume() {
         super.onResume();
+
+
+        if (!iAlreadyExist) { // make sure it's not jut a onNewIntent
+
+            iAlreadyExist = true;
+
+            final WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+            final CoordinatorLayout fview = coordinatorLayout;
+            final ViewTreeObserver vto = fview.getViewTreeObserver();
+            vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+//                LayerDrawable ld = (LayerDrawable)tv.getBackground();
+//                ld.setLayerInset(1, 0, tv.getHeight() / 2, 0, 0);
+//                ViewTreeObserver obs = tv.getViewTreeObserver();
+
+                    ViewUtility.circleRevealExtra(coordinatorLayout); // lmfao
+                    Log.e("vto", "circle revealing");
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        fview.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    } else {
+                        fview.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                    }
+                }
+
+            });
+        }
+
+
 //        DisplayDefinitionPopupActivity.shouldShowPreviousTypeWordPopup = true; // reset to true, in case
     }
 
@@ -760,27 +824,34 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 //        handler.postDelayed(new Runnable() {
 //            @Override
 //            public void run() {
-                View view = searchAndShowActivity.getCurrentFocus();
-                if (view != null) {
-                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                }
+
+
+//                //hwanhee
+//                View view = searchAndShowActivity.getCurrentFocus();
+//                if (view != null) {
+//                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+//                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+//                }
+
+
+
 //
 //            }
 //        }, 50);
 
 
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                View view = searchAndShowActivity.getCurrentFocus();
-                if (view != null) {
-                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                }
-            }
-        }, 50);
+//        //hwanhee
+//        final Handler handler = new Handler();
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                View view = searchAndShowActivity.getCurrentFocus();
+//                if (view != null) {
+//                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+//                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+//                }
+//            }
+//        }, 50);
     }
 
     // Set the pearson definitions through the listviews
@@ -789,9 +860,11 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
         pA = pearsonAnswer;
 
         setFrameHeight();
-
+//
         recyclerAdapter = new PearsonAdapter(this, pearsonAnswer.definitionExamplesList, this, pearsonAnswer.word); //todo: update adapter, not new one
-        defExRecycler.setAdapter(recyclerAdapter);
+        defExRecycler.setAdapter(recyclerAdapter); // set a new adapter.. but don't do this
+
+        recyclerAdapter.updateMainWord(pearsonAnswer.word);
 
         //region idk
         final ArrayList<PearsonAnswer.DefinitionExamples> finalDataSet = new ArrayList<>();
@@ -826,37 +899,45 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 
             //hide keyboard again///////////// well thats annoying
 
-            finishReplyInputNotif();
+            finishReplyInputNotif(); // android N only
 
             final SearchAndShowActivity searchAndShowActivity = this;
 //            final Handler handler = new Handler();
 //            handler.postDelayed(new Runnable() {
 //                @Override
 //                public void run() {
-                    View view = searchAndShowActivity.getCurrentFocus();
-                    if (view != null) {
-                        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                    }
+
+
+
+//                    // hwanhee
+//                    View view = searchAndShowActivity.getCurrentFocus();
+//                    if (view != null) {
+//                        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+//                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+//                    }
+
+
+
 
             // Hide 2.0
 //            }, 50);
 
 
             // -_- DESTROY KEYBOARD!!!!!!!!!!
-            final Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    View view = searchAndShowActivity.getCurrentFocus();
-                    if (view != null) {
-                        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                    }
-                    // Hide 2.0
-
-                }
-            }, 50);
+            ////hwanhee
+//            final Handler handler = new Handler();
+//            handler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    View view = searchAndShowActivity.getCurrentFocus();
+//                    if (view != null) {
+//                        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+//                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+//                    }
+//                    // Hide 2.0
+//
+//                }
+//            }, 50);
 
 
             progressBar.setVisibility(View.INVISIBLE);

@@ -72,7 +72,7 @@ public class ClipboardWatcherService extends Service {
 
 
                 Intent popupIntent = new Intent(ClipboardWatcherService.this, FloatingWindowService.class);
-                popupIntent.putExtra(FloatingWindowService.KEY_WORD, word);
+                popupIntent.putExtra(FloatingWindowService.KEY_WORD, word.toLowerCase());
                 startService(popupIntent);
 
 

@@ -93,6 +93,11 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
     }
 
 
+    public void updateMainWord (String word) {
+        mainWord = word;
+    }
+
+
     public void updateSelect(int idx, boolean sel) {
         mySelected[idx] = sel;
     }
@@ -104,14 +109,21 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
 //        }
 
     public void clearAll() { // for when the user requests and new definition
-        sortedPearsonDataSet = new ArrayList<>();
+        for (int i = sortedPearsonDataSet.size()-1; i>=0; i--) {
+            sortedPearsonDataSet.remove(i);
+            notifyItemRemoved(i);
+            Log.e("clearall", "removing " + i);
+        }
+
+//        sortedPearsonDataSet = new ArrayList<>();
+//        notifyDataSetChanged(); // just in case
+
         contextIdx = -1; // index of the context input
         for (int i = 0; i < 500; i ++) {
             disBig[i] = false; // unused
             disLen[i] = -1; // unvisited
 
         }
-        notifyDataSetChanged();
     }
 
     public void remove(PearsonAnswer.DefinitionExamples item) {
@@ -308,53 +320,58 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
         // todo: make fade work
 
 
-        // OMG IT WORKS!!! YOU JUST HAVE TO SET THE OPPPOSTE
-        // set alpha based on lev distance
-//        if (sortedPearsonDataSet.size() > 1) { // don't do alpha if there's only one definition
-        int dis = PearsonComparator.computeLevenshteinDistance(sortedPearsonDataSet.get(position).wordForm, mainWord);
-//        int alphaInt = dis - 5; // 6 is an arbitrary number
-        if (dis < 7 ) {
-            if (holder.definitionText != null) {
-//                Log.e("levDis", "setting def alpha " + (.87f) + " " + sortedPearsonDataSet.get(position).wordForm + " vs " + mainWord + "... " + dis);
-                holder.definitionText.setAlpha(.87f);
-            }
-            if (holder.exampleText != null) {
-                holder.exampleText.setAlpha(.54f);
-            }
-        } else {
-            if (/*disBig[position] ||*/ (disLen[position] != -1 && disLen[position] >= 7) || dis >= 7) { // close enough to the actual wor
-//                disBig[position] = true;
-                disLen[position]= dis;
-                if (holder.definitionText != null) {
-                    Log.e("levDis", "setting def alpha " + (.6f * .87f) + " " + sortedPearsonDataSet.get(position).wordForm + " vs " + mainWord + "... " + dis);
-                    holder.definitionText.setAlpha(.6f * .87f);
-                }
-                if (holder.exampleText != null) {
-                    holder.exampleText.setAlpha(.6f * .54f);
-                }
-            }
-        }
-
-
+//        // OMG IT WORKS!!! YOU JUST HAVE TO SET THE OPPPOSTE
 //        // set alpha based on lev distance
-//        int dis = PearsonComparator.computeLevenshteinDistance(sortedPearsonDataSet.get(position).wordForm, mainWord);
-//        int alphaInt = dis - 5; // 6 is an arbitrary number
 ////        if (sortedPearsonDataSet.size() > 1) { // don't do alpha if there's only one definition
-//            int dis = PearsonComparator.computeLevenshteinDistance(sortedPearsonDataSet.get(position).wordForm, mainWord);
-//            int alphaInt = dis - 5; // 6 is an arbitrary number
-//            if (alphaInt < 0) { // close enough to the actual wor
-//                // do nothing
-//            } else { // alpha distance greater than 6... set alpha to tell user that the app is aware that this word is pretty far off
-//                float alpha = 1f - ((alphaInt > 15) ? 15f : (float)alphaInt) / 28f;// 20 is also arbitrary
+//        int dis = PearsonComparator.computeLevenshteinDistance(sortedPearsonDataSet.get(position).wordForm, mainWord);
+////        int alphaInt = dis - 5; // 6 is an arbitrary number
+//        if (dis < 7 ) {
+//            if (holder.definitionText != null) {
+////                Log.e("levDis", "setting def alpha " + (.87f) + " " + sortedPearsonDataSet.get(position).wordForm + " vs " + mainWord + "... " + dis);
+//                holder.definitionText.setAlpha(.87f);
+//            }
+//            if (holder.exampleText != null) {
+//                holder.exampleText.setAlpha(.54f);
+//            }
+//        } else {
+//            if (/*disBig[position] ||*/ (disLen[position] != -1 && disLen[position] >= 7) || dis >= 7) { // close enough to the actual wor
+////                disBig[position] = true;
+//                disLen[position]= dis;
 //                if (holder.definitionText != null) {
-//                    Log.e("levDis", "setting def alpha " + (alpha*.87f) + " " + sortedPearsonDataSet.get(position).wordForm + " vs " +mainWord + "... " + dis);
-//                    holder.definitionText.setAlpha(alpha * .87f);
+//                    Log.e("levDis", "setting def alpha " + (.6f * .87f) + " " + sortedPearsonDataSet.get(position).wordForm + " vs " + mainWord + "... " + dis);
+//                    holder.definitionText.setAlpha(.6f * .87f);
 //                }
 //                if (holder.exampleText != null) {
-//                    holder.exampleText.setAlpha(alpha * .54f);
+//                    holder.exampleText.setAlpha(.6f * .54f);
 //                }
 //            }
-////        }
+//        }
+
+
+             // set alpha based on lev distance
+            // if (sortedPearsonDataSet.size() > 1) { // don't do alpha if there's only one definition
+            int dis = PearsonComparator.computeLevenshteinDistance(sortedPearsonDataSet.get(position).wordForm, mainWord);
+            int alphaInt = dis - 5; // 6 is an arbitrary number
+            if (alphaInt < 0) { // close enough to the actual wor
+                 // do nothing
+                if (holder.definitionText != null) {
+//                Log.e("levDis", "setting def alpha " + (.87f) + " " + sortedPearsonDataSet.get(position).wordForm + " vs " + mainWord + "... " + dis);
+                holder.definitionText.setAlpha(.87f);
+                }
+                if (holder.exampleText != null) {
+                    holder.exampleText.setAlpha(.54f);
+                }
+            } else { // alpha distance greater than 6... set alpha to tell user that the app is aware that this word is pretty far off
+                float alpha = 1f - ((alphaInt > 8) ? 8f : (float)alphaInt) / 13f;// 16 is also arbitrary
+                if (holder.definitionText != null) {
+                    Log.e("levDis", "setting def alpha " + (alpha*.87f) + " " + sortedPearsonDataSet.get(position).wordForm + " vs " +mainWord + "... " + dis);
+                    holder.definitionText.setAlpha(alpha * .87f);
+                }
+                if (holder.exampleText != null) {
+                    holder.exampleText.setAlpha(alpha * .54f);
+                }
+            }
+//        }
 
 
 

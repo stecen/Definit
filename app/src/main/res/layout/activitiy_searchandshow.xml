@@ -22,6 +22,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
+        android:visibility="invisible"
+
+
         tools:context=".show.DisplayDefinitionPopupActivity">
 
         <!--android:fitsSystemWindows="true"-->
@@ -141,7 +144,6 @@
             <android.support.v7.widget.RecyclerView android:id="@+id/definition_example_recycler"
                 xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
-
 
                 android:alpha="1"
 

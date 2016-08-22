@@ -9,8 +9,12 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewAnimationUtils;
+import android.view.animation.AnimationUtils;
+import android.view.animation.Interpolator;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+
+import com.steven.android.vocabkeepernew.R;
 
 /**
  * Created by Steven on 8/15/2016.
@@ -50,7 +54,13 @@ public class ViewUtility {
         }
     }
 
+
+
     public static void circleExit(View view) {
+        circleExit(view, CIRCLE_ANIM_DURATION);
+    }
+
+    public static void circleExit(View view, int duration) {
         // previously visible view
         final View myView = view;
 
@@ -69,7 +79,7 @@ public class ViewUtility {
             Animator anim =
                     ViewAnimationUtils.createCircularReveal(myView, cx, cy, initialRadius, 0);
 
-            anim.setDuration(CIRCLE_ANIM_DURATION);
+            anim.setDuration(duration);
 
             // make the view invisible when the animation is done
             anim.addListener(new AnimatorListenerAdapter() {
@@ -86,6 +96,40 @@ public class ViewUtility {
             myView.setVisibility(View.GONE);
         }
     }
+
+    public static void circleRevealExtra(View view) {
+        // previously invisible view
+        final View myView = view;
+
+//        myView.setVisibility(View.VISIBLE);
+
+        Log.e("fab", "showing");
+
+        // create the animator for this view (the start radius is zero)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+            myView.setVisibility(View.VISIBLE);
+
+            // get the center for the clipping circle
+            int cx = myView.getMeasuredWidth() / 2;
+            int cy = myView.getMeasuredHeight() / 2;
+
+            // get the final radius for the clipping circle
+            int finalRadius = Math.max(myView.getWidth(), myView.getHeight()) / 2;
+            Animator anim =
+                    ViewAnimationUtils.createCircularReveal(myView, cx, cy, 0, finalRadius + 500);
+
+
+            anim.setDuration(CIRCLE_ANIM_DURATION + 500);
+
+
+            anim.start();
+        } else {
+            //    // make the view visible and start the animation
+            myView.setVisibility(View.VISIBLE);
+        }
+    }
+
 
     public static View setMarginsRelative(float l, float t, float r, float b, View textView, Context context) {
         RelativeLayout.LayoutParams llp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
