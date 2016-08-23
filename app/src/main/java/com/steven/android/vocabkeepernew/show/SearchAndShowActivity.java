@@ -15,11 +15,9 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -51,7 +49,7 @@ import com.steven.android.vocabkeepernew.get.pearson.PearsonAsyncTask;
 import com.steven.android.vocabkeepernew.get.pearson.PearsonResponseInterface;
 import com.steven.android.vocabkeepernew.input.RelaySpeechActivity;
 import com.steven.android.vocabkeepernew.input.TypeWordPopupActivity;
-import com.steven.android.vocabkeepernew.showuservocab.SheetHistorySavedActivity;
+import com.steven.android.vocabkeepernew.showuservocab.sheet.SheetHistorySavedActivity;
 import com.steven.android.vocabkeepernew.showuservocab.UserVocabActivity;
 import com.steven.android.vocabkeepernew.utility.DividerItemDecoration;
 import com.steven.android.vocabkeepernew.utility.PearsonAnswer;
@@ -62,11 +60,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Locale;
 
-import jp.wasabeef.recyclerview.animators.FadeInDownAnimator;
 import jp.wasabeef.recyclerview.animators.FadeInRightAnimator;
-import jp.wasabeef.recyclerview.animators.FadeInUpAnimator;
-import jp.wasabeef.recyclerview.animators.LandingAnimator;
-import jp.wasabeef.recyclerview.animators.OvershootInRightAnimator;
 
 /**
  * Created by Steven on 8/20/2016.
@@ -203,8 +197,15 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
             @Override
             public void onClick(View view) {
 //                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                View fview = getCurrentFocus();
+                if (fview != null) {
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(fview.getWindowToken(), 0);
+                }
+
                 Intent sheetIntent = new Intent(getApplicationContext(), SheetHistorySavedActivity.class);
                 startActivity(sheetIntent);
+                overridePendingTransition(0, 0);
             }
         });
 
@@ -719,6 +720,12 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
             final TextView defText = (TextView) v.findViewById(R.id.definition_text);
             final TextView exText = (TextView) v.findViewById(R.id.de_example_text); // doesn't necessarily exist
             final RelativeLayout colorView = (RelativeLayout) v.findViewById(R.id.color_view);
+
+            View view = getCurrentFocus();
+            if (view != null) {
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
 
             if (!selected[position]) { // that's for adding a context !!!
 //            selected[position] = true;

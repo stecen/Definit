@@ -155,14 +155,14 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
         // - replace the contents of the view with that element
         final UserVocab userVocab = sortedDataSet.get(position);
 
-        Log.e("adapterGson", (new Gson()).toJson(userVocab));
+//        Log.e("adapterGson", (new Gson()).toJson(userVocab));
         holder.wordText.setText(userVocab.word);
 
         Log.e("deftext", userVocab.word + " len: " + userVocab.listOfDefEx.size());
 //        Toast.makeText(context, userVocab.word + " len: " + userVocab.listOfDefEx.size(), Toast.LENGTH_SHORT).show();
 
         if (userVocab.listOfDefEx.size() > 0) {
-            Log.e("going", "into " + userVocab.word + " 0");
+//            Log.e("going", "into " + userVocab.word + " 0");
             if (userVocab.listOfDefEx.size() > 1) {
                 String text = userVocab.listOfDefEx.get(0).definition + "\n...";
                 holder.def1Text.setText(text);

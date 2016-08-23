@@ -69,6 +69,16 @@
         <item name="android:textColorPrimary">#FFF</item>
     </style>
 
+    <style name="HistoryTheme" parent="Theme.AppCompat.Light">
+        <item name="colorPrimary">@color/main_blue</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowNoTitle">true</item>
+
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
 
 
     <!-- Base application theme. -->
