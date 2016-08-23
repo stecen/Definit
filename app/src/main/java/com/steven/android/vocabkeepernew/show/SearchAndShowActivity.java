@@ -19,6 +19,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatImageView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -27,6 +28,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
+import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,7 +78,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
     FloatingActionButton fab;
     FrameLayout frame;
     ProgressBar progressBar;
-    ImageView navImage;
+    ImageView histImage;
 //    BottomSheetBehavior bottomSheetBehavior;
     View makeSpaceView;
     CoordinatorLayout coordinatorLayout;
@@ -101,7 +103,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 
     private static final String PEARSON_JSON = "pearson_json";
 
-    public static String lastWord = null;
+    public static String lastWord = " "; // not null pls :)
 
     PearsonAsyncTask pearsonAsyncTask;
     GlosbeAsyncTask glosbeAsyncTask;
@@ -162,10 +164,51 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
             View v = searchLinear.getChildAt(i);
             Log.e("viewll", "i" + v.toString());
         }
+
         LinearLayout frameLinear = (LinearLayout) searchLinear.findViewById(android.support.v7.appcompat.R.id.search_edit_frame);
         frameLinear.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         ViewUtility.setMarginsLinear(0f, 0f, 0f, 0f, frameLinear, getApplicationContext());
         frameLinear.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+
+//        ImageView searchButton = (ImageView) searchLinear.findViewById(android.support.v7.appcompat.R.id.search_button);
+//        searchButton.setImageResource(R.drawable.ic_send_black_24dp);
+        int childcount2 = frameLinear.getChildCount();
+        Log.e("viewll2", ""+childcount2);
+        for (int i=0; i < childcount2; i++){
+            View v = frameLinear.getChildAt(i);
+            Log.e("viewll2", "i" + v.toString());
+        }
+
+        LinearLayout plateLinear = (LinearLayout) frameLinear.findViewById(android.support.v7.appcompat.R.id.search_plate);
+        int childcount3 = plateLinear.getChildCount();
+        Log.e("viewll3", ""+childcount3);
+        for (int i=0; i < childcount3; i++){
+            View v = plateLinear.getChildAt(i);
+            Log.e("viewll3", "i" + v.toString());
+        }
+        AppCompatImageView closeButton = (AppCompatImageView) plateLinear.findViewById(android.support.v7.appcompat.R.id.search_close_btn);
+        if (closeButton != null) { // stop inching close button to the left!!
+
+            ViewUtility.setMarginsLinear(0f, 0f, 0f, 0f, closeButton, this);
+            closeButton.setPadding(0,16,16,0);
+        }
+
+        LinearLayout submitLinear = (LinearLayout) frameLinear.findViewById(android.support.v7.appcompat.R.id.submit_area);
+        int childcount4 = submitLinear.getChildCount();
+        Log.e("viewll4", ""+childcount4);
+        for (int i=0; i < childcount4; i++){
+            View v = submitLinear.getChildAt(i);
+            Log.e("viewll4", "i" + v.toString());
+        }
+        AppCompatImageView voiceButton = (AppCompatImageView) submitLinear.findViewById(android.support.v7.appcompat.R.id.search_voice_btn);
+        if (voiceButton != null) { // stop inching record button to the left!!
+
+            ViewUtility.setMarginsLinear(0f, 0f, 0f, 0f, voiceButton, this);
+            voiceButton.setPadding(0,16,16,0);
+        }
+
+
 
 
         //todo: change to include other things like multiple definitions, context, examples, other reminders, gifs
@@ -191,9 +234,9 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 //            public void onSlide(View bottomSheet, float slideOffset) {
 //            }
 //        });
-        navImage = (ImageView) findViewById(R.id.nav_image); // testing view gone // todo: replace with history button
+        histImage = (ImageView) findViewById(R.id.history_image); // testing view gone // todo: replace with history button
 //        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        navImage.setOnClickListener(new View.OnClickListener() {
+        histImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
@@ -345,7 +388,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 
             String query = intent.getStringExtra(SearchManager.QUERY);
 
-            if (lastWord == null || !lastWord.equals(query)) { // if not defining the same word
+            if (!lastWord.equals(query)) { // if not defining the same word
 
                 progressBar.setVisibility(View.VISIBLE); // clear the progress bar
 
@@ -607,6 +650,16 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 //        mainIntent.putExtra(UserVocabActivity.KEY_TASK, UserVocabActivity.IS_BACK);
 //        startActivity(mainIntent);
         super.onDestroy();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.menu_sheet, menu);
+        Log.e("sheet", "options menu called");
+//        searchView.setMaxWidth(Integer.MAX_VALUE);
+//        searchView.setLayoutParams(new RelativeLayout.LayoutParams(Integer.MAX_VALUE, ViewGroup.LayoutParams.WRAP_CONTENT));
+        return true;
     }
 
     public void touchHandler(int source) {

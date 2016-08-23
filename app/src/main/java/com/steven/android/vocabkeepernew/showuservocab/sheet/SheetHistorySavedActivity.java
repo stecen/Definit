@@ -34,6 +34,7 @@ import android.util.Log;
 import android.util.StringBuilderPrinter;
 import android.util.TypedValue;
 import android.view.Display;
+import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -167,7 +168,7 @@ public class SheetHistorySavedActivity extends AppCompatActivity implements Recy
 
         ///todo: set sheet percentage height
 
-        navImage = (ImageView) findViewById(R.id.nav_image); // testing view gone // todo: replace with history button
+//        navImage = (ImageView) findViewById(R.id.nav_image); // testing view gone // todo: replace with history button
 
         recyclerView = (RecyclerView) findViewById(R.id.inner_recycler);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
