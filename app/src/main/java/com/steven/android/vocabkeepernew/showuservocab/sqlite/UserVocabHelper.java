@@ -27,6 +27,7 @@ public class UserVocabHelper extends SQLiteOpenHelper {
 
     // Tables
     private static final String TABLE_WORDS = "words";
+    private static final String TABLE_HISTORY = "history";
 
     // Columns
     private static final String KEY_ID = "_id",
@@ -34,6 +35,7 @@ public class UserVocabHelper extends SQLiteOpenHelper {
         KEY_JSON = "json",
         KEY_DATE = "date",
         KEY_DATETEXT = "dateText";
+    // used for both tables
 
     public UserVocabHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -57,11 +59,95 @@ public class UserVocabHelper extends SQLiteOpenHelper {
                TABLE_WORDS, KEY_ID, KEY_WORD, KEY_JSON, KEY_DATE, KEY_DATETEXT);
 //                "CREATE TABLE IF NOT EXISTS " +TABLE_WORDS+ "(" +KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +KEY_WORD+
 //                        " VARCHAR, " +KEY_JSON+ " VARCHAR, " +KEY_DATE+ " INTEGER, " +KEY_DATETEXT+ " VARCHAR);";
-
         Log.e("userVocab", "executing sql: " + CREATE_WORDS_TABLE);
+        db.execSQL(CREATE_WORDS_TABLE); // create user saved words table
 
-        db.execSQL(CREATE_WORDS_TABLE);
+//
+//
+        String CREATE_HISTORY_TABLE = String.format(Locale.US, "CREATE TABLE IF NOT EXISTS %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s VARCHAR, %s UNSIGNED BIG INT);",
+                TABLE_HISTORY, KEY_ID, KEY_WORD, KEY_DATE);
+        Log.e("userVocab", "executing sql: " + CREATE_HISTORY_TABLE);
+        db.execSQL(CREATE_HISTORY_TABLE); // create all user searched words
     }
+
+    //region history
+    public void addHistory(HistoryVocab historyVocab) {
+        SQLiteDatabase db = getWritableDatabase();
+
+        Log.e("addWordHist", historyVocab.word + " " + historyVocab.date);
+
+        // It's a good idea to wrap our insert in a transaction. This helps with performance and ensures
+        // consistency of the database.
+        db.beginTransaction();
+        try {
+            // The user might already exist in the database (i.e. the same user created multiple posts).
+            //long userId = addOrUpdateWord(userVocab.word); //todo: check for duplicates
+
+            ContentValues values = new ContentValues();
+            values.put(KEY_WORD, historyVocab.word.trim());
+            values.put(KEY_DATE, historyVocab.date);
+
+            String queryString = String.format(Locale.US, "INSERT INTO %s VALUES (%s, %s) VALUES (\"%s\", %d);",
+                    TABLE_HISTORY,
+                    KEY_WORD, KEY_DATE,
+                    historyVocab.word.trim(), historyVocab.date);
+
+            Log.e("addWordHist", "adding: " + queryString);
+
+            // Notice how we haven't specified the primary key. SQLite auto increments the primary key column.
+            db.insertOrThrow(TABLE_HISTORY, null, values);
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.d("userVocab", "\n\n\n\n\n\n\n\n\n\n\n\nEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEError while trying to add post to database + " + e.toString() + "\n\n");
+        } finally {
+            db.endTransaction();
+        }
+    }
+
+    public ArrayList<HistoryVocab> getHistory50() {
+        ArrayList<HistoryVocab> historyVocabs = new ArrayList<>();
+
+        // SELECT * FROM POSTS
+        // LEFT OUTER JOIN USERS
+        // ON POSTS.KEY_POST_USER_ID_FK = USERS.KEY_USER_ID
+        String HISTORY_SELECT_QUERY =
+                String.format("SELECT * FROM %s ORDER BY %s DESC;",
+                        TABLE_HISTORY,
+                        KEY_DATE);
+
+
+        SQLiteDatabase db = getReadableDatabase();
+        Log.e("hist", "querying: " + HISTORY_SELECT_QUERY);
+        Cursor cursor = db.rawQuery(HISTORY_SELECT_QUERY, null);
+        try {
+            if (cursor.moveToFirst()) {
+                do {
+                    HistoryVocab histVocab = new HistoryVocab();
+                    histVocab.word = cursor.getString(cursor.getColumnIndex(KEY_WORD));
+                    histVocab.date = cursor.getLong(cursor.getColumnIndex(KEY_DATE));
+
+                    historyVocabs.add(histVocab);
+
+                } while(cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.d("hist", "error getting hist "  + e.toString());
+        } finally {
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+        }
+
+        Collections.reverse(historyVocabs);
+        return historyVocabs;
+    }
+
+
+
+
+
+
+    //region user vocab
 
     public Cursor getAllUserVocabCursor() { // make sure to close cursor!
         // SELECT * FROM POSTS
@@ -87,7 +173,7 @@ public class UserVocabHelper extends SQLiteOpenHelper {
         // LEFT OUTER JOIN USERS
         // ON POSTS.KEY_POST_USER_ID_FK = USERS.KEY_USER_ID
         String USER_VOCAB_SELECT_QUERY =
-                String.format("SELECT * FROM %s ORDER BY %s;",
+                String.format("SELECT * FROM %s ORDER BY %s DESC;",
                         TABLE_WORDS,
                         KEY_DATE);
 
@@ -119,10 +205,9 @@ public class UserVocabHelper extends SQLiteOpenHelper {
                 cursor.close();
             }
         }
-        Collections.reverse(userVocabs);
+//        Collections.reverse(userVocabs);
         return userVocabs;
     }
-
 
 
     // todo: upsert SQLite
@@ -136,7 +221,7 @@ public class UserVocabHelper extends SQLiteOpenHelper {
         // It's a good idea to wrap our insert in a transaction. This helps with performance and ensures
         // consistency of the database.
         db.beginTransaction();
-//        try {
+        try {
             // The user might already exist in the database (i.e. the same user created multiple posts).
             //long userId = addOrUpdateWord(userVocab.word); //todo: check for duplicates
 
@@ -161,12 +246,15 @@ public class UserVocabHelper extends SQLiteOpenHelper {
             // Notice how we haven't specified the primary key. SQLite auto increments the primary key column.
             db.insertOrThrow(TABLE_WORDS, null, values);
             db.setTransactionSuccessful();
-//        } catch (Exception e) {
-//            Log.d("userVocab", "Error while trying to add post to database + " + e.toString());
-//        } finally {
+        } catch (Exception e) {
+            Log.d("userVocab", "\n\n\n\n\n\n\n\n\n\n\n\nEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEError while trying to add post to database + " + e.toString() + "\n\n");
+        } finally {
             db.endTransaction();
-//        }
+        }
     }
+
+    //endregion
+
 
 // region check duplicate
 // Insert or update a user in the database

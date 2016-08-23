@@ -53,6 +53,9 @@ import com.steven.android.vocabkeepernew.input.RelaySpeechActivity;
 import com.steven.android.vocabkeepernew.input.TypeWordPopupActivity;
 import com.steven.android.vocabkeepernew.showuservocab.sheet.SheetHistorySavedActivity;
 import com.steven.android.vocabkeepernew.showuservocab.UserVocabActivity;
+import com.steven.android.vocabkeepernew.showuservocab.sqlite.HistoryVocab;
+import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocab;
+import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocabHelper;
 import com.steven.android.vocabkeepernew.utility.DividerItemDecoration;
 import com.steven.android.vocabkeepernew.utility.PearsonAnswer;
 import com.steven.android.vocabkeepernew.utility.PearsonComparator;
@@ -565,6 +568,23 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
             }
         }, 25);
 
+        addToHistory(query);
+
+
+        UserVocabHelper userVocabHelper = UserVocabHelper.getInstance(getApplicationContext());
+        ArrayList<HistoryVocab> historyVocabs = userVocabHelper.getHistory50();
+        for (int i = 0 ; i < historyVocabs.size(); i++) {
+            Log.e("smh", historyVocabs.get(i).word + " " + historyVocabs.get(i).date);
+        }
+        Log.e("smh", historyVocabs.size() + "");
+
+    }
+
+    // add t history table for viewing :)
+    public void addToHistory(String word) {
+        Log.e("sql", "adding " + word + " to database");
+        UserVocabHelper sqlHelper = UserVocabHelper.getInstance(getApplicationContext());
+        sqlHelper.addHistory(new HistoryVocab(word, System.currentTimeMillis()));
     }
 
 
