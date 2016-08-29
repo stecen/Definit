@@ -29,6 +29,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.text.format.DateFormat;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.StringBuilderPrinter;
@@ -62,6 +63,7 @@ import com.steven.android.vocabkeepernew.show.RecyclerViewClickListener;
 import com.steven.android.vocabkeepernew.show.SearchAndShowActivity;
 import com.steven.android.vocabkeepernew.showuservocab.UserDetailsActivity;
 import com.steven.android.vocabkeepernew.showuservocab.UserVocabAdapter;
+import com.steven.android.vocabkeepernew.showuservocab.sqlite.HistoryVocab;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocab;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocabHelper;
 import com.steven.android.vocabkeepernew.utility.DividerItemDecoration;
@@ -88,7 +90,7 @@ public class SheetHistorySavedActivity extends AppCompatActivity implements Recy
 
     RecyclerView recyclerView;
     UserVocabHelper helper;
-    UserVocabAdapter adapter;
+    SheetHistoryAdapter adapter;
     NestedScrollView nested;
 
     boolean canFinish = false;//before opening the sheet, don't stop when clicked coord
@@ -177,15 +179,20 @@ public class SheetHistorySavedActivity extends AppCompatActivity implements Recy
         recyclerView.setHasFixedSize(true);
         helper = UserVocabHelper.getInstance(this);
 
-        ArrayList<UserVocab> userVocabList = helper.getAllUserVocab();
-        adapter = new UserVocabAdapter(userVocabList, this, getApplicationContext());
+        ArrayList<HistoryVocab> historyVocabs = helper.getHistory50();
+        adapter = new SheetHistoryAdapter(historyVocabs, this, getApplicationContext());
         recyclerView.setNestedScrollingEnabled(false);
+//        recyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext()));
         recyclerView.setAdapter(adapter);
 
         nested = (NestedScrollView) findViewById(R.id.bottom_sheet);
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
             nested.setElevation(16f);
         }
+
+
+
+
 
 
 //        setScrollHeight();
@@ -216,13 +223,15 @@ public class SheetHistorySavedActivity extends AppCompatActivity implements Recy
 
     }
 
-    public void recyclerViewListClicked(View v, int position) {
-        String userVocabString = (new Gson()).toJson(adapter.sortedDataSet.get(position));
-        Log.e("userVocab", "clicked " + position +". " + userVocabString);
 
-        Intent detailIntent = new Intent(this, UserDetailsActivity.class);
-        detailIntent.putExtra(UserDetailsActivity.KEY_JSON, userVocabString);
-        startActivity(detailIntent);
+    public void recyclerViewListClicked(View v, int position) {
+        String query = adapter.sortedDataSet.get(position).word;
+        Log.e("sheet", "clicked " + position +". " + query);
+
+        Intent defineIntent = new Intent(this, SearchAndShowActivity.class);
+        defineIntent.putExtra(SearchAndShowActivity.SENT_WORD, query);
+        defineIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(defineIntent);
     }
 
     public void setScrollHeight () {

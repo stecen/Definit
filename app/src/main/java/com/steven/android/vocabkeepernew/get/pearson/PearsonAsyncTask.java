@@ -112,7 +112,7 @@ public class PearsonAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
 
             url = new URL(completeURL);
             HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
-            con.setConnectTimeout(15000);
+            con.setConnectTimeout(10000);
             con.setDoInput(true);
             con.setDoOutput(false);
 
@@ -241,11 +241,28 @@ public class PearsonAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
                     sb.append(line).append("\n");
                 }
 
-                Log.d("lol", "error stream: \n" + sb.toString());
+                Log.d("pearson", "errorstream: \n" + sb.toString());
+
+
+                PearsonAnswer.DefinitionExamples definitionExamples = new PearsonAnswer.DefinitionExamples();
+                definitionExamples.wordForm = PearsonAnswer.DEFAULT_NO_DEFINITION;
+                definitionExamples.definition = PearsonAnswer.DEFAULT_NO_DEFINITION;
+                definitionExamples.examples.add(PearsonAnswer.DEFAULT_NO_EXAMPLE);
+                definitionExamples.partOfSpeech = "---";
+
+                pearsonAnswer.definitionExamplesList.add(definitionExamples); //same
             }
 
 
         } catch (Exception e) {
+            PearsonAnswer.DefinitionExamples definitionExamples = new PearsonAnswer.DefinitionExamples();
+            definitionExamples.wordForm = PearsonAnswer.DEFAULT_NO_DEFINITION;
+            definitionExamples.definition = PearsonAnswer.DEFAULT_NO_DEFINITION;
+            definitionExamples.examples.add(PearsonAnswer.DEFAULT_NO_EXAMPLE);
+            definitionExamples.partOfSpeech = "---";
+
+            pearsonAnswer.definitionExamplesList.add(definitionExamples); //same
+
             Log.d("lol", e.toString());
         } finally {
             if (reader != null) {

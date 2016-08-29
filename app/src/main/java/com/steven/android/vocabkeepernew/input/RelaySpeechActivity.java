@@ -31,6 +31,16 @@ public class RelaySpeechActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_relay);
 
+        linearLayout = (LinearLayout) findViewById(R.id.relay_linear);
+
+        linearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.e("relay", "ll clicked");
+                finish();
+            }
+        });
+
 //        linearLayout = (LinearLayout) findViewById(R.id.relay_linear);
 //        linearLayout.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -86,7 +96,7 @@ public class RelaySpeechActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        Log.e("speechlol", "onActivityResult...");
+        Log.e("speechlol", "onActivityResult... " + requestCode + " " + resultCode);
 
         switch (requestCode) {
             case REQ_CODE_SPEECH_INPUT: {
@@ -105,6 +115,9 @@ public class RelaySpeechActivity extends Activity {
                     intent.putExtra(SearchAndShowActivity.SENT_WORD, result.get(0).trim());
                     Log.e("relay", "sending... " + result.get(0).trim());
                     startActivity(intent);
+                    finish();
+                } else if (resultCode == RESULT_CANCELED /*&& data != null*/) {
+                    Log.e("relay", "finishing cuz user cancelled lol");
                     finish();
                 }
                 break;

@@ -12,7 +12,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
-import android.support.v4.app.NotificationBuilderWithBuilderAccessor;
+import android.support.design.widget.AppBarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -35,6 +35,7 @@ import com.steven.android.vocabkeepernew.show.RecyclerViewClickListener;
 import com.steven.android.vocabkeepernew.show.SearchAndShowActivity;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocab;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocabHelper;
+import com.steven.android.vocabkeepernew.useless.WordDisplayCursorAdapter;
 import com.steven.android.vocabkeepernew.utility.DividerItemDecoration;
 
 import java.io.File;
@@ -47,6 +48,8 @@ public class UserVocabActivity extends AppCompatActivity implements RecyclerView
 //    ListView wordList;
     Button startButton, stopButton;
     TextView animationText;
+
+    AppBarLayout appBarLayout;
 
     RecyclerView recyclerView;
     UserVocabAdapter adapter;
@@ -91,10 +94,16 @@ public class UserVocabActivity extends AppCompatActivity implements RecyclerView
 //        startButton = (Button) findViewById(R.id.startService);
 //        stopButton = (Button) findViewById(R.id.stopService);
 
+        appBarLayout = (AppBarLayout) findViewById(R.id.word_list_appbar);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
             Log.e("tool", "Setting support toolbar...");
             setSupportActionBar(toolbar);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                if (appBarLayout  != null) {
+                    appBarLayout.setElevation(8);
+                }
+            }
         }
 
 //        serviceText = (TextView) findViewById(R.id.service_text);
@@ -132,7 +141,7 @@ public class UserVocabActivity extends AppCompatActivity implements RecyclerView
 //            Log.e("userVocab", userVocabList.get(i).word);
 //        }
         adapter = new UserVocabAdapter(userVocabList, this, getApplicationContext());
-        recyclerView.addItemDecoration(dividerItemDecoration);
+//        recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setAdapter(/*new SlideInLeftAnimationAdapter(*/adapter/*)*/);
 //        Log.e("adapter count",""+ adapter.getItemCount());
 
@@ -276,6 +285,9 @@ public class UserVocabActivity extends AppCompatActivity implements RecyclerView
 
             Notification n = builder.build();
 
+            n.flags = Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
+            n.priority = Notification.PRIORITY_MIN;
+
             nm.notify(NOTIF_ID, n);
 
         } else {
@@ -308,7 +320,9 @@ public class UserVocabActivity extends AppCompatActivity implements RecyclerView
             }
 
             Notification n = builder.build();
-//        n.flags |= Notification.FLAG_NO_CLEAR; // sticky todo: un sticky this
+
+            n.flags = Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
+            n.priority = Notification.PRIORITY_MIN;
 
             nm.notify(NOTIF_ID, n);
         }

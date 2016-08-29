@@ -138,7 +138,7 @@ public class UserVocabHelper extends SQLiteOpenHelper {
             }
         }
 
-        Collections.reverse(historyVocabs);
+//        Collections.reverse(historyVocabs);
         return historyVocabs;
     }
 

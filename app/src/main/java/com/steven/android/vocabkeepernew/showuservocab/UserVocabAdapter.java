@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.steven.android.vocabkeepernew.utility.DateUtility;
 import com.steven.android.vocabkeepernew.utility.PearsonAnswer;
 import com.steven.android.vocabkeepernew.R;
 import com.steven.android.vocabkeepernew.show.RecyclerViewClickListener;
@@ -39,6 +40,10 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView wordText, def1Text/*, def2Text, def3Text*/;
+
+        RelativeLayout headerRelative, mainRelative; // main , clickable content. exists because if there is a date header, you don't want ripplies showing through that because it's not supposed to be a part of the item
+        TextView dateHeaderText;
+
         TextView exampleText;
         View fillerView;
         RelativeLayout colorView;
@@ -48,6 +53,9 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
             super(v);
             wordText = (TextView) v.findViewById(R.id.word_text);
             def1Text = (TextView) v.findViewById(R.id.def1_text);
+            mainRelative = (RelativeLayout) v.findViewById(R.id.item_uservocab_main_relative);
+            headerRelative = (RelativeLayout) v.findViewById(R.id.item_user_vocab_recycler_dateheader);
+            dateHeaderText = (TextView) v.findViewById(R.id.item_uservocab_main_dateheader_text);
 //            def2Text = (TextView) v.findViewById(R.id.def2_text);
 //            def3Text = (TextView) v.findViewById(R.id.def3_text);
 //            exampleText = (TextView) v.findViewById(R.id.example_text);
@@ -55,7 +63,7 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
 //            colorView = (RelativeLayout) v.findViewById(R.id.color_view);
 //            fillerView = v.findViewById(R.id.filler);
 //                relativeLayout = (RelativeLayout) v;
-            v.setOnClickListener(this);
+            mainRelative.setOnClickListener(this);
         }
 
         @Override
@@ -154,6 +162,34 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         final UserVocab userVocab = sortedDataSet.get(position);
+
+
+        // if this item is the first
+        String date = DateUtility.getFullDate(userVocab.date, "MM/dd");
+        String prevDate = " ";
+        if (position != 0) {
+            prevDate = (DateUtility.getFullDate(sortedDataSet.get(position-1).date, "MM/dd"));
+        }
+//        Log.e("datecmp", date + " vs " + prevDate + "...    " + date.equals(prevDate));
+        if (position != 0 && !(date.equals(prevDate))) {
+            holder.headerRelative.setVisibility(View.VISIBLE);
+            holder.dateHeaderText.setText(date);
+        } else if (position != 0) {
+//            holder.dateHeaderText.setText(" "); // if is the same date as yesterday
+            holder.headerRelative.setVisibility(View.GONE);
+        } else { // exclusive for pos == 0
+            holder.headerRelative.setVisibility(View.VISIBLE);
+            holder.dateHeaderText.setPadding(0,0,0,0);
+            holder.dateHeaderText.setText(date);
+        }
+
+
+
+
+
+
+
+
 
 //        Log.e("adapterGson", (new Gson()).toJson(userVocab));
         holder.wordText.setText(userVocab.word);

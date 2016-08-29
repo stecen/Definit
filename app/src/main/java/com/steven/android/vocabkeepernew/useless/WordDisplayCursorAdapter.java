@@ -1,4 +1,4 @@
-package com.steven.android.vocabkeepernew.showuservocab;
+package com.steven.android.vocabkeepernew.useless;
 
 import android.content.Context;
 import android.database.Cursor;

@@ -131,6 +131,8 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
     final float BIG_FONT = 16f;
     boolean doChangeFont = true; // for me to change
 
+    boolean didUserCancel = false; // when the user presses the searchview while the results are still loading
+
     // dialog activity's maximum height http://stackoverflow.com/questions/6624480/how-to-customize-the-width-and-height-when-show-an-activity-as-a-dialog
     // expanding toolbar https://github.com/chrisbanes/cheesesquare/tree/master/app/src/main/java/com/support/android/designlibdemo
 
@@ -141,8 +143,8 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
         super.onCreate(savedInstanceState);
 
         // Make us non-modal, so that others can receive touch events.  ...but notify us that it happened.
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL, WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH, WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH); // don't watch outside
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL, WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL);
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH, WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH); // don't watch outside
 
         setContentView(R.layout.activitiy_searchandshow);
 
@@ -160,7 +162,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 //        ViewUtility.setMarginsLinear(0f, 0f, 0f, 0f, (View) searchText, getApplicationContext());
         searchText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 21f);
 
-//
+        // region readjust searchview margins
         LinearLayout searchLinear = (LinearLayout) searchView.findViewById(android.support.v7.appcompat.R.id.search_bar);
         int childcount = searchLinear.getChildCount();
         for (int i=0; i < childcount; i++){
@@ -210,9 +212,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
             ViewUtility.setMarginsLinear(0f, 0f, 0f, 0f, voiceButton, this);
             voiceButton.setPadding(0,16,16,0);
         }
-
-
-
+        //endregion
 
         //todo: change to include other things like multiple definitions, context, examples, other reminders, gifs
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
@@ -337,7 +337,11 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
             // hide keyboard
         } else if (comingIntent != null && comingIntent.hasExtra(SENT_WORD)) { //  manually sent from places
             String query = comingIntent.getStringExtra(SENT_WORD).trim();
+
+//            searchView.setQuery(query, true);
             getDefinition(query);
+
+            searchView.clearFocus();
 
             lastWord= query;
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && comingIntent != null) { //quick reply
@@ -421,6 +425,8 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 
             Log.e("searchandshow", "wow u sent " + word);
 
+//            getDefinitionNewIntent(word);
+//
             if (lastWord == null || !lastWord.equals(word)) { // if not defining the same word
 
                 progressBar.setVisibility(View.VISIBLE); // clear the progress bar
@@ -435,6 +441,18 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 
                 getDefinition(word);
 
+                final Handler handler1 = new Handler();
+                handler1.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        View view = getCurrentFocus();
+                        if (view != null) {
+                            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                        }
+                    }
+                }, 100);
+
                 lastWord = word;
             }
 
@@ -444,6 +462,8 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
                 InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
+            searchView.clearFocus();
+
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) { //quick reply
             progressBar.setVisibility(View.VISIBLE); // clear the progress bar
             recyclerAdapter.clearAll(); // clear the list
@@ -523,6 +543,11 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
         });
     }
 
+    public void interruptGetDefinition () {
+        progressBar.setVisibility(View.INVISIBLE);
+        didUserCancel = true;
+    }
+
     public void getDefinition(String query) {
         Log.e("searchomg", query);
         searchView.setQuery(query,false);
@@ -542,6 +567,28 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 //        makeSpaceView.setVisibility(View.VISIBLE);
 
         //clear Adapter and set progress bar
+
+        didUserCancel = false;
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) { // if the user changes the text after sending this definition request, cancel the request
+                Log.e("search", "textchanged");
+                interruptGetDefinition();
+                return false;
+            }
+        });
+
+        query = query.replace("\n", " ");
+        if (query.length() > 50) {
+            query = query.substring(0, 50); // volcanoisis
+        }
+
 
         pearsonAsyncTask = new PearsonAsyncTask(this, query, this);
         pearsonAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -568,15 +615,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
             }
         }, 25);
 
-        addToHistory(query);
-
-
-        UserVocabHelper userVocabHelper = UserVocabHelper.getInstance(getApplicationContext());
-        ArrayList<HistoryVocab> historyVocabs = userVocabHelper.getHistory50();
-        for (int i = 0 ; i < historyVocabs.size(); i++) {
-            Log.e("smh", historyVocabs.get(i).word + " " + historyVocabs.get(i).date);
-        }
-        Log.e("smh", historyVocabs.size() + "");
+        addToHistory(query); // add to history
 
     }
 
@@ -918,6 +957,18 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
     @Override
     public void afterGlosbeDefine(PearsonAnswer pearsonAnswer) {
         finishReplyInputNotif(); //
+        if (didUserCancel) { // they changed searchview content aka searched for something new
+            didUserCancel = false;
+            searchView.setOnQueryTextListener(null);
+            return;
+        }
+
+        View view = getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+
 
         ArrayList<PearsonAnswer> list = new ArrayList<>();
         list.add(pearsonAnswer);
@@ -961,6 +1012,18 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
     // Set the pearson definitions through the listviews
     @Override
     public void afterPearsonDefine(PearsonAnswer pearsonAnswer) {
+        if (didUserCancel) { // they changed searchview content aka searched for something new
+            didUserCancel = false;
+            searchView.setOnQueryTextListener(null);
+            return;
+        }
+
+        View view = getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+
         pA = pearsonAnswer;
 
         setFrameHeight();
@@ -992,7 +1055,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
         }
 
         // if the data set has definitions to display
-        if (!(finalDataSet.isEmpty())) { // do glosbe asynctask
+        if (!(finalDataSet.isEmpty())) {
 //        AlphaAnimation alphaAnimation = new AlphaAnimation(1.0f, 0.0f); // remove progress bar
 //        alphaAnimation.setDuration(120);
 //        progressBar.startAnimation(alphaAnimation);
