@@ -31,6 +31,7 @@ import com.steven.android.vocabkeepernew.R;
 import com.steven.android.vocabkeepernew.get.sqlite.DictionaryDatabaseHelper;
 import com.steven.android.vocabkeepernew.input.ClipboardWatcherService;
 import com.steven.android.vocabkeepernew.input.RelaySpeechActivity;
+import com.steven.android.vocabkeepernew.settings.PreferencesActivity;
 import com.steven.android.vocabkeepernew.show.RecyclerViewClickListener;
 import com.steven.android.vocabkeepernew.show.SearchAndShowActivity;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocab;
@@ -384,6 +385,9 @@ public class UserVocabActivity extends AppCompatActivity implements RecyclerView
 //                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, (View) animationText, "word");
 //                startActivity(intent, options.toBundle());
 //            }
+
+            Intent intent = new Intent(this, PreferencesActivity.class);
+            startActivity(intent);
 
             return true;
         } else if (id == R.id.drop_table) {

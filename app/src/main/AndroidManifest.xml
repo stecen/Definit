@@ -52,7 +52,9 @@
         <!--http://stackoverflow.com/questions/3282204/android-open-dialogue-activity-without-opening-main-activity-behind-it-->
 
 
-
+        <activity android:name=".settings.PreferencesActivity"
+            android:theme="@style/PreferencesTheme"
+            android:label="Definit"/>
 
 
         <activity android:name=".show.DisplayDefinitionPopupActivity"

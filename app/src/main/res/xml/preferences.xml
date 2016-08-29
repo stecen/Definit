@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--<EditTextPreference android:title="Your Name"-->
+        <!--android:key="username"-->
+        <!--android:summary="Please provide your username"></EditTextPreference>-->
+    <SwitchPreference android:title="Toggle notification shortcut"
+        android:defaultValue="false"
+        android:summary="Creates a persistent notification shortcut to define words"
+        android:key="shortcut" />
+    <SwitchPreference android:title="Toggle pasteboard lookup"
+        android:defaultValue="false"
+        android:summary="Allows copied text to automatically be defined"
+        android:key="paste" />
+
+    <!--<PreferenceCategory-->
+        <!--android:title="@string/pref_sms_storage_title"-->
+        <!--android:key="pref_key_storage_settings">-->
+
+
+
+    <!--<ListPreference     android:title="Download Details"-->
+        <!--android:summary="Select the kind of data that you would like to download"-->
+        <!--android:key="downloadType"-->
+        <!--android:defaultValue="1"-->
+        <!--android:entries="@array/listArray"-->
+        <!--android:entryValues="@array/listValues" />-->
+</PreferenceScreen>

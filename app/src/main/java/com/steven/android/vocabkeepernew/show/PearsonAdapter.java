@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.steven.android.vocabkeepernew.R;
+import com.steven.android.vocabkeepernew.get.pearson.PearsonAsyncTask;
 import com.steven.android.vocabkeepernew.input.UserVocabInsertService;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocab;
 import com.steven.android.vocabkeepernew.utility.PearsonAnswer;
@@ -234,7 +235,7 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
         // - replace the contents of the view with that element
         final PearsonAnswer.DefinitionExamples definitionExamples = sortedPearsonDataSet.get(position);
         String number = String.format("%d", position + 1) + ". ";
-        String form = ((sortedPearsonDataSet.get(position).wordForm.trim().toLowerCase().equals(mainWord.toLowerCase())) ?
+        String form = ((sortedPearsonDataSet.get(position).wordForm.trim().toLowerCase().equals(mainWord.toLowerCase()) || sortedPearsonDataSet.get(position).wordForm.trim().equals("")) ?
                 ""
                 : (" (" + sortedPearsonDataSet.get(position).wordForm.trim() + ") "));
         String abbrev = ((abbr.containsKey(sortedPearsonDataSet.get(position).partOfSpeech)) ?

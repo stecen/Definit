@@ -56,8 +56,25 @@ public class DateUtility {
         Log.e("splitted", ""+splitted.length);
         if (splitted.length == 2) { // make sure
             int monthInt = Integer.parseInt(splitted[0]);
+            int dayInt = Integer.parseInt(splitted[1]);
             Log.e("splitted", "month: " + monthInt + ", of " + month[monthInt]);
-            return (month[monthInt] + " " + splitted[1]);
+
+            String superscript = "";
+            switch (dayInt % 10) { // first, second third, ..
+                case 1:
+                    superscript = "st";
+                    break;
+                case 2:
+                    superscript = "nd";
+                    break;
+                case 3:
+                    superscript = "rd";
+                    break;
+                default:
+                    superscript = "th";
+                    break;
+            }
+            return (month[monthInt] + " " + splitted[1] + superscript);
         } else {
             return formatted;
         }

@@ -13,6 +13,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLEncoder;
 
@@ -254,12 +255,22 @@ public class PearsonAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
             }
 
 
-        } catch (Exception e) {
+        } catch (SocketTimeoutException e) {
             PearsonAnswer.DefinitionExamples definitionExamples = new PearsonAnswer.DefinitionExamples();
             definitionExamples.wordForm = PearsonAnswer.DEFAULT_NO_DEFINITION;
             definitionExamples.definition = PearsonAnswer.DEFAULT_NO_DEFINITION;
             definitionExamples.examples.add(PearsonAnswer.DEFAULT_NO_EXAMPLE);
             definitionExamples.partOfSpeech = "---";
+
+            pearsonAnswer.definitionExamplesList.add(definitionExamples); //same
+
+            Log.d("pearson","sockettimeout");
+        } catch (Exception e) {
+            PearsonAnswer.DefinitionExamples definitionExamples = new PearsonAnswer.DefinitionExamples();
+            definitionExamples.wordForm = PearsonAnswer.DEFAULT_NO_DEFINITION;
+            definitionExamples.definition = PearsonAnswer.DEFAULT_NO_DEFINITION;
+            definitionExamples.examples.add(PearsonAnswer.DEFAULT_NO_EXAMPLE);
+//            definitionExamples.partOfSpeech = "---";
 
             pearsonAnswer.definitionExamplesList.add(definitionExamples); //same
 
