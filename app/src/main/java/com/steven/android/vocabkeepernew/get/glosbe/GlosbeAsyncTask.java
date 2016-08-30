@@ -1,12 +1,15 @@
 package com.steven.android.vocabkeepernew.get.glosbe;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.steven.android.vocabkeepernew.settings.PreferencesActivity;
 import com.steven.android.vocabkeepernew.utility.GlosbePackage;
 import com.steven.android.vocabkeepernew.utility.PearsonAnswer;
 import com.steven.android.vocabkeepernew.get.sqlite.DictionaryDatabaseHelper;
@@ -50,9 +53,9 @@ public class GlosbeAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
     Context ctx;
     String wordToDefine;
 
-    public final static String GLOSBE_QUERY = "https://glosbe.com/gapi/translate?from=eng&dest=eng&format=json&pretty=true&phrase=";
-    public final static String PEARSON_QUERY = "https://api.pearson.com/v2/dictionaries/ldoce5/entries?apikey=rsGRiugAUCRGAkIGXfAnzkMcBTcuKKtM&headword=";
-    public final static String PEARSON_SECOND_QUERY = "https://api.pearson.com/v2/dictionaries/laad3/entries?apikey=rsGRiugAUCRGAkIGXfAnzkMcBTcuKKtM&headword=";
+    public final static String GLOSBE_ENG_QUERY = "https://glosbe.com/gapi/translate?from=eng&dest=eng&format=json&pretty=true&phrase=";
+    public final static String GLOSBE_SPA_QUERY = "https://glosbe.com/gapi/translate?from=eng&dest=spa&format=json&pretty=true&phrase=";
+    public final static String GLOSBE_CHI_QUERY = "https://glosbe.com/gapi/translate?from=eng&dest=zho&format=json&pretty=true&phrase=";
 
     public final static String DEFAULT_NO_DEFINITION = "No definition found";
     public final static String DEFAULT_NO_EXAMPLE = "No example found";
@@ -156,10 +159,23 @@ public class GlosbeAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
         BufferedReader reader = null;
         URL url;
 
+        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(ctx.getApplicationContext());
+        String language = SP.getString("lang", "1");
+        Log.e("languageglosbe", language);
+        String queryUrl = GLOSBE_ENG_QUERY;
+        int langInt = Integer.parseInt(language.trim());
+        if (langInt == PreferencesActivity.ENGLISH_KEY) {
+            queryUrl = GLOSBE_ENG_QUERY; // redundant
+        } else if (langInt == PreferencesActivity.CHINESE_KEY) {
+            queryUrl = GLOSBE_CHI_QUERY;
+        } else if (langInt == PreferencesActivity.SPANISH_KEY) {
+            queryUrl = GLOSBE_SPA_QUERY;
+        }
+
         try {
             wordText = URLEncoder.encode(wordText.trim(), "ascii");
 
-            String completeURL = GLOSBE_QUERY + wordText;
+            String completeURL = queryUrl + wordText;
 
             url = new URL(completeURL);
             HttpsURLConnection con = (HttpsURLConnection) url.openConnection();

@@ -287,6 +287,7 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
             RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             layoutParams.addRule(RelativeLayout.BELOW, R.id.wordform_header_text);
             int px16 = Math.round(ViewUtility.convertDpToPixel(16, searchAndShowActivity));
+            int px8 = Math.round(ViewUtility.convertDpToPixel(8, searchAndShowActivity));
 //            int px12 = Math.round(ViewUtility.convertDpToPixel(12, searchAndShowActivity));
             layoutParams.setMargins(px16, px16, px16, 0);
             holder.posText.setLayoutParams(layoutParams); // reprogram the margins

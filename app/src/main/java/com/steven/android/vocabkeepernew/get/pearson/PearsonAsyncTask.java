@@ -176,7 +176,6 @@ public class PearsonAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
                                 definitionExamples.partOfSpeech = ("---"); // no part of speech
                             }
 
-
                             if (answer.has("senses") && !answer.isNull("senses") && answer.getJSONArray("senses").length() != 0) {
                                 JSONArray senses = answer.getJSONArray("senses");
 
