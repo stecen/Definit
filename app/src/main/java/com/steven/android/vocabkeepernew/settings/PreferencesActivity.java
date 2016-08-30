@@ -17,6 +17,7 @@ import com.steven.android.vocabkeepernew.utility.NotificationUtility;
 public class PreferencesActivity extends AppCompatActivity {
     public static int ENGLISH_KEY = 1;
     public static int CHINESE_KEY = 2;
+    public static int SPANISH_KEY = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

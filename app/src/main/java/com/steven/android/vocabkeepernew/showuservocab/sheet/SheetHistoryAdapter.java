@@ -2,7 +2,6 @@ package com.steven.android.vocabkeepernew.showuservocab.sheet;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,13 +9,10 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.HistoryVocab;
 import com.steven.android.vocabkeepernew.utility.DateUtility;
-import com.steven.android.vocabkeepernew.utility.PearsonAnswer;
 import com.steven.android.vocabkeepernew.R;
 import com.steven.android.vocabkeepernew.show.RecyclerViewClickListener;
-import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocab;
 
 import java.util.ArrayList;
 
@@ -41,15 +37,18 @@ public class SheetHistoryAdapter extends RecyclerView.Adapter<SheetHistoryAdapte
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        TextView wordText, dateText;
+        TextView wordText, dateHeaderText, timeText;
         TextView exampleText;
         View fillerView;
         RelativeLayout colorView;
+        RelativeLayout headerRelative;
 
         public ViewHolder(View v) {
             super(v);
             wordText = (TextView) v.findViewById(R.id.sheet_word_text);
-            dateText = (TextView) v.findViewById(R.id.sheet_date_text);
+            dateHeaderText = (TextView) v.findViewById(R.id.item_uservocab_main_dateheader_text);
+            headerRelative = (RelativeLayout) v.findViewById(R.id.item_user_vocab_recycler_dateheader);
+            timeText = (TextView) v.findViewById(R.id.sheet_time_text);
 
             v.setOnClickListener(this);
         }
@@ -90,23 +89,43 @@ public class SheetHistoryAdapter extends RecyclerView.Adapter<SheetHistoryAdapte
 
         holder.wordText.setText(historyVocab.word);
 
-        String date = DateUtility.getHumanifiedDate(historyVocab.date, "MM/dd");
+        // if this item is the first
+        String date = DateUtility.getFullDate(historyVocab.date, "MM/dd");
         String prevDate = " ";
-
         if (position != 0) {
-            prevDate = (DateUtility.getHumanifiedDate(sortedDataSet.get(position-1).date, "MM/dd"));
+            prevDate = (DateUtility.getFullDate(sortedDataSet.get(position-1).date, "MM/dd"));
         }
-
-
 //        Log.e("datecmp", date + " vs " + prevDate + "...    " + date.equals(prevDate));
         if (position != 0 && !(date.equals(prevDate))) {
-            holder.dateText.setText(date);
+            holder.headerRelative.setVisibility(View.VISIBLE);
+            holder.dateHeaderText.setText(date);
         } else if (position != 0) {
-            holder.dateText.setText(" "); // if is the same date as yesterday
-        } else {
-            holder.dateText.setText(date);
+//            holder.dateHeaderText.setText(" "); // if is the same date as yesterday
+            holder.headerRelative.setVisibility(View.GONE);
+        } else { // exclusive for pos == 0
+            holder.headerRelative.setVisibility(View.VISIBLE);
+            holder.dateHeaderText.setPadding(0,0,0,0);
+            holder.dateHeaderText.setText(date);
         }
 
+        holder.timeText.setText(DateUtility.getTime(historyVocab.date + ""));
+
+//        String date = DateUtility.getHumanifiedDate(historyVocab.date, "MM/dd");
+//        String prevDate = " ";
+//
+//        if (position != 0) {
+//            prevDate = (DateUtility.getHumanifiedDate(sortedDataSet.get(position-1).date, "MM/dd"));
+//        }
+//
+//
+////        Log.e("datecmp", date + " vs " + prevDate + "...    " + date.equals(prevDate));
+//        if (position != 0 && !(date.equals(prevDate))) {
+//            holder.dateText.setText(date);
+//        } else if (position != 0) {
+//            holder.dateText.setText(" "); // if is the same date as yesterday
+//        } else {
+//            holder.dateText.setText(date);
+//        }
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -114,4 +133,5 @@ public class SheetHistoryAdapter extends RecyclerView.Adapter<SheetHistoryAdapte
     public int getItemCount() {
         return sortedDataSet.size();
     }
+
 }

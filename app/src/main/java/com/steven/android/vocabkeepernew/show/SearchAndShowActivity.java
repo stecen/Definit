@@ -125,9 +125,10 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
     boolean endingActivity = false; //disable onclicks when the user wants to send
     boolean finishedGetting = false; // to make sure the activity doesn't end when the user clicks the framelayout before the definitions have loaded
 
-
     final float SMALL_FONT = 15f;
     final float BIG_FONT = 16f;
+    final float SMALL_HEAD_FONT = 16f;
+    final float BIG_HEAD_FONT = 17f;
     boolean doChangeFont = true; // for me to change
 
     boolean didUserCancel = false; // when the user presses the searchview while the results are still loading
@@ -830,7 +831,9 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
             final View outerView = v;
             final TextView defText = (TextView) v.findViewById(R.id.definition_text);
             final TextView exText = (TextView) v.findViewById(R.id.de_example_text); // doesn't necessarily exist
+            final TextView headText = (TextView) v.findViewById(R.id.wordform_header_text);
             final RelativeLayout colorView = (RelativeLayout) v.findViewById(R.id.color_view);
+            final TextView posText = (TextView) v.findViewById(R.id.pos_text);
 
             View view = getCurrentFocus();
             if (view != null) {
@@ -893,6 +896,32 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
                             });
                             exAnimator.start();
                         }
+
+                        if (headText != null && headText.getVisibility() == View.VISIBLE) {
+                            ValueAnimator headAnimator = ValueAnimator.ofFloat(BIG_HEAD_FONT, SMALL_HEAD_FONT);
+                            headAnimator.setDuration(SELECT_DURATION);
+                            headAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                                @Override
+                                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                                    float animatedValue = (float) valueAnimator.getAnimatedValue();
+                                    headText.setTextSize(animatedValue);
+                                }
+                            });
+                            headAnimator.start();
+                        }
+
+                        if (posText != null && posText.getVisibility() == View.VISIBLE) {
+                            ValueAnimator posAnimator = ValueAnimator.ofFloat(BIG_HEAD_FONT, SMALL_HEAD_FONT);
+                            posAnimator.setDuration(SELECT_DURATION);
+                            posAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                                @Override
+                                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                                    float animatedValue = (float) valueAnimator.getAnimatedValue();
+                                    posText.setTextSize(animatedValue);
+                                }
+                            });
+                            posAnimator.start();
+                        }
                     }
                 }
 
@@ -944,6 +973,32 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
                             }
                         });
                         exAnimator.start();
+                    }
+
+                    if (headText != null && headText.getVisibility() == View.VISIBLE) {
+                        ValueAnimator headAnimator = ValueAnimator.ofFloat(SMALL_HEAD_FONT, BIG_HEAD_FONT);
+                        headAnimator.setDuration(SELECT_DURATION);
+                        headAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                            @Override
+                            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                                float animatedValue = (float) valueAnimator.getAnimatedValue();
+                                headText.setTextSize(animatedValue);
+                            }
+                        });
+                        headAnimator.start();
+                    }
+
+                    if (posText != null && posText.getVisibility() == View.VISIBLE) { // should never be invisible tho...
+                        ValueAnimator posAnimator = ValueAnimator.ofFloat(SMALL_HEAD_FONT, BIG_HEAD_FONT);
+                        posAnimator.setDuration(SELECT_DURATION);
+                        posAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                            @Override
+                            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                                float animatedValue = (float) valueAnimator.getAnimatedValue();
+                                posText.setTextSize(animatedValue);
+                            }
+                        });
+                        posAnimator.start();
                     }
                 }
             }

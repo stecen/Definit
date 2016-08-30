@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.steven.android.vocabkeepernew.R;
-import com.steven.android.vocabkeepernew.get.pearson.PearsonAsyncTask;
 import com.steven.android.vocabkeepernew.input.UserVocabInsertService;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocab;
 import com.steven.android.vocabkeepernew.utility.PearsonAnswer;
@@ -69,8 +68,10 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        TextView wordformText;
         TextView definitionText;
         TextView exampleText;
+        TextView posText;
         View defFillerView, exFillerView;
         RelativeLayout colorView;
 //            RelativeLayout relativeLayout;
@@ -82,6 +83,8 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
             colorView = (RelativeLayout) v.findViewById(R.id.color_view);
             defFillerView = v.findViewById(R.id.def_bottom_filler);
             exFillerView = v.findViewById(R.id.ex_bottom_filler);
+            wordformText = (TextView) v.findViewById(R.id.wordform_header_text);
+            posText = (TextView) v.findViewById(R.id.pos_text);
 //                relativeLayout = (RelativeLayout) v;
             v.setOnClickListener(this);
         }
@@ -208,6 +211,18 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
                 exText.startAnimation(translateAnimation);
                 exText.setVisibility(View.INVISIBLE);
             }
+
+            TextView posText = (TextView) rootView.findViewById(R.id.pos_text);
+            if (posText != null) {
+                posText.startAnimation(translateAnimation);
+                posText.setVisibility(View.INVISIBLE);
+            }
+
+            TextView headText = (TextView) rootView.findViewById(R.id.wordform_header_text);
+            if (headText != null && headText.getVisibility() == View.VISIBLE) {
+                headText.startAnimation(translateAnimation);
+                headText.setVisibility(View.INVISIBLE);
+            }
         }
 
     }
@@ -238,25 +253,46 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
         String form = ((sortedPearsonDataSet.get(position).wordForm.trim().toLowerCase().equals(mainWord.toLowerCase()) || sortedPearsonDataSet.get(position).wordForm.trim().equals("")) ?
                 ""
                 : (" (" + sortedPearsonDataSet.get(position).wordForm.trim() + ") "));
-        String abbrev = ((abbr.containsKey(sortedPearsonDataSet.get(position).partOfSpeech)) ?
-                (" (" + abbr.get(sortedPearsonDataSet.get(position).partOfSpeech.trim()) + ")")
-                : (" (" + sortedPearsonDataSet.get(position).partOfSpeech + ")"));
+
+//        String abbrev = ((abbr.containsKey(sortedPearsonDataSet.get(position).partOfSpeech)) ?
+//                (" (" + abbr.get(sortedPearsonDataSet.get(position).partOfSpeech.trim()) + ")")
+//                : (" (" + sortedPearsonDataSet.get(position).partOfSpeech + ")"));
+        String abbrev = sortedPearsonDataSet.get(position).partOfSpeech.trim(); // lol for now
         String part = ((!(sortedPearsonDataSet.get(position).partOfSpeech.equals("---"))) ? (abbrev) : (""));
 
 
         String defText = number + form + sortedPearsonDataSet.get(position).definition + part;
         boolean isValid = sortedPearsonDataSet.get(position).definition.trim().equals(PearsonAnswer.DEFAULT_NO_DEFINITION);
 
-//        if (sortedPearsonDataSet.get(position).definition.trim().equals(EXTRA_CONTEXT)) {
-//            holder.definitionText.setText("Enter context here...");
-//            contextIdx = position;
-//            Log.e("contextIdx", "" + contextIdx);
-//        } else {
-            String htmlDefText = "<strong> " + ((!isValid) ? number : "") + form + "</strong>" + sortedPearsonDataSet.get(position).definition + "<i> " + part + "</i>";
-//            Log.e("html", htmlDefText);
+        String htmlDefText = "<strong> " + ((!isValid) ? number : "") + /*form +*/ "</strong>" + sortedPearsonDataSet.get(position).definition /*+ "<i> " + part + "</i>"*/;
+        holder.definitionText.setText(Html.fromHtml(htmlDefText));
 
-            holder.definitionText.setText(Html.fromHtml(htmlDefText));
-//        }
+        // new wordformtext
+        // if equals mainword, don't show anything
+        if (form.equals("")) {
+//            holder.wordformText.setText("wtf");
+            holder.wordformText.setVisibility(View.GONE);
+        } else {
+            holder.wordformText.setVisibility(View.VISIBLE);
+            holder.wordformText.setText(Html.fromHtml("<strong>" + sortedPearsonDataSet.get(position).wordForm.trim()+ "</strong>"));
+        }
+
+        // part of speech text
+        if (part.equals("")) {
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, 0);
+            layoutParams.addRule(RelativeLayout.BELOW, R.id.wordform_header_text);
+
+            holder.posText.setLayoutParams(layoutParams);
+        } else {
+            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+            layoutParams.addRule(RelativeLayout.BELOW, R.id.wordform_header_text);
+            int px16 = Math.round(ViewUtility.convertDpToPixel(16, searchAndShowActivity));
+//            int px12 = Math.round(ViewUtility.convertDpToPixel(12, searchAndShowActivity));
+            layoutParams.setMargins(px16, px16, px16, 0);
+            holder.posText.setLayoutParams(layoutParams); // reprogram the margins
+            holder.posText.setText(Html.fromHtml("<i>" + part + "</i>"));
+        }
+
 
         // if there is a context
         boolean hasExample = false;
@@ -304,6 +340,12 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
                 if (holder.exampleText != null) {
                     holder.exampleText.setTextSize(searchAndShowActivity.SMALL_FONT);
                 }
+                if (holder.wordformText != null && holder.wordformText.getVisibility() == View.VISIBLE) {
+                    holder.wordformText.setTextSize(searchAndShowActivity.SMALL_HEAD_FONT);
+                }
+                if (holder.posText != null) {
+                    holder.posText.setTextSize(searchAndShowActivity.SMALL_FONT);
+                }
             }
 
         } else {
@@ -314,6 +356,12 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
                 holder.definitionText.setTextSize(searchAndShowActivity.BIG_FONT);
                 if (holder.exampleText != null) {
                     holder.exampleText.setTextSize(searchAndShowActivity.BIG_FONT);
+                }
+                if (holder.wordformText != null && holder.wordformText.getVisibility() == View.VISIBLE) {
+                    holder.wordformText.setTextSize(searchAndShowActivity.BIG_HEAD_FONT);
+                }
+                if (holder.posText != null) {
+                    holder.posText.setTextSize(searchAndShowActivity.BIG_FONT);
                 }
             }
         }
@@ -362,6 +410,12 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
                 if (holder.exampleText != null) {
                     holder.exampleText.setAlpha(.54f);
                 }
+                if (holder.wordformText != null && holder.wordformText.getVisibility() == View.VISIBLE) {
+                    holder.wordformText.setAlpha(.87f);
+                }
+                if (holder.posText != null && holder.posText.getHeight() > 0) {
+                    holder.posText.setAlpha(.70f);
+                }
             } else { // alpha distance greater than 6... set alpha to tell user that the app is aware that this word is pretty far off
                 float alpha = 1f - ((alphaInt > 8) ? 8f : (float)alphaInt) / 13f;// 16 is also arbitrary
                 if (holder.definitionText != null) {
@@ -371,10 +425,14 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
                 if (holder.exampleText != null) {
                     holder.exampleText.setAlpha(alpha * .54f);
                 }
+                if (holder.wordformText != null && holder.wordformText.getVisibility() == View.VISIBLE) {
+                    holder.wordformText.setAlpha(alpha * .87f);
+                }
+                if (holder.posText != null && holder.posText.getHeight() > 0) {
+                    holder.posText.setAlpha(alpha * .70f);
+                }
             }
 //        }
-
-
 
                 /*if (position == 0*//* || position == searchAndShowActivity.lastIdx*//*) { // add space above because of send button
             ViewUtility.setMarginsRelative(16f, 40f, 16f, (hasExample) ? 16f : 16f, holder.definitionText, searchAndShowActivity.getApplicationContext());

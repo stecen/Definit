@@ -49,7 +49,7 @@ import javax.net.ssl.HttpsURLConnection;
 public class PearsonAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
     public final static String PEARSON_ENG_QUERY = "https://api.pearson.com/v2/dictionaries/ldoce5/entries?apikey=rsGRiugAUCRGAkIGXfAnzkMcBTcuKKtM&headword=";
     public final static String PEARSON_CHN_QUERY = "https://api.pearson.com/v2/dictionaries/ldec/entries?apikey=rsGRiugAUCRGAkIGXfAnzkMcBTcuKKtM&headword=";
-
+    public final static String PEARSON_SPA_QUERY = "https://api.pearson.com/v2/dictionaries/laes/entries?apikey=rsGRiugAUCRGAkIGXfAnzkMcBTcuKKtM&headword=";
 
     Context ctx;
     String wordToDefine;
@@ -115,14 +115,13 @@ public class PearsonAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
         String language = SP.getString("lang", "Lmao");
         Log.e("language", language);
         String queryUrl = PEARSON_ENG_QUERY;
-        String defOrTrans = "definition";// english has "definition" json key. other langs have "translation" json key.
         int langInt = Integer.parseInt(language.trim());
         if (langInt == PreferencesActivity.ENGLISH_KEY) {
             queryUrl = PEARSON_ENG_QUERY; // redundant
-            defOrTrans = "definition";
         } else if (langInt == PreferencesActivity.CHINESE_KEY) {
             queryUrl = PEARSON_CHN_QUERY;
-            defOrTrans = "translation";
+        } else if (langInt == PreferencesActivity.SPANISH_KEY) {
+            queryUrl = PEARSON_SPA_QUERY;
         }
 
         try {
@@ -234,6 +233,47 @@ public class PearsonAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
                                                 definitionExamples.examples.add(PearsonAnswer.DEFAULT_NO_EXAMPLE);
                                             }
                                         } else {
+                                            definitionExamples.examples.add(PearsonAnswer.DEFAULT_NO_EXAMPLE);
+                                        }
+
+                                    } else if (langInt == PreferencesActivity.SPANISH_KEY) {
+                                        if (sense0.has("translations") && !sense0.isNull("translations")) { // "definition" or "translation" depending on the language
+                                            JSONArray translations = sense0.getJSONArray("translations");
+                                            if (translations.length() > 0) {
+                                                if (translations.getJSONObject(0).has("text") && !translations.getJSONObject(0).isNull("text")) {
+                                                    JSONArray text = translations.getJSONObject(0).getJSONArray("text");
+                                                    if (text.length() > 0 && !text.isNull(0)) {
+                                                        definitionExamples.definition = text.getString(0);
+                                                    } else {
+                                                        definitionExamples.definition = PearsonAnswer.DEFAULT_NO_DEFINITION;
+                                                    }
+                                                } else {
+                                                    definitionExamples.definition = PearsonAnswer.DEFAULT_NO_DEFINITION;
+                                                }
+
+                                                // get example
+                                                if (translations.getJSONObject(0).has("example") && !translations.getJSONObject(0).isNull("example")) {
+                                                    JSONArray examples = translations.getJSONObject(0).getJSONArray("example");
+                                                    if (examples.length() > 0) {
+                                                        if (examples.getJSONObject(0).has("text") && !examples.getJSONObject(0).isNull("text")) {
+                                                            definitionExamples.examples.add(examples.getJSONObject(0).getString("text"));
+                                                        } else {
+                                                            definitionExamples.examples.add(PearsonAnswer.DEFAULT_NO_EXAMPLE);
+                                                        }
+                                                    } else {
+                                                        definitionExamples.examples.add(PearsonAnswer.DEFAULT_NO_EXAMPLE);
+                                                    }
+                                                } else {
+                                                    definitionExamples.examples.add(PearsonAnswer.DEFAULT_NO_EXAMPLE);
+                                                }
+
+
+                                            } else {
+                                                definitionExamples.definition = PearsonAnswer.DEFAULT_NO_DEFINITION;
+                                                definitionExamples.examples.add(PearsonAnswer.DEFAULT_NO_EXAMPLE);
+                                            }
+                                        } else {
+                                            definitionExamples.definition = PearsonAnswer.DEFAULT_NO_DEFINITION;
                                             definitionExamples.examples.add(PearsonAnswer.DEFAULT_NO_EXAMPLE);
                                         }
 

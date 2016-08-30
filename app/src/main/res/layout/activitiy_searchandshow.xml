@@ -75,6 +75,8 @@
                         android:src="@drawable/ic_history_white_24dp"
                         android:layout_alignParentEnd="true"
 
+                        android:alpha=".5"
+
                         android:layout_marginTop="16dp"
                         android:layout_marginRight="16dp"
 

@@ -3,6 +3,8 @@ package com.steven.android.vocabkeepernew.utility;
 import android.text.format.DateFormat;
 import android.util.Log;
 
+import java.util.Calendar;
+
 /**
  * Created by Steven on 8/23/2016.
  */
@@ -78,5 +80,28 @@ public class DateUtility {
         } else {
             return formatted;
         }
+    }
+
+    public static String getTime(String milliseconds) {
+
+        String time = "";
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(Long.parseLong(milliseconds));
+
+        int minute = cal.get(Calendar.MINUTE);
+        String minuteStr = ""+minute;
+        if (minute <= 9) {
+            minuteStr = "0"+minuteStr;
+        }
+
+        time = cal.get(Calendar.HOUR) + ":" + minuteStr;
+
+        if(cal.get(Calendar.AM_PM)==0)
+            time=time+" am";
+        else
+            time=time+" pm";
+
+        return time;
+
     }
 }

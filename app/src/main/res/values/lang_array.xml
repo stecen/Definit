@@ -3,10 +3,12 @@
     <string-array name="langKeys">
         <item>English</item>
         <item>Chinese</item>
+        <item>Spanish</item>
     </string-array>
 
     <string-array name="langValues">
         <item>1</item>
         <item>2</item>
+        <item>3</item>
     </string-array>
 </resources>
