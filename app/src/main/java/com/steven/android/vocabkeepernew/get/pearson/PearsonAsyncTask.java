@@ -1,10 +1,13 @@
 package com.steven.android.vocabkeepernew.get.pearson;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.steven.android.vocabkeepernew.settings.PreferencesActivity;
 import com.steven.android.vocabkeepernew.utility.PearsonAnswer;
 
 import org.json.JSONArray;
@@ -44,7 +47,9 @@ import javax.net.ssl.HttpsURLConnection;
  * */
 
 public class PearsonAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
-    public final static String PEARSON_QUERY = "https://api.pearson.com/v2/dictionaries/ldoce5/entries?apikey=rsGRiugAUCRGAkIGXfAnzkMcBTcuKKtM&headword=";
+    public final static String PEARSON_ENG_QUERY = "https://api.pearson.com/v2/dictionaries/ldoce5/entries?apikey=rsGRiugAUCRGAkIGXfAnzkMcBTcuKKtM&headword=";
+    public final static String PEARSON_CHN_QUERY = "https://api.pearson.com/v2/dictionaries/ldec/entries?apikey=rsGRiugAUCRGAkIGXfAnzkMcBTcuKKtM&headword=";
+
 
     Context ctx;
     String wordToDefine;
@@ -106,10 +111,24 @@ public class PearsonAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
         PearsonAnswer pearsonAnswer = new PearsonAnswer();
         pearsonAnswer.word = wordText;
 
+        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(ctx.getApplicationContext());
+        String language = SP.getString("lang", "Lmao");
+        Log.e("language", language);
+        String queryUrl = PEARSON_ENG_QUERY;
+        String defOrTrans = "definition";// english has "definition" json key. other langs have "translation" json key.
+        int langInt = Integer.parseInt(language.trim());
+        if (langInt == PreferencesActivity.ENGLISH_KEY) {
+            queryUrl = PEARSON_ENG_QUERY; // redundant
+            defOrTrans = "definition";
+        } else if (langInt == PreferencesActivity.CHINESE_KEY) {
+            queryUrl = PEARSON_CHN_QUERY;
+            defOrTrans = "translation";
+        }
+
         try {
             wordText = URLEncoder.encode(wordText.trim(), "ascii");
 
-            String completeURL = PEARSON_QUERY + wordText;
+            String completeURL = queryUrl + wordText; // different url based on language
 
             url = new URL(completeURL);
             HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
@@ -165,30 +184,59 @@ public class PearsonAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
                                 if (senses.length() > 0) {
                                     JSONObject sense0 = senses.getJSONObject(0);
 
-                                    if (sense0.has("definition")) {
-                                        JSONArray definitions = sense0.getJSONArray("definition");
-                                        if (definitions.length() > 0) {
-                                            definitionExamples.definition = definitions.getString(0);
+                                    if (langInt == PreferencesActivity.ENGLISH_KEY) { // get english stuff
+                                        if (sense0.has("definition") && !sense0.isNull("definition")) { // "definition" or "translation" depending on the language
+                                            JSONArray definitions = sense0.getJSONArray("definition");
+                                            if (definitions.length() > 0) {
+                                                definitionExamples.definition = definitions.getString(0);
+                                            } else {
+                                                definitionExamples.definition = PearsonAnswer.DEFAULT_NO_DEFINITION;
+                                            }
                                         } else {
                                             definitionExamples.definition = PearsonAnswer.DEFAULT_NO_DEFINITION;
                                         }
-                                    } else {
-                                        definitionExamples.definition = PearsonAnswer.DEFAULT_NO_DEFINITION;
-                                    }
 
-                                    if (sense0.has("examples") && !sense0.isNull("examples")) {
-                                        JSONArray examples = sense0.getJSONArray("examples");
-                                        if (examples.length() > 0) {
-                                            if (examples.getJSONObject(0).has("text") && !examples.getJSONObject(0).isNull("text")) {
-                                                definitionExamples.examples.add(examples.getJSONObject(0).getString("text"));
+                                        if (sense0.has("examples") && !sense0.isNull("examples")) {
+                                            JSONArray examples = sense0.getJSONArray("examples");
+                                            if (examples.length() > 0) {
+                                                if (examples.getJSONObject(0).has("text") && !examples.getJSONObject(0).isNull("text")) {
+                                                    definitionExamples.examples.add(examples.getJSONObject(0).getString("text"));
+                                                } else {
+                                                    definitionExamples.examples.add(PearsonAnswer.DEFAULT_NO_EXAMPLE);
+                                                }
                                             } else {
                                                 definitionExamples.examples.add(PearsonAnswer.DEFAULT_NO_EXAMPLE);
                                             }
                                         } else {
                                             definitionExamples.examples.add(PearsonAnswer.DEFAULT_NO_EXAMPLE);
                                         }
-                                    } else {
-                                        definitionExamples.examples.add(PearsonAnswer.DEFAULT_NO_EXAMPLE);
+                                    } else if (langInt == PreferencesActivity.CHINESE_KEY) {
+                                        if (sense0.has("translation") && !sense0.isNull("translation")) {
+                                            String translation = sense0.getString("translation");
+                                            if (translation != null) {
+                                                definitionExamples.definition = translation;
+                                            } else {
+                                                definitionExamples.definition = PearsonAnswer.DEFAULT_NO_DEFINITION;
+                                            }
+                                        } else {
+                                            definitionExamples.definition = PearsonAnswer.DEFAULT_NO_DEFINITION;
+                                        }
+
+                                        if (sense0.has("examples") && !sense0.isNull("examples")) {
+                                            JSONArray examples = sense0.getJSONArray("examples");
+                                            if (examples.length() > 0) {
+                                                if (examples.getJSONObject(0).has("text") && !examples.getJSONObject(0).isNull("text")) {
+                                                    definitionExamples.examples.add(examples.getJSONObject(0).getString("text"));
+                                                } else {
+                                                    definitionExamples.examples.add(PearsonAnswer.DEFAULT_NO_EXAMPLE);
+                                                }
+                                            } else {
+                                                definitionExamples.examples.add(PearsonAnswer.DEFAULT_NO_EXAMPLE);
+                                            }
+                                        } else {
+                                            definitionExamples.examples.add(PearsonAnswer.DEFAULT_NO_EXAMPLE);
+                                        }
+
                                     }
 
 
