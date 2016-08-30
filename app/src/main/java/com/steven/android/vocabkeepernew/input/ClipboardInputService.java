@@ -13,7 +13,7 @@ import com.steven.android.vocabkeepernew.show.DisplayDefinitionPopupActivity;
 /**
  * Created by Steven on 8/17/2016.
  */
-public class ClipboardInputService extends IntentService {
+public class ClipboardInputService extends IntentService { // from the notification.
     public ClipboardInputService() {
         super("ClipboardInputService");
     }

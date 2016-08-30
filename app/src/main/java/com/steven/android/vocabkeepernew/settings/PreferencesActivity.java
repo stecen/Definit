@@ -1,36 +1,54 @@
 package com.steven.android.vocabkeepernew.settings;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
-import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.LinearLayout;
+import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 
 import com.steven.android.vocabkeepernew.R;
+import com.steven.android.vocabkeepernew.input.ClipboardWatcherService;
+import com.steven.android.vocabkeepernew.utility.NotificationUtility;
 
 /**
  * Created by Steven on 8/29/2016.
  */
-public class PreferencesActivity extends AppCompatPreferenceActivity  {
+public class PreferencesActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // get the root container of the preferences list
-        LinearLayout root = (LinearLayout)findViewById(android.R.id.list).getParent().getParent().getParent();
-        Toolbar bar = (Toolbar) LayoutInflater.from(this).inflate(R.layout.preferences_toolbar, root, false);
-        root.addView(bar, 0); // insert at top
-        bar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
         getFragmentManager().beginTransaction().replace(android.R.id.content, new MyPreferenceFragment()).commit();
+    }
+
+    @Override
+    public void onPause() { // commit settings changes
+        super.onPause();
+
+        // commit changes made in settings...
+        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+//        String strUserName = SP.getString("username", "NA");
+        boolean doPaste = SP.getBoolean("paste",false);
+        boolean doShortcut = SP.getBoolean("shortcut", false);
+//        String downloadType = SP.getString("downloadType","1");
+
+        if (doPaste) {
+            startService(new Intent(getBaseContext(), ClipboardWatcherService.class));
+        } else {
+            stopService(new Intent(getBaseContext(), ClipboardWatcherService.class));
+        }
+
+        if (doShortcut) {
+            NotificationUtility.createConvenienceNotif(this);
+        } else {
+            NotificationUtility.cancelConvenienceNotif(this);
+        }
     }
 
     public static class MyPreferenceFragment extends PreferenceFragment

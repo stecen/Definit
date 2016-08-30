@@ -3,11 +3,14 @@ package com.steven.android.vocabkeepernew.input;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
@@ -64,6 +67,8 @@ public class FloatingWindowService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+
+
 
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         Display display = windowManager.getDefaultDisplay();

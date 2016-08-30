@@ -52,11 +52,10 @@ import com.steven.android.vocabkeepernew.get.pearson.PearsonResponseInterface;
 import com.steven.android.vocabkeepernew.input.RelaySpeechActivity;
 import com.steven.android.vocabkeepernew.input.TypeWordPopupActivity;
 import com.steven.android.vocabkeepernew.showuservocab.sheet.SheetHistorySavedActivity;
-import com.steven.android.vocabkeepernew.showuservocab.UserVocabActivity;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.HistoryVocab;
-import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocab;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocabHelper;
 import com.steven.android.vocabkeepernew.utility.DividerItemDecoration;
+import com.steven.android.vocabkeepernew.utility.NotificationUtility;
 import com.steven.android.vocabkeepernew.utility.PearsonAnswer;
 import com.steven.android.vocabkeepernew.utility.PearsonComparator;
 import com.steven.android.vocabkeepernew.utility.ViewUtility;
@@ -1216,7 +1215,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
                             .build();
             builder.addAction(replyAction);
             Notification n = builder.build();
-            nm.notify(UserVocabActivity.NOTIF_ID, n);
+            nm.notify(NotificationUtility.NOTIF_ID, n);
 
 
                         Intent it = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);

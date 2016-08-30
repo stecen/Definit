@@ -4,13 +4,22 @@
         <!--android:key="username"-->
         <!--android:summary="Please provide your username"></EditTextPreference>-->
     <SwitchPreference android:title="Toggle notification shortcut"
-        android:defaultValue="false"
+        android:defaultValue="true"
         android:summary="Creates a persistent notification shortcut to define words"
         android:key="shortcut" />
     <SwitchPreference android:title="Toggle pasteboard lookup"
-        android:defaultValue="false"
+        android:defaultValue="true"
         android:summary="Allows copied text to automatically be defined"
-        android:key="paste" />
+        android:key="paste"
+        />
+
+    <ListPreference
+        android:title="Language"
+        android:defaultValue="1"
+        android:summary="Choose which language to define to or translate into. Current supports English or Chinese"
+        android:key="lang"
+        android:entries="@array/langKeys"
+        android:entryValues="@array/langValues" />
 
     <!--<PreferenceCategory-->
         <!--android:title="@string/pref_sms_storage_title"-->
