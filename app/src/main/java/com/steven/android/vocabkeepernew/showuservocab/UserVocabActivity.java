@@ -10,6 +10,8 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -28,6 +30,7 @@ import com.steven.android.vocabkeepernew.get.sqlite.DictionaryDatabaseHelper;
 import com.steven.android.vocabkeepernew.input.ClipboardWatcherService;
 import com.steven.android.vocabkeepernew.settings.PreferencesActivity;
 import com.steven.android.vocabkeepernew.show.RecyclerViewClickListener;
+import com.steven.android.vocabkeepernew.showuservocab.fragment.Pager;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocab;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocabHelper;
 import com.steven.android.vocabkeepernew.useless.WordDisplayCursorAdapter;
@@ -39,13 +42,16 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 
-public class UserVocabActivity extends AppCompatActivity implements RecyclerViewClickListener {
+public class UserVocabActivity extends AppCompatActivity implements RecyclerViewClickListener, TabLayout.OnTabSelectedListener {
     TextView serviceText;
 //    ListView wordList;
     Button startButton, stopButton;
     TextView animationText;
 
     AppBarLayout appBarLayout;
+
+    TabLayout tabLayout;
+    ViewPager viewPager;
 
     RecyclerView recyclerView;
     UserVocabAdapter adapter;
@@ -70,79 +76,47 @@ public class UserVocabActivity extends AppCompatActivity implements RecyclerView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_vocab);
 
-        Intent intent = getIntent();
-        if (intent != null) {
-            String intentString = intent.getStringExtra(KEY_TASK);
-            if (intentString != null) {
-                Toast.makeText(this, "Intent received for " + intentString, Toast.LENGTH_SHORT).show();
-                if (intentString.equals(IS_BACK)) {
-                    moveTaskToBack(true);
-                }
-            }
-        }
-
-
-        recyclerView = (RecyclerView) findViewById(R.id.user_vocab_recycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-
-//        startButton = (Button) findViewById(R.id.startService);
-//        stopButton = (Button) findViewById(R.id.stopService);
-
-        appBarLayout = (AppBarLayout) findViewById(R.id.word_list_appbar);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if (toolbar != null) {
-            Log.e("tool", "Setting support toolbar...");
-            setSupportActionBar(toolbar);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                if (appBarLayout  != null) {
-                    appBarLayout.setElevation(8);
-                }
-            }
-        }
-
-//        serviceText = (TextView) findViewById(R.id.service_text);
-//        wordList = (ListView) findViewById(R.id.words_listview);
-
-//        startButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Toast.makeText(getApplicationContext(), "You clicked on start Button", Toast.LENGTH_SHORT).show();
-//                startService(new Intent(getBaseContext(), ClipboardWatcherService.class));
+//        appBarLayout = (AppBarLayout) findViewById(R.id.word_list_appbar);
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+//        if (toolbar != null) {
+//            Log.e("tool", "Setting support toolbar...");
+//            setSupportActionBar(toolbar);
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                if (appBarLayout  != null) {
+//                    appBarLayout.setElevation(8);
+//                }
 //            }
-//        });
-//
-//        stopButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                stopService(new Intent(getBaseContext(), ClipboardWatcherService.class));
-//            }
-//        });
-
-
-        dividerItemDecoration = new DividerItemDecoration(this);
-
-        helper = UserVocabHelper.getInstance(this);
-
-//        PearsonAnswer.DefinitionExamples testDef = new PearsonAnswer.DefinitionExamples();
-//        testDef.wordForm = "fly";
-//        testDef.definition = "when you go up";
-//        helper.addWord((new UserVocab(testDef.wordForm, testDef, System.currentTimeMillis(), "August 11th")));
-
-        ArrayList<UserVocab> userVocabList = helper.getAllUserVocab();
-
-        Log.e("userVocab", "" + userVocabList.size());
-//        for (int i =0; i < userVocabList.size(); i++) {
-//            Log.e("userVocab", userVocabList.get(i).word);
 //        }
-        adapter = new UserVocabAdapter(userVocabList, this, getApplicationContext());
-//        recyclerView.addItemDecoration(dividerItemDecoration);
-        recyclerView.setAdapter(/*new SlideInLeftAnimationAdapter(*/adapter/*)*/);
-//        Log.e("adapter count",""+ adapter.getItemCount());
+
+        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        //Adding the tabs using addTab() method
+        tabLayout.addTab(tabLayout.newTab().setText("Saved"));
+        tabLayout.addTab(tabLayout.newTab().setText("History"));
+        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
+        viewPager = (ViewPager) findViewById(R.id.pager);
+        Pager adapter = new Pager(getSupportFragmentManager(), tabLayout.getTabCount());
+        viewPager.setAdapter(adapter);
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        tabLayout.setOnTabSelectedListener(this); // for view swiping
+
+        // recycler stuff
+//        recyclerView = (RecyclerView) findViewById(R.id.user_vocab_recycler);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+//
+//        dividerItemDecoration = new DividerItemDecoration(this);
+//
+//        helper = UserVocabHelper.getInstance(this);
+//        ArrayList<UserVocab> userVocabList = helper.getAllUserVocab();
+//        Log.e("userVocab", "" + userVocabList.size());
+//        adapter = new UserVocabAdapter(userVocabList, this, getApplicationContext());
+////        recyclerView.addItemDecoration(dividerItemDecoration);
+//        recyclerView.setAdapter(/*new SlideInLeftAnimationAdapter(*/adapter/*)*/);
+////        Log.e("adapter count",""+ adapter.getItemCount());
 
 
-//        Toast.makeText(this, "onCreate is being called", Toast.LENGTH_SHORT).show();
         NotificationUtility.createConvenienceNotif(this);
-//start clipboard watcher service
+        //start clipboard watcher service
         startService(new Intent(getBaseContext(), ClipboardWatcherService.class));
 
         doFirstTimeShebang();
@@ -151,6 +125,21 @@ public class UserVocabActivity extends AppCompatActivity implements RecyclerView
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
 //        animationText = (TextView) findViewById(R.id.animation_text);
+    }
+
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        viewPager.setCurrentItem(tab.getPosition());
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
+
     }
 
     public void refreshRecycler () {
@@ -174,8 +163,35 @@ public class UserVocabActivity extends AppCompatActivity implements RecyclerView
 
     @Override
     protected void onResume() {
-        refreshRecycler();
+
+
+
+
+
+
+
+
+
+
+//        refreshRecycler(); // todo: REFRESH RECYCLER!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
+
+
+
         super.onResume();
+
+
+
+
+
+
+
+
+
 //        StringBuilder sb = new StringBuilder();
 //        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
 //        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {

@@ -128,6 +128,10 @@ public class SheetHistoryAdapter extends RecyclerView.Adapter<SheetHistoryAdapte
 //        }
     }
 
+    public void replaceData(ArrayList<HistoryVocab> list) {
+        sortedDataSet = list;
+    }
+
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
