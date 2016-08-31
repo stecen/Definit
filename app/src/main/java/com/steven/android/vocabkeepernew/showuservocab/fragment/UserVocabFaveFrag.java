@@ -28,7 +28,7 @@ import java.util.ArrayList;
 /**
  * Created by Steven on 8/30/2016.
  */
-public class UserVocabFaveFrag extends Fragment implements RecyclerViewClickListener{
+public class UserVocabFaveFrag extends Fragment implements RecyclerViewClickListener, FragmentRefresher{
     RecyclerView recyclerView;
     DividerItemDecoration dividerItemDecoration;
     UserVocabHelper helper;
@@ -55,34 +55,44 @@ public class UserVocabFaveFrag extends Fragment implements RecyclerViewClickList
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-//        // recycler stuff
-//        recyclerView = (RecyclerView) getView().findViewById(R.id.fave_recycler);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(appContext));
-//
+        // recycler stuff
+        recyclerView = (RecyclerView) getView().findViewById(R.id.fave_recycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(appContext));
+
 //        dividerItemDecoration = new DividerItemDecoration(appContext);
-//
-//        helper = UserVocabHelper.getInstance(appContext);
-//        ArrayList<UserVocab> userVocabList = helper.getAllUserVocab();
-//        Log.e("userVocab", "" + userVocabList.size());
-//        adapter = new UserVocabAdapter(userVocabList, this, appContext);
-////        recyclerView.addItemDecoration(dividerItemDecoration);
-//        recyclerView.setAdapter(/*new SlideInLeftAnimationAdapter(*/adapter/*)*/);
-////        Log.e("adapter count",""+ adapter.getItemCount());
+
+        helper = UserVocabHelper.getInstance(appContext);
+        ArrayList<UserVocab> userVocabList = helper.getFaveVocabList();
+        Log.e("userVocab", "" + userVocabList.size());
+        adapter = new UserVocabAdapter(userVocabList, this, appContext, true);
+//        recyclerView.addItemDecoration(dividerItemDecoration);
+        recyclerView.setAdapter(/*new SlideInLeftAnimationAdapter(*/adapter/*)*/);
+//        Log.e("adapter count",""+ adapter.getItemCount());
 
     }
 
     @Override
     public void onResume() {
-//        refreshRecycler();
+        refreshRecycler();
         super.onResume();
+    }
+
+    public void refreshViews() {
+        Log.e("refresh", "favorite");
+        refreshRecycler();
     }
 
     public void refreshRecycler () {
         // todo variable to keep track if there are changes so this activity doesnt have to keep reloading the entire sqlite
         helper = UserVocabHelper.getInstance(appContext);
-        ArrayList<UserVocab> userVocabList = helper.getAllUserVocab();
-        Log.e("userVocab", "" + userVocabList.size());
-        Log.e("adapter count",""+ adapter.getItemCount());
+        ArrayList<UserVocab> userVocabList = helper.getFaveVocabList();
+        if (adapter == null) {
+            recyclerView = (RecyclerView) getView().findViewById(R.id.fave_recycler);
+            adapter = new UserVocabAdapter(userVocabList, this, appContext, true);
+            recyclerView.setAdapter(/*new SlideInLeftAnimationAdapter(*/adapter/*)*/);
+        }
+        Log.e("userVocabfave", "" + userVocabList.size());
+        Log.e("adapter fave count",""+ adapter.getItemCount());
         adapter.replaceData(userVocabList);
         adapter.notifyDataSetChanged();
     }

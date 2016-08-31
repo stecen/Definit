@@ -28,7 +28,7 @@ import java.util.ArrayList;
 /**
  * Created by Steven on 8/30/2016.
  */
-public class UserVocabHistFrag extends Fragment implements RecyclerViewClickListener{
+public class UserVocabHistFrag extends Fragment implements RecyclerViewClickListener, FragmentRefresher {
 //    RecyclerView recyclerView;
 //    DividerItemDecoration dividerItemDecoration;
 //    UserVocabHelper helper;
@@ -139,6 +139,11 @@ public class UserVocabHistFrag extends Fragment implements RecyclerViewClickList
         refreshRecycler(); // refresh the data
 
         super.onResume();
+    }
+
+    public void refreshViews() {
+        Log.e("refresh", "history");
+        refreshRecycler();
     }
 
     public void refreshRecycler () {

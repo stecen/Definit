@@ -15,13 +15,14 @@
         android:theme="@style/AppTheme.AppBarOverlay">
 
 
-        <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/collapsing_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+        <!--<android.support.design.widget.CollapsingToolbarLayout-->
+            <!--android:id="@+id/collapsing_toolbar"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
 
-            app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|enterAlways">
+            <!--app:contentScrim="?attr/colorPrimary"-->
+            <!--app:layout_scrollFlags="scroll|enterAlways">-->
+
             <!--app:expandedTitleMarginEnd="64dp"-->
             <!--app:expandedTitleMarginStart="48dp"-->
             <!--android:fitsSystemWindows="true"-->
@@ -35,6 +36,7 @@
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
+                android:title="Lasdf"
                 android:layout_height="56dp"
                 android:background="?attr/colorPrimary"
                 app:layout_scrollFlags="scroll|enterAlways"
@@ -42,16 +44,17 @@
                  >
                 <!--android:layout_height="?attr/actionBarSize"-->
 
-                <TextView
-                    android:id="@+id/uservocab_toolbar_text"
-                    android:textColor="#fff"
-                    android:alpha="1"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginLeft="16dp"
-                    android:textSize="24sp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Definit"/>
+                <!--<TextView-->
+                    <!--android:id="@+id/uservocab_toolbar_text"-->
+                    <!--android:textColor="#fff"-->
+                    <!--android:alpha="1"-->
+                    <!--android:layout_marginTop="16dp"-->
+                    <!--android:layout_marginLeft="16dp"-->
+                    <!--android:textSize="24sp"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="Definit"/>-->
+                <!---->
                 </android.support.v7.widget.Toolbar>
 
 
@@ -64,7 +67,7 @@
                 app:tabGravity="fill" />
 
 
-        </android.support.design.widget.CollapsingToolbarLayout>
+        <!--</android.support.design.widget.CollapsingToolbarLayout>-->
 
     </android.support.design.widget.AppBarLayout>
 

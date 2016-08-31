@@ -12,6 +12,7 @@ import android.provider.Settings;
 import android.speech.RecognizerIntent;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -32,6 +33,7 @@ import com.steven.android.vocabkeepernew.get.sqlite.DictionaryDatabaseHelper;
 import com.steven.android.vocabkeepernew.input.ClipboardWatcherService;
 import com.steven.android.vocabkeepernew.settings.PreferencesActivity;
 import com.steven.android.vocabkeepernew.show.RecyclerViewClickListener;
+import com.steven.android.vocabkeepernew.showuservocab.fragment.FragmentRefresher;
 import com.steven.android.vocabkeepernew.showuservocab.fragment.Pager;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocab;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocabHelper;
@@ -73,7 +75,7 @@ public class UserVocabActivity extends AppCompatActivity implements RecyclerView
     public static final int PREF_YES = 1;
     public static final int PREF_NO = 0;
 
-    public static final int UNSEL_TAB_ALPHA = 128;
+    public static final int UNSEL_TAB_ALPHA = 90;
 
     DividerItemDecoration dividerItemDecoration;
 
@@ -83,7 +85,7 @@ public class UserVocabActivity extends AppCompatActivity implements RecyclerView
         setContentView(R.layout.activity_user_vocab);
 
         appBarLayout = (AppBarLayout) findViewById(R.id.word_list_appbar);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
             toolbar.setTitle("Definit");
             Log.e("tool", "Setting support toolbar...");
@@ -91,31 +93,38 @@ public class UserVocabActivity extends AppCompatActivity implements RecyclerView
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 if (appBarLayout  != null) {
                     appBarLayout.setElevation(8);
+//                    toolbar.setElevation(0);
                 }
             }
         }
 
-        toolbarText = (TextView) findViewById(R.id.uservocab_toolbar_text);
-//        toolbarText.setText(Html.fromHtml("<strong>"+"Definit"+"</strong>"));
+//        toolbarText = (TextView) findViewById(R.id.uservocab_toolbar_text);
 
 
 
 
 
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-        //Adding the tabs using addTab() method
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//            tabLayout.setElevation(0);
+//        }
         tabLayout.addTab(tabLayout.newTab()/*.setText("Saved")*/.setIcon(R.drawable.ic_home_white_24dp));
+        tabLayout.addTab(tabLayout.newTab()/*.setText("Favorited")*/.setIcon(R.drawable.ic_star_white_24dp));
         tabLayout.addTab(tabLayout.newTab()/*.setText("History")*/.setIcon(R.drawable.ic_history_white_24dp));
-        tabLayout.addTab(tabLayout.newTab()/*.setText("Favorited")*/.setIcon(R.drawable.ic_favorite_white_24dp));
-        tabLayout.getTabAt(1).getIcon().setAlpha(128);
-        tabLayout.getTabAt(2).getIcon().setAlpha(128);
+        tabLayout.addTab(tabLayout.newTab().setIcon(R.drawable.ic_person_white_24dp));
+        tabLayout.getTabAt(0).getIcon().setAlpha(255);
+        tabLayout.getTabAt(1).getIcon().setAlpha(UNSEL_TAB_ALPHA);
+        tabLayout.getTabAt(2).getIcon().setAlpha(UNSEL_TAB_ALPHA);
+        tabLayout.getTabAt(3).getIcon().setAlpha(UNSEL_TAB_ALPHA);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         viewPager = (ViewPager) findViewById(R.id.pager);
         Pager adapter = new Pager(getSupportFragmentManager(), tabLayout.getTabCount());
+        final Pager finalAdapter = adapter;
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        viewPager.setOffscreenPageLimit(3);
+        viewPager.setOffscreenPageLimit(4);
+//        final TextView ftext = toolbarText;
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -125,9 +134,17 @@ public class UserVocabActivity extends AppCompatActivity implements RecyclerView
             @Override
             public void onPageSelected(int position) {
                 Log.e("viewpager", "selected " + position);
+
+                FragmentRefresher fragment = (FragmentRefresher) finalAdapter.getItem(position);
+                fragment.refreshViews();
+
+//                appBarLayout.setExpanded(true, true);
                 try {
                     switch (position) {
                         case 0:
+//                            ftext.setText("Definit");
+                            toolbar.setTitle("Definit");
+
                             Drawable icon0 = tabLayout.getTabAt(0).getIcon();
                             if (icon0 != null) icon0.setAlpha(255);
 
@@ -136,21 +153,41 @@ public class UserVocabActivity extends AppCompatActivity implements RecyclerView
 
                             Drawable icon2 = tabLayout.getTabAt(2).getIcon();
                             if (icon2!=null) icon2.setAlpha(UNSEL_TAB_ALPHA);
+
+                            tabLayout.getTabAt(3).getIcon().setAlpha(UNSEL_TAB_ALPHA);
                             break;
                         case 1:
+//                            ftext.setText("Starred");
+                            toolbar.setTitle("Starred");
+
                             tabLayout.getTabAt(0).getIcon().setAlpha(UNSEL_TAB_ALPHA);
                             tabLayout.getTabAt(1).getIcon().setAlpha(255);
                             tabLayout.getTabAt(2).getIcon().setAlpha(UNSEL_TAB_ALPHA);
+                            tabLayout.getTabAt(3).getIcon().setAlpha(UNSEL_TAB_ALPHA);
                             break;
                         case 2:
+//                            ftext.setText("History");
+                            toolbar.setTitle("History");
+
                             tabLayout.getTabAt(0).getIcon().setAlpha(UNSEL_TAB_ALPHA);
                             tabLayout.getTabAt(1).getIcon().setAlpha(UNSEL_TAB_ALPHA);
                             tabLayout.getTabAt(2).getIcon().setAlpha(255);
+                            tabLayout.getTabAt(3).getIcon().setAlpha(UNSEL_TAB_ALPHA);
+                            break;
+                        case 3:
+//                            ftext.setText("User");
+                            toolbar.setTitle("User");
+
+                            tabLayout.getTabAt(0).getIcon().setAlpha(UNSEL_TAB_ALPHA);
+                            tabLayout.getTabAt(1).getIcon().setAlpha(UNSEL_TAB_ALPHA);
+                            tabLayout.getTabAt(2).getIcon().setAlpha(UNSEL_TAB_ALPHA);
+                            tabLayout.getTabAt(3).getIcon().setAlpha(255);
                             break;
                     }
                 } catch (NullPointerException e) {
                     Log.e("viewpager", e + "\n\n\n\n");
                 }
+
             }
 
             @Override

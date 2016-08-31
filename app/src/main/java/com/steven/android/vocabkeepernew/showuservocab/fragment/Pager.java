@@ -30,11 +30,14 @@ public class Pager extends FragmentStatePagerAdapter {
                 UserVocabMainFrag tab1 = new UserVocabMainFrag();
                 return tab1;
             case 1:
-                UserVocabHistFrag tab2 = new UserVocabHistFrag();
-                return tab2;
-            case 2:
                 UserVocabFaveFrag tab3 = new UserVocabFaveFrag();
                 return tab3;
+            case 2:
+                UserVocabHistFrag tab2 = new UserVocabHistFrag();
+                return tab2;
+            case 3:
+                UserVocabProfileFrag tab4 = new UserVocabProfileFrag();
+                return tab4;
             default:
                 return null;
         }

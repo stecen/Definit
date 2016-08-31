@@ -25,7 +25,7 @@ import java.util.ArrayList;
 /**
  * Created by Steven on 8/30/2016.
  */
-public class UserVocabMainFrag extends Fragment implements RecyclerViewClickListener {
+public class UserVocabMainFrag extends Fragment implements RecyclerViewClickListener, FragmentRefresher {
     RecyclerView recyclerView;
     DividerItemDecoration dividerItemDecoration;
     UserVocabHelper helper;
@@ -61,7 +61,7 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
         helper = UserVocabHelper.getInstance(appContext);
         ArrayList<UserVocab> userVocabList = helper.getAllUserVocab();
         Log.e("userVocab", "" + userVocabList.size());
-        adapter = new UserVocabAdapter(userVocabList, this, appContext);
+        adapter = new UserVocabAdapter(userVocabList, this, appContext, false);
 //        recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setAdapter(/*new SlideInLeftAnimationAdapter(*/adapter/*)*/);
 //        Log.e("adapter count",""+ adapter.getItemCount());
@@ -72,6 +72,11 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
     public void onResume() {
         refreshRecycler();
         super.onResume();
+    }
+
+    public void refreshViews() {
+        Log.e("refresh", "main");
+        refreshRecycler();
     }
 
     public void refreshRecycler () {

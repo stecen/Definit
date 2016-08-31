@@ -12,6 +12,7 @@ public class UserVocab { // for sqlite database easiness
     public ArrayList<PearsonAnswer.DefinitionExamples> listOfDefEx;
     public long date;
     public String dateText;
+    public boolean fave = false;
 
     public UserVocab(String word, ArrayList<PearsonAnswer.DefinitionExamples> list, long date, String dateText) {
         this.word = word; // should be same as PearsonAnswer.DefinitionExampleslist#wordForm

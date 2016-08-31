@@ -125,7 +125,7 @@
 
                     android:alpha="1"
 
-                        android:layout_marginTop="52dp"
+
 
 
                         android:fadeScrollbars="false"
@@ -137,7 +137,7 @@
                     <!--android:layout_marginTop="96dp"-->
 
         </RelativeLayout>
-
+            <!--android:layout_marginTop="52dp"-->
 
             <!--</android.support.design.widget.CoordinatorLayout>-->
 

@@ -34,8 +34,11 @@ public class UserVocabHelper extends SQLiteOpenHelper {
         KEY_WORD = "word",
         KEY_JSON = "json",
         KEY_DATE = "date",
-        KEY_DATETEXT = "dateText";
+        KEY_FAVE = "fave";
     // used for both tables
+
+    public static int IS_FAVE = 1;
+    public static int NOT_FAVE = 0;
 
     public UserVocabHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -55,8 +58,8 @@ public class UserVocabHelper extends SQLiteOpenHelper {
     // If a database already exists on disk with the same DATABASE_NAME, this method will NOT be called.
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_WORDS_TABLE = String.format(Locale.US, "CREATE TABLE IF NOT EXISTS %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s VARCHAR, %s VARCHAR, %s UNSIGNED BIG INT, %s VARCHAR);",
-               TABLE_WORDS, KEY_ID, KEY_WORD, KEY_JSON, KEY_DATE, KEY_DATETEXT);
+        String CREATE_WORDS_TABLE = String.format(Locale.US, "CREATE TABLE IF NOT EXISTS %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s VARCHAR, %s VARCHAR, %s UNSIGNED BIG INT, %s INTEGER);",
+               TABLE_WORDS, KEY_ID, KEY_WORD, KEY_JSON, KEY_DATE, KEY_FAVE);
 //                "CREATE TABLE IF NOT EXISTS " +TABLE_WORDS+ "(" +KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +KEY_WORD+
 //                        " VARCHAR, " +KEY_JSON+ " VARCHAR, " +KEY_DATE+ " INTEGER, " +KEY_DATETEXT+ " VARCHAR);";
         Log.e("userVocab", "executing sql: " + CREATE_WORDS_TABLE);
@@ -149,22 +152,22 @@ public class UserVocabHelper extends SQLiteOpenHelper {
 
     //region user vocab
 
-    public Cursor getAllUserVocabCursor() { // make sure to close cursor!
-        // SELECT * FROM POSTS
-        // LEFT OUTER JOIN USERS
-        // ON POSTS.KEY_POST_USER_ID_FK = USERS.KEY_USER_ID
-        String USER_VOCAB_SELECT_QUERY =
-                String.format("SELECT * FROM %s;",
-                        TABLE_WORDS/*,
-                        KEY_DATE*/);
-
-
-        SQLiteDatabase db = getReadableDatabase();
-        Log.e("userVocab", "querying for cursor: " + USER_VOCAB_SELECT_QUERY);
-        Cursor cursor = db.rawQuery(USER_VOCAB_SELECT_QUERY, null);
-
-        return cursor;
-    }
+//    public Cursor getAllUserVocabCursor() { // make sure to close cursor!
+//        // SELECT * FROM POSTS
+//        // LEFT OUTER JOIN USERS
+//        // ON POSTS.KEY_POST_USER_ID_FK = USERS.KEY_USER_ID
+//        String USER_VOCAB_SELECT_QUERY =
+//                String.format("SELECT * FROM %s;",
+//                        TABLE_WORDS/*,
+//                        KEY_DATE*/);
+//
+//
+//        SQLiteDatabase db = getReadableDatabase();
+//        Log.e("userVocab", "querying for cursor: " + USER_VOCAB_SELECT_QUERY);
+//        Cursor cursor = db.rawQuery(USER_VOCAB_SELECT_QUERY, null);
+//
+//        return cursor;
+//    }
 
     public ArrayList<UserVocab> getAllUserVocab() {
         ArrayList<UserVocab> userVocabs = new ArrayList<>();
@@ -191,8 +194,11 @@ public class UserVocabHelper extends SQLiteOpenHelper {
                     userVocab.listOfDefEx = (new Gson()).fromJson(json, new TypeToken<ArrayList<PearsonAnswer.DefinitionExamples>>(){}.getType());
                     Log.e("getAllUserVocab", ""+ userVocab.listOfDefEx.size());
                     userVocab.date = cursor.getLong(cursor.getColumnIndex(KEY_DATE));
-                    Log.e("byte", (long)cursor.getLong(cursor.getColumnIndex(KEY_DATE)) + "");
-                    userVocab.dateText = cursor.getString(cursor.getColumnIndex(KEY_DATETEXT));
+
+                    int faveInt = cursor.getInt(cursor.getColumnIndex(KEY_FAVE));
+                    userVocab.fave = (faveInt == IS_FAVE);
+//                    Log.e("byte", (long)cursor.getLong(cursor.getColumnIndex(KEY_DATE)) + "");
+//                    userVocab.dateText = cursor.getString(cursor.getColumnIndex(KEY_DATETEXT));
 
                     userVocabs.add(userVocab);
 
@@ -206,6 +212,50 @@ public class UserVocabHelper extends SQLiteOpenHelper {
             }
         }
 //        Collections.reverse(userVocabs);
+        return userVocabs;
+    }
+
+    public ArrayList<UserVocab> getFaveVocabList() {
+        ArrayList<UserVocab> userVocabs = new ArrayList<>();
+
+        // SELECT * FROM POSTS
+        // LEFT OUTER JOIN USERS
+        // ON POSTS.KEY_POST_USER_ID_FK = USERS.KEY_USER_ID
+        String USER_VOCAB_SELECT_QUERY =
+                String.format("SELECT * FROM %s WHERE %s = %d ORDER BY %s DESC ;",
+                        TABLE_WORDS, KEY_FAVE,
+                        IS_FAVE,
+                        KEY_DATE);
+
+
+        SQLiteDatabase db = getReadableDatabase();
+        Log.e("userVocab", "fave querying: " + USER_VOCAB_SELECT_QUERY);
+        Cursor cursor = db.rawQuery(USER_VOCAB_SELECT_QUERY, null);
+        try {
+            if (cursor.moveToFirst()) {
+                do {
+                    UserVocab userVocab = new UserVocab();
+                    userVocab.word = cursor.getString(cursor.getColumnIndex(KEY_WORD));
+                    String json = cursor.getString(cursor.getColumnIndex(KEY_JSON));
+                    userVocab.listOfDefEx = (new Gson()).fromJson(json, new TypeToken<ArrayList<PearsonAnswer.DefinitionExamples>>(){}.getType());
+                    userVocab.date = cursor.getLong(cursor.getColumnIndex(KEY_DATE));
+
+                    int faveInt = cursor.getInt(cursor.getColumnIndex(KEY_FAVE));
+                    userVocab.fave = (faveInt == IS_FAVE);
+//                    Log.e("byte", (long)cursor.getLong(cursor.getColumnIndex(KEY_DATE)) + "");
+//                    userVocab.dateText = cursor.getString(cursor.getColumnIndex(KEY_DATETEXT));
+
+                    userVocabs.add(userVocab);
+
+                } while(cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.d("userVocab", "fave error getting user vocab "  + e.toString());
+        } finally {
+            if (cursor != null && !cursor.isClosed()) {
+                cursor.close();
+            }
+        }
         return userVocabs;
     }
 
@@ -233,18 +283,42 @@ public class UserVocabHelper extends SQLiteOpenHelper {
             Log.e("adding word json", json);
 
             values.put(KEY_DATE, userVocab.date);
-            values.put(KEY_DATETEXT, userVocab.dateText);
+            values.put(KEY_FAVE, (userVocab.fave) ? IS_FAVE : NOT_FAVE);
 
-            String queryString = String.format(Locale.US, "INSERT INTO %s VALUES (%s, %s, %s, %s) VALUES (\"%s\", \"%s\", \"%d\", \"%s\");",
+            String queryString = String.format(Locale.US, "INSERT INTO %s VALUES (%s, %s, %s, %s) VALUES (\"%s\", \"%s\", \"%d\", \"%d\");",
                     TABLE_WORDS,
-                    KEY_WORD, KEY_JSON, KEY_DATE, KEY_DATETEXT,
-                    userVocab.word.trim(), (new Gson()).toJson(userVocab.listOfDefEx), userVocab.date, userVocab.dateText);
+                    KEY_WORD, KEY_JSON, KEY_DATE, KEY_FAVE,
+                    userVocab.word.trim(), (new Gson()).toJson(userVocab.listOfDefEx), userVocab.date, (userVocab.fave)?IS_FAVE:NOT_FAVE);
 
 
             Log.e("userVocab", "adding: " + queryString);
 
             // Notice how we haven't specified the primary key. SQLite auto increments the primary key column.
             db.insertOrThrow(TABLE_WORDS, null, values);
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.d("userVocab", "\n\n\n\n\n\n\n\n\n\n\n\nEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEError while trying to add post to database + " + e.toString() + "\n\n");
+        } finally {
+            db.endTransaction();
+        }
+    }
+
+    public void toggleFavorite(UserVocab userVocab) {
+        // Create and/or open the database for writing
+        SQLiteDatabase db = getWritableDatabase();
+
+        Log.e("toggleFavorite", "toggling " + userVocab.word + " to " + !userVocab.fave);
+
+        db.beginTransaction();
+        try {
+
+            ContentValues values = new ContentValues();
+            values.put(KEY_FAVE, (!userVocab.fave) ? IS_FAVE : NOT_FAVE);
+
+            String where= KEY_DATE + '=' + userVocab.date + " AND " + KEY_WORD + " = \"" + userVocab.word+"\"";
+            // Notice how we haven't specified the primary key. SQLite auto increments the primary key column.
+            Log.e("toggleFavorite", where);
+            db.update(TABLE_WORDS, values, where, null);
             db.setTransactionSuccessful();
         } catch (Exception e) {
             Log.d("userVocab", "\n\n\n\n\n\n\n\n\n\n\n\nEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEError while trying to add post to database + " + e.toString() + "\n\n");

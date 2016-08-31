@@ -6,18 +6,21 @@
     <ListPreference
         android:title="Language"
         android:defaultValue="1"
-        android:summary="Choose which language to define to or translate into. Current supports English or Chinese"
+        android:summary="Choose which language to define to or translate into. Currently supports English, Chinese and Spanish definitions"
         android:key="lang"
+        android:icon="@drawable/ic_language_black_24dp"
         android:entries="@array/langKeys"
         android:entryValues="@array/langValues" />
 
 
     <SwitchPreference android:title="Toggle notification shortcut"
         android:defaultValue="true"
+        android:icon="@drawable/ic_notifications_black_24dp"
         android:summary="Creates a persistent notification shortcut to define words"
         android:key="shortcut" />
     <SwitchPreference android:title="Toggle pasteboard lookup"
         android:defaultValue="true"
+        android:icon="@drawable/ic_content_paste_black_24dp"
         android:summary="Allows copied text to automatically be defined"
         android:key="paste"
         />

@@ -6,36 +6,26 @@
     android:layout_margin="0dp"
 
     >
-    
-    <RelativeLayout android:id="@+id/item_user_vocab_recycler_dateheader"
-        android:alpha="1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="0dp"
-        android:background="#eee">
-
-        <TextView
-            android:alpha=".57"
-            android:textSize="16sp"
-            android:id="@+id/item_uservocab_main_dateheader_text"
-            android:layout_margin="16dp"
-            android:text="DateLol"
-            android:textColor="#000"
-            android:gravity="end"
-            android:textAlignment="textEnd"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/item_uservocab_main_relative"
-        android:layout_below="@id/item_user_vocab_recycler_dateheader"
+        android:layout_below="@+id/item_user_vocab_recycler_dateheader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
 
         android:background="?android:attr/selectableItemBackground"
         android:foreground="?android:attr/selectableItemBackground">
+        
+        <TextView
+            android:text=""
+            android:id="@+id/fave_color_view"
+            android:visibility="invisible"
+            android:background="@color/fave_bg"
+            android:layout_margin="0dp"
+            android:padding="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 
         <TextView android:id="@+id/word_text"
             android:layout_width="wrap_content"
@@ -66,35 +56,51 @@
 
             />
 
+        <ImageView android:id="@+id/fave_image"
+            android:src="@drawable/ic_star_border_black_24dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+
+            android:layout_alignParentEnd="true"
+            android:layout_width="wrap_content"
+            android:alpha=".15"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_height="wrap_content"
+
+            android:background="?attr/selectableItemBackgroundBorderless" />
+
         <!--<TextView android:id="@+id/def2_text"-->
-            <!--android:layout_below="@id/def1_text"-->
+        <!--android:layout_below="@id/def1_text"-->
 
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
 
-            <!--android:layout_marginTop="4dp"-->
-            <!--android:layout_marginRight="16dp"-->
-            <!--android:layout_marginLeft="16dp"-->
-            <!--android:layout_marginBottom="16dp"-->
+        <!--android:layout_marginTop="4dp"-->
+        <!--android:layout_marginRight="16dp"-->
+        <!--android:layout_marginLeft="16dp"-->
+        <!--android:layout_marginBottom="16dp"-->
 
-            <!--android:alpha=".75"-->
+        <!--android:alpha=".75"-->
 
-            <!--/>-->
+        <!--/>-->
 
         <!--<TextView android:id="@+id/def3_text"-->
-            <!--android:layout_below="@id/def2_text"-->
+        <!--android:layout_below="@id/def2_text"-->
 
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
 
-            <!--android:layout_marginTop="4dp"-->
-            <!--android:layout_marginLeft="16dp"-->
-            <!--android:layout_marginRight="16dp"-->
-            <!--android:layout_marginBottom="16dp"-->
+        <!--android:layout_marginTop="4dp"-->
+        <!--android:layout_marginLeft="16dp"-->
+        <!--android:layout_marginRight="16dp"-->
+        <!--android:layout_marginBottom="16dp"-->
 
-            <!--android:alpha=".75"-->
+        <!--android:alpha=".75"-->
 
-            <!--/>-->
+        <!--/>-->
 
 
         <View
@@ -104,5 +110,48 @@
             android:layout_height="32dp"/>
 
     </RelativeLayout>
+    
+    <RelativeLayout android:id="@id/item_user_vocab_recycler_dateheader"
+        android:alpha="1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="0dp"
+        android:background="@color/dateHeader">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:alpha=".7"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/drop_shadow2" />
+
+        <TextView
+            android:alpha=".47"
+            android:layout_marginTop="16dp"
+
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginBottom="16dp"
+
+            android:textSize="16sp"
+            android:id="@+id/item_uservocab_main_dateheader_text"
+
+            android:text="DateLol"
+            android:textColor="#000"
+            android:gravity="end"
+            android:textAlignment="textEnd"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <!--android:alpha=".57"-->
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:alpha=".7"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/drop_shadow" />
+    </RelativeLayout>
+
+
 
 </RelativeLayout>

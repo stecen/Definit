@@ -52,8 +52,15 @@ public class DateUtility {
         }
     }
 
-    public static String getFullDate(long millis, String dateFormat) {
+    public static String getFullDate(long millis, String dateFormat) { // todo : supply my own dateformat because i dont want to depend on the caller's format...
         String formatted = DateFormat.format(dateFormat, millis).toString();
+
+        String todaysDate = DateFormat.format(dateFormat, System.currentTimeMillis()).toString();
+
+        if (formatted.equals(todaysDate)) {
+            return "Today";
+        }
+
         String[] splitted = formatted.split("/");
         Log.e("splitted", ""+splitted.length);
         if (splitted.length == 2) { // make sure

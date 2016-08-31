@@ -550,6 +550,10 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 
     public void getDefinition(String query) {
         Log.e("searchomg", query);
+
+
+        query = query.replaceAll("\"","");
+        query = query.replace("\\", "/");
         searchView.setQuery(query,false);
 
 //        defExRecycler.invalidateItemDecorations(); //todo why is this null when oncreate is already called

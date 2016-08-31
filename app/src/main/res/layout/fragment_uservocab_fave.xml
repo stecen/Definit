@@ -2,15 +2,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
+    android:background="@color/fave_bg"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!--<android.support.v7.widget.RecyclerView-->
-        <!--android:id="@+id/fave_recycler"-->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/fave_recycler"
 
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
 
-        <!--/>-->
+        />
 
 </RelativeLayout>
