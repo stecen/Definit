@@ -46,6 +46,7 @@ public class UserVocabFaveFrag extends Fragment implements RecyclerViewClickList
     //Overriden method onCreateView
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
 
         //Returning the layout file after inflating
         //Change R.layout.tab1 in you classes
@@ -71,9 +72,10 @@ public class UserVocabFaveFrag extends Fragment implements RecyclerViewClickList
 
     }
 
+
     @Override
     public void onResume() {
-        refreshRecycler();
+//        refreshRecycler();
         super.onResume();
     }
 

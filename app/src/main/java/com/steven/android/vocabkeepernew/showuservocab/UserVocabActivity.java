@@ -135,7 +135,7 @@ public class UserVocabActivity extends AppCompatActivity implements RecyclerView
             public void onPageSelected(int position) {
                 Log.e("viewpager", "selected " + position);
 
-                FragmentRefresher fragment = (FragmentRefresher) finalAdapter.getItem(position);
+                FragmentRefresher fragment = (FragmentRefresher) finalAdapter.instantiateItem(viewPager, position);
                 fragment.refreshViews();
 
 //                appBarLayout.setExpanded(true, true);
