@@ -33,6 +33,7 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:alpha="1"
         android:layout_margin="16dp">
         <TextView
             android:id="@+id/sheet_word_text"

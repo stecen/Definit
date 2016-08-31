@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -16,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -50,6 +52,8 @@ public class UserVocabActivity extends AppCompatActivity implements RecyclerView
 
     AppBarLayout appBarLayout;
 
+    TextView toolbarText;
+
     TabLayout tabLayout;
     ViewPager viewPager;
 
@@ -69,6 +73,8 @@ public class UserVocabActivity extends AppCompatActivity implements RecyclerView
     public static final int PREF_YES = 1;
     public static final int PREF_NO = 0;
 
+    public static final int UNSEL_TAB_ALPHA = 128;
+
     DividerItemDecoration dividerItemDecoration;
 
     @Override
@@ -76,29 +82,87 @@ public class UserVocabActivity extends AppCompatActivity implements RecyclerView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_vocab);
 
-//        appBarLayout = (AppBarLayout) findViewById(R.id.word_list_appbar);
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        if (toolbar != null) {
-//            Log.e("tool", "Setting support toolbar...");
-//            setSupportActionBar(toolbar);
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                if (appBarLayout  != null) {
-//                    appBarLayout.setElevation(8);
-//                }
-//            }
-//        }
+        appBarLayout = (AppBarLayout) findViewById(R.id.word_list_appbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            toolbar.setTitle("Definit");
+            Log.e("tool", "Setting support toolbar...");
+            setSupportActionBar(toolbar);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                if (appBarLayout  != null) {
+                    appBarLayout.setElevation(8);
+                }
+            }
+        }
+
+        toolbarText = (TextView) findViewById(R.id.uservocab_toolbar_text);
+//        toolbarText.setText(Html.fromHtml("<strong>"+"Definit"+"</strong>"));
+
+
+
+
 
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         //Adding the tabs using addTab() method
-        tabLayout.addTab(tabLayout.newTab().setText("Saved"));
-        tabLayout.addTab(tabLayout.newTab().setText("History"));
+        tabLayout.addTab(tabLayout.newTab()/*.setText("Saved")*/.setIcon(R.drawable.ic_home_white_24dp));
+        tabLayout.addTab(tabLayout.newTab()/*.setText("History")*/.setIcon(R.drawable.ic_history_white_24dp));
+        tabLayout.addTab(tabLayout.newTab()/*.setText("Favorited")*/.setIcon(R.drawable.ic_favorite_white_24dp));
+        tabLayout.getTabAt(1).getIcon().setAlpha(128);
+        tabLayout.getTabAt(2).getIcon().setAlpha(128);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         viewPager = (ViewPager) findViewById(R.id.pager);
         Pager adapter = new Pager(getSupportFragmentManager(), tabLayout.getTabCount());
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
+        viewPager.setOffscreenPageLimit(3);
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//                Log.e("viewpager", "scrolled to" + position);
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                Log.e("viewpager", "selected " + position);
+                try {
+                    switch (position) {
+                        case 0:
+                            Drawable icon0 = tabLayout.getTabAt(0).getIcon();
+                            if (icon0 != null) icon0.setAlpha(255);
+
+                            Drawable icon1 = tabLayout.getTabAt(1).getIcon();
+                            if (icon1!=null) icon1.setAlpha(UNSEL_TAB_ALPHA);
+
+                            Drawable icon2 = tabLayout.getTabAt(2).getIcon();
+                            if (icon2!=null) icon2.setAlpha(UNSEL_TAB_ALPHA);
+                            break;
+                        case 1:
+                            tabLayout.getTabAt(0).getIcon().setAlpha(UNSEL_TAB_ALPHA);
+                            tabLayout.getTabAt(1).getIcon().setAlpha(255);
+                            tabLayout.getTabAt(2).getIcon().setAlpha(UNSEL_TAB_ALPHA);
+                            break;
+                        case 2:
+                            tabLayout.getTabAt(0).getIcon().setAlpha(UNSEL_TAB_ALPHA);
+                            tabLayout.getTabAt(1).getIcon().setAlpha(UNSEL_TAB_ALPHA);
+                            tabLayout.getTabAt(2).getIcon().setAlpha(255);
+                            break;
+                    }
+                } catch (NullPointerException e) {
+                    Log.e("viewpager", e + "\n\n\n\n");
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
         tabLayout.setOnTabSelectedListener(this); // for view swiping
+
+
+
+
 
         // recycler stuff
 //        recyclerView = (RecyclerView) findViewById(R.id.user_vocab_recycler);

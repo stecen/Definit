@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.steven.android.vocabkeepernew.showuservocab.sqlite.HistoryVocab;
 import com.steven.android.vocabkeepernew.utility.DateUtility;
 import com.steven.android.vocabkeepernew.utility.PearsonAnswer;
 import com.steven.android.vocabkeepernew.R;
@@ -77,8 +78,15 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
         mySelected[idx] = sel;
     }
 
-    public void replaceData(ArrayList<UserVocab> userVocabArrayList) {
-        sortedDataSet = userVocabArrayList;
+    public void replaceData(ArrayList<UserVocab> list) {
+        if (sortedDataSet.equals(list)) {
+            Log.e("replaceUser", "equals");
+        } else {
+            Log.e("replaceUser", "not equals");
+            sortedDataSet = list;
+            notifyDataSetChanged();
+        }
+
     }
 
 

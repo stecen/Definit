@@ -14,8 +14,11 @@ import android.view.ViewGroup;
 import com.google.gson.Gson;
 import com.steven.android.vocabkeepernew.R;
 import com.steven.android.vocabkeepernew.show.RecyclerViewClickListener;
+import com.steven.android.vocabkeepernew.show.SearchAndShowActivity;
 import com.steven.android.vocabkeepernew.showuservocab.UserDetailsActivity;
 import com.steven.android.vocabkeepernew.showuservocab.UserVocabAdapter;
+import com.steven.android.vocabkeepernew.showuservocab.sheet.SheetHistoryAdapter;
+import com.steven.android.vocabkeepernew.showuservocab.sqlite.HistoryVocab;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocab;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocabHelper;
 import com.steven.android.vocabkeepernew.utility.DividerItemDecoration;
@@ -25,7 +28,7 @@ import java.util.ArrayList;
 /**
  * Created by Steven on 8/30/2016.
  */
-public class UserVocabMainFrag extends Fragment implements RecyclerViewClickListener {
+public class UserVocabFaveFrag extends Fragment implements RecyclerViewClickListener{
     RecyclerView recyclerView;
     DividerItemDecoration dividerItemDecoration;
     UserVocabHelper helper;
@@ -46,31 +49,31 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
 
         //Returning the layout file after inflating
         //Change R.layout.tab1 in you classes
-        return inflater.inflate(R.layout.fragment_uservocab_main, container, false);
+        return inflater.inflate(R.layout.fragment_uservocab_fave, container, false);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        // recycler stuff
-        recyclerView = (RecyclerView) getView().findViewById(R.id.user_vocab_recycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(appContext));
-
-        dividerItemDecoration = new DividerItemDecoration(appContext);
-
-        helper = UserVocabHelper.getInstance(appContext);
-        ArrayList<UserVocab> userVocabList = helper.getAllUserVocab();
-        Log.e("userVocab", "" + userVocabList.size());
-        adapter = new UserVocabAdapter(userVocabList, this, appContext);
-//        recyclerView.addItemDecoration(dividerItemDecoration);
-        recyclerView.setAdapter(/*new SlideInLeftAnimationAdapter(*/adapter/*)*/);
-//        Log.e("adapter count",""+ adapter.getItemCount());
+//        // recycler stuff
+//        recyclerView = (RecyclerView) getView().findViewById(R.id.fave_recycler);
+//        recyclerView.setLayoutManager(new LinearLayoutManager(appContext));
+//
+//        dividerItemDecoration = new DividerItemDecoration(appContext);
+//
+//        helper = UserVocabHelper.getInstance(appContext);
+//        ArrayList<UserVocab> userVocabList = helper.getAllUserVocab();
+//        Log.e("userVocab", "" + userVocabList.size());
+//        adapter = new UserVocabAdapter(userVocabList, this, appContext);
+////        recyclerView.addItemDecoration(dividerItemDecoration);
+//        recyclerView.setAdapter(/*new SlideInLeftAnimationAdapter(*/adapter/*)*/);
+////        Log.e("adapter count",""+ adapter.getItemCount());
 
     }
 
     @Override
     public void onResume() {
-        refreshRecycler();
+//        refreshRecycler();
         super.onResume();
     }
 
@@ -81,6 +84,7 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
         Log.e("userVocab", "" + userVocabList.size());
         Log.e("adapter count",""+ adapter.getItemCount());
         adapter.replaceData(userVocabList);
+        adapter.notifyDataSetChanged();
     }
 
     public void recyclerViewListClicked(View v, int position) {

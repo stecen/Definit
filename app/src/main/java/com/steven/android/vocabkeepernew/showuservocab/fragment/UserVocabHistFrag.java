@@ -148,7 +148,6 @@ public class UserVocabHistFrag extends Fragment implements RecyclerViewClickList
         Log.e("historyVocab", "" + historyVocabs.size());
         Log.e("hist adapter count",""+ adapter.getItemCount());
         adapter.replaceData(historyVocabs);
-        adapter.notifyDataSetChanged();
     }
 
 

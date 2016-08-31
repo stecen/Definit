@@ -32,9 +32,9 @@ public class Pager extends FragmentStatePagerAdapter {
             case 1:
                 UserVocabHistFrag tab2 = new UserVocabHistFrag();
                 return tab2;
-//            case 2:
-//                Tab3 tab3 = new Tab3();
-//                return tab3;
+            case 2:
+                UserVocabFaveFrag tab3 = new UserVocabFaveFrag();
+                return tab3;
             default:
                 return null;
         }

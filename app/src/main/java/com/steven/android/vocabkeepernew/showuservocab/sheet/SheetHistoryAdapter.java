@@ -129,7 +129,14 @@ public class SheetHistoryAdapter extends RecyclerView.Adapter<SheetHistoryAdapte
     }
 
     public void replaceData(ArrayList<HistoryVocab> list) {
-        sortedDataSet = list;
+        if (sortedDataSet.equals(list)) {
+            Log.e("replaceHist", "equals");
+        } else {
+            Log.e("replaceHist", "not equals");
+            sortedDataSet = list;
+            notifyDataSetChanged();
+        }
+
     }
 
     // Return the size of your dataset (invoked by the layout manager)
