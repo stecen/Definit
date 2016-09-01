@@ -291,7 +291,7 @@ public class UserVocabHelper extends SQLiteOpenHelper {
         // LEFT OUTER JOIN USERS
         // ON POSTS.KEY_POST_USER_ID_FK = USERS.KEY_USER_ID
         String USER_VOCAB_SELECT_QUERY =
-                String.format("SELECT * FROM %s WHERE %s = %d ORDER BY %s DESC ;",
+                String.format(Locale.US, "SELECT * FROM %s WHERE %s = %d ORDER BY %s DESC ;",
                         TABLE_WORDS, KEY_FAVE,
                         IS_FAVE,
                         KEY_DATE);
