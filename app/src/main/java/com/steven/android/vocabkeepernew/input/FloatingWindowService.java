@@ -59,7 +59,7 @@ public class FloatingWindowService extends Service {
 
     @Override
     public void onDestroy() {
-//        Toast.makeText(this, "service onDestroy", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "service onDestroy", Toast.LENGTH_SHORT).show();
 //        customHandler
         super.onDestroy();
     }
@@ -99,8 +99,14 @@ public class FloatingWindowService extends Service {
                 displayDefIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(displayDefIntent);
 
-                windowManager.removeView(linearLayout);
-                stopSelf();
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        windowManager.removeView(linearLayout);
+                        stopSelf();
+                    }
+                }, 200);
 
             }
         });
@@ -130,11 +136,20 @@ public class FloatingWindowService extends Service {
             @Override
             public void run() {
                 if (!isKilled) {
-                    windowManager.removeView(linearLayout);
+                    ViewUtility.circleExit(linearLayout);
                     stopSelf();
                 }
             }
         }, 8000);
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (!isKilled) {
+                    windowManager.removeView(linearLayout);
+                    stopSelf();
+                }
+            }
+        }, 8000+100);
 
         //region ontouch
         //        linearLayout.setOnTouchListener(new View.OnTouchListener() {
