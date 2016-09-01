@@ -14,7 +14,6 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.steven.android.vocabkeepernew.utility.GlosbePackage;
-import com.steven.android.vocabkeepernew.show.DisplayDefinitionPopupActivity;
 import com.steven.android.vocabkeepernew.get.sqlite.DictionaryDatabaseHelper;
 
 import org.json.JSONArray;

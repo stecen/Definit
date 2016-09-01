@@ -1,26 +1,12 @@
 package com.steven.android.vocabkeepernew.showuservocab.sheet;
 
-import android.animation.ArgbEvaluator;
-import android.animation.ValueAnimator;
-import android.app.Activity;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.RemoteInput;
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.Point;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
@@ -28,54 +14,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.support.v7.widget.Toolbar;
-import android.text.format.DateFormat;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.StringBuilderPrinter;
-import android.util.TypedValue;
 import android.view.Display;
-import android.view.Menu;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.steven.android.vocabkeepernew.R;
-import com.steven.android.vocabkeepernew.get.glosbe.GlosbeAsyncTask;
-import com.steven.android.vocabkeepernew.get.glosbe.GlosbeResponseInterface;
-import com.steven.android.vocabkeepernew.get.pearson.PearsonAsyncTask;
-import com.steven.android.vocabkeepernew.get.pearson.PearsonResponseInterface;
-import com.steven.android.vocabkeepernew.input.RelaySpeechActivity;
-import com.steven.android.vocabkeepernew.input.TypeWordPopupActivity;
-import com.steven.android.vocabkeepernew.show.PearsonAdapter;
-import com.steven.android.vocabkeepernew.show.RecyclerViewClickListener;
+import com.steven.android.vocabkeepernew.utility.RecyclerViewClickListener;
 import com.steven.android.vocabkeepernew.show.SearchAndShowActivity;
-import com.steven.android.vocabkeepernew.showuservocab.UserDetailsActivity;
-import com.steven.android.vocabkeepernew.showuservocab.UserVocabAdapter;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.HistoryVocab;
-import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocab;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocabHelper;
-import com.steven.android.vocabkeepernew.utility.DividerItemDecoration;
-import com.steven.android.vocabkeepernew.utility.PearsonAnswer;
-import com.steven.android.vocabkeepernew.utility.PearsonComparator;
 import com.steven.android.vocabkeepernew.utility.ViewUtility;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Locale;
-
-import jp.wasabeef.recyclerview.animators.FadeInRightAnimator;
 
 /**
  * Created by Steven on 8/22/2016.

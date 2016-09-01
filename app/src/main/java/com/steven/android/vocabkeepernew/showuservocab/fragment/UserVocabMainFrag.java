@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 
 import com.google.gson.Gson;
 import com.steven.android.vocabkeepernew.R;
-import com.steven.android.vocabkeepernew.show.RecyclerViewClickListener;
+import com.steven.android.vocabkeepernew.utility.RecyclerViewClickListener;
 import com.steven.android.vocabkeepernew.showuservocab.UserDetailsActivity;
 import com.steven.android.vocabkeepernew.showuservocab.UserVocabActivity;
 import com.steven.android.vocabkeepernew.showuservocab.UserVocabAdapter;

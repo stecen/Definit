@@ -419,14 +419,14 @@ public class UserVocabHelper extends SQLiteOpenHelper {
 
     // todo: upsert SQLite
     // Insert a post into the database
-    public void addWord(UserVocab userVocab) {
+    public void addWord(UserVocab userVocab) { // todo: make favorite and addword async
         // Create and/or open the database for writing
         SQLiteDatabase db = getWritableDatabase();
 
 //        Log.e("addWordUV", (new Gson()).toJson(userVocab));
 
 
-        for (int i = 0; i < 1000; i++) {
+//        for (int i = 0; i < 100; i++) {
 
             // It's a good idea to wrap our insert in a transaction. This helps with performance and ensures
             // consistency of the database.
@@ -462,7 +462,7 @@ public class UserVocabHelper extends SQLiteOpenHelper {
             } finally {
                 db.endTransaction();
             }
-        }
+//        }
     }
 
     public void toggleFavorite(UserVocab userVocab) {

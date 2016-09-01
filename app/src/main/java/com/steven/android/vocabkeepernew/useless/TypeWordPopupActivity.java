@@ -1,4 +1,4 @@
-package com.steven.android.vocabkeepernew.input;
+package com.steven.android.vocabkeepernew.useless;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -13,23 +13,15 @@ import android.speech.RecognizerIntent;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.steven.android.vocabkeepernew.R;
-import com.steven.android.vocabkeepernew.show.DisplayDefinitionPopupActivity;
-import com.steven.android.vocabkeepernew.showuservocab.UserVocabActivity;
-import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocab;
-import com.steven.android.vocabkeepernew.utility.CallbackAsyncTask;
 
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.logging.LogRecord;
 
 /**
  * Created by Steven on 11/30/2015.

@@ -83,7 +83,7 @@ public class FloatingWindowService extends Service {
         linearLayout=new LinearLayout(this);
 
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
-        linearLayout.setBackgroundColor(Color.argb(0, 200, 200,200));
+        linearLayout.setBackgroundColor(Color.argb(0, 200, 200, 200));
         linearLayout.setLayoutParams(layoutParams);
 
         //display the app icon
@@ -104,7 +104,17 @@ public class FloatingWindowService extends Service {
 
             }
         });
+        icon.setVisibility(View.INVISIBLE);
         linearLayout.addView(icon);
+
+        final ImageView fIcon = icon;
+        icon.post(new Runnable() {
+            @Override
+            public void run() {
+                ViewUtility.circleReveal(fIcon);
+            }
+        });
+
 
 
         final WindowManager.LayoutParams windowParams = new WindowManager.LayoutParams(150, 150, WindowManager.LayoutParams.TYPE_PHONE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, PixelFormat.TRANSLUCENT);

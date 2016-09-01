@@ -2,9 +2,6 @@ package com.steven.android.vocabkeepernew.show;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.RemoteInput;
 import android.app.SearchManager;
 import android.content.Context;
@@ -49,8 +46,7 @@ import com.steven.android.vocabkeepernew.get.glosbe.GlosbeAsyncTask;
 import com.steven.android.vocabkeepernew.get.glosbe.GlosbeResponseInterface;
 import com.steven.android.vocabkeepernew.get.pearson.PearsonAsyncTask;
 import com.steven.android.vocabkeepernew.get.pearson.PearsonResponseInterface;
-import com.steven.android.vocabkeepernew.input.RelaySpeechActivity;
-import com.steven.android.vocabkeepernew.input.TypeWordPopupActivity;
+import com.steven.android.vocabkeepernew.useless.TypeWordPopupActivity;
 import com.steven.android.vocabkeepernew.showuservocab.sheet.SheetHistorySavedActivity;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.HistoryVocab;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocabHelper;
@@ -58,6 +54,7 @@ import com.steven.android.vocabkeepernew.utility.DividerItemDecoration;
 import com.steven.android.vocabkeepernew.utility.NotificationUtility;
 import com.steven.android.vocabkeepernew.utility.PearsonAnswer;
 import com.steven.android.vocabkeepernew.utility.PearsonComparator;
+import com.steven.android.vocabkeepernew.utility.RecyclerViewClickListener;
 import com.steven.android.vocabkeepernew.utility.ViewUtility;
 
 import java.util.ArrayList;

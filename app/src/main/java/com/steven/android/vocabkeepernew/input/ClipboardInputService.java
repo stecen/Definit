@@ -8,7 +8,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.steven.android.vocabkeepernew.show.DisplayDefinitionPopupActivity;
+import com.steven.android.vocabkeepernew.useless.DisplayDefinitionPopupActivity;
 
 /**
  * Created by Steven on 8/17/2016.

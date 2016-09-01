@@ -1,4 +1,4 @@
-package com.steven.android.vocabkeepernew.show;
+package com.steven.android.vocabkeepernew.useless;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
@@ -36,13 +36,14 @@ import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.steven.android.vocabkeepernew.get.glosbe.GlosbeAsyncTask;
+import com.steven.android.vocabkeepernew.show.PearsonAdapter;
+import com.steven.android.vocabkeepernew.utility.RecyclerViewClickListener;
 import com.steven.android.vocabkeepernew.utility.DividerItemDecoration;
 import com.steven.android.vocabkeepernew.utility.PearsonAnswer;
 import com.steven.android.vocabkeepernew.R;
 import com.steven.android.vocabkeepernew.get.glosbe.GlosbeResponseInterface;
 import com.steven.android.vocabkeepernew.get.pearson.PearsonAsyncTask;
 import com.steven.android.vocabkeepernew.get.pearson.PearsonResponseInterface;
-import com.steven.android.vocabkeepernew.input.TypeWordPopupActivity;
 import com.steven.android.vocabkeepernew.utility.PearsonComparator;
 import com.steven.android.vocabkeepernew.utility.ViewUtility;
 
@@ -61,7 +62,7 @@ import jp.wasabeef.recyclerview.animators.FadeInRightAnimator;
 //import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
 
-public class DisplayDefinitionPopupActivity extends AppCompatActivity implements PearsonResponseInterface, GlosbeResponseInterface, RecyclerViewClickListener{
+public class DisplayDefinitionPopupActivity extends AppCompatActivity implements PearsonResponseInterface, GlosbeResponseInterface, RecyclerViewClickListener {
     TextView wordText /*defText, defText2*/, toolbarText;
 //    ListView defExListView;
     FloatingActionButton fab;

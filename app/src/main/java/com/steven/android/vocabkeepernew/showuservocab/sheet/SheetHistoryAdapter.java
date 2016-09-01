@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.HistoryVocab;
 import com.steven.android.vocabkeepernew.utility.DateUtility;
 import com.steven.android.vocabkeepernew.R;
-import com.steven.android.vocabkeepernew.show.RecyclerViewClickListener;
+import com.steven.android.vocabkeepernew.utility.RecyclerViewClickListener;
 
 import java.util.ArrayList;
 

@@ -36,7 +36,7 @@
             />
 
         <!--HELP:    http://stackoverflow.com/questions/32824079/launchmode-singletask-does-not-create-a-new-task-->
-        <activity android:name=".input.TypeWordPopupActivity"
+        <activity android:name=".useless.TypeWordPopupActivity"
             android:label="Define word"
 
         android:taskAffinity=""
@@ -64,7 +64,7 @@
                 />
         </activity>
 
-        <activity android:name=".show.DisplayDefinitionPopupActivity"
+        <activity android:name=".useless.DisplayDefinitionPopupActivity"
             android:theme="@style/VocabDialogTheme"
             android:label="Definition"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -82,9 +82,10 @@
             android:theme="@style/VocabDialogTheme"
             android:label="Definition"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:windowSoftInputMode="stateVisible"
+            android:windowSoftInputMode="adjustPan"
             android:taskAffinity=""
             android:launchMode="singleTop">
+            <!--android:windowSoftInputMode="stateVisible"-->
 
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />

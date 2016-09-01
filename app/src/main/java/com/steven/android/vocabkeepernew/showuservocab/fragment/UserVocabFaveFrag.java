@@ -13,14 +13,11 @@ import android.view.ViewGroup;
 
 import com.google.gson.Gson;
 import com.steven.android.vocabkeepernew.R;
-import com.steven.android.vocabkeepernew.show.RecyclerViewClickListener;
-import com.steven.android.vocabkeepernew.show.SearchAndShowActivity;
+import com.steven.android.vocabkeepernew.utility.RecyclerViewClickListener;
 import com.steven.android.vocabkeepernew.showuservocab.UserDetailsActivity;
 import com.steven.android.vocabkeepernew.showuservocab.UserVocabActivity;
 import com.steven.android.vocabkeepernew.showuservocab.UserVocabAdapter;
-import com.steven.android.vocabkeepernew.showuservocab.sheet.SheetHistoryAdapter;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.GetAllWordsAsyncInterface;
-import com.steven.android.vocabkeepernew.showuservocab.sqlite.HistoryVocab;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocab;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocabHelper;
 import com.steven.android.vocabkeepernew.utility.DividerItemDecoration;
