@@ -56,6 +56,7 @@ public class UserVocabFaveFrag extends Fragment implements RecyclerViewClickList
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        Log.e("favorite", "on activity created");
         // recycler stuff
         recyclerView = (RecyclerView) getView().findViewById(R.id.fave_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(appContext));
@@ -75,12 +76,13 @@ public class UserVocabFaveFrag extends Fragment implements RecyclerViewClickList
 
     @Override
     public void onResume() {
-//        refreshRecycler();
+        refreshRecycler();
+        Log.e("favorite", "onresume");
         super.onResume();
     }
 
     public void refreshViews() {
-        Log.e("refresh", "favorite");
+        Log.e("favorite", "refresh");
         refreshRecycler();
     }
 

@@ -16,6 +16,7 @@ import com.steven.android.vocabkeepernew.R;
 import com.steven.android.vocabkeepernew.show.RecyclerViewClickListener;
 import com.steven.android.vocabkeepernew.showuservocab.UserDetailsActivity;
 import com.steven.android.vocabkeepernew.showuservocab.UserVocabAdapter;
+import com.steven.android.vocabkeepernew.showuservocab.sqlite.GetAllWordsAsyncInterface;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocab;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocabHelper;
 import com.steven.android.vocabkeepernew.utility.DividerItemDecoration;
@@ -58,13 +59,24 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
 
         dividerItemDecoration = new DividerItemDecoration(appContext);
 
+//        helper = UserVocabHelper.getInstance(appContext);
+//        ArrayList<UserVocab> userVocabList = helper.getAllUserVocab();
+//        Log.e("userVocab", "" + userVocabList.size());
+//        adapter = new UserVocabAdapter(userVocabList, this, appContext, false);
+////        recyclerView.addItemDecoration(dividerItemDecoration);
+//        recyclerView.setAdapter(/*new SlideInLeftAnimationAdapter(*/adapter/*)*/);
+////        Log.e("adapter count",""+ adapter.getItemCount());
         helper = UserVocabHelper.getInstance(appContext);
-        ArrayList<UserVocab> userVocabList = helper.getAllUserVocab();
-        Log.e("userVocab", "" + userVocabList.size());
-        adapter = new UserVocabAdapter(userVocabList, this, appContext, false);
-//        recyclerView.addItemDecoration(dividerItemDecoration);
-        recyclerView.setAdapter(/*new SlideInLeftAnimationAdapter(*/adapter/*)*/);
-//        Log.e("adapter count",""+ adapter.getItemCount());
+        final RecyclerViewClickListener listener = this;
+        helper.getAllUserVocab(new GetAllWordsAsyncInterface() {
+            @Override
+            public void setWordsData(ArrayList<UserVocab> userVocabList) {
+                Log.e("userVocab", "" + userVocabList.size());
+                adapter = new UserVocabAdapter(userVocabList, listener, appContext, false);
+                recyclerView.setAdapter(/*new SlideInLeftAnimationAdapter(*/adapter/*)*/);
+            }
+        });
+
 
     }
 
@@ -81,11 +93,21 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
 
     public void refreshRecycler () {
         // todo variable to keep track if there are changes so this activity doesnt have to keep reloading the entire sqlite
+//        helper = UserVocabHelper.getInstance(appContext);
+//        ArrayList<UserVocab> userVocabList = helper.getAllUserVocab();
+//        Log.e("userVocab", "" + userVocabList.size());
+//        Log.e("adapter count",""+ adapter.getItemCount());
+//        adapter.replaceData(userVocabList);
+
         helper = UserVocabHelper.getInstance(appContext);
-        ArrayList<UserVocab> userVocabList = helper.getAllUserVocab();
-        Log.e("userVocab", "" + userVocabList.size());
-        Log.e("adapter count",""+ adapter.getItemCount());
-        adapter.replaceData(userVocabList);
+        helper.getAllUserVocab(new GetAllWordsAsyncInterface() {
+            @Override
+            public void setWordsData(ArrayList<UserVocab> userVocabList) {
+                Log.e("userVocab", "" + userVocabList.size());
+                adapter.replaceData(userVocabList);
+                Log.e("adapter count",""+ adapter.getItemCount());
+            }
+        });
     }
 
     public void recyclerViewListClicked(View v, int position) {

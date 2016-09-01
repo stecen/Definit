@@ -243,15 +243,15 @@ public class UserVocabActivity extends AppCompatActivity implements RecyclerView
 
     }
 
-    public void refreshRecycler () {
-        // todo variable to keep track if there are changes so this activity doesnt have to keep reloading the entire sqlite
-        helper = UserVocabHelper.getInstance(getApplicationContext());
-        ArrayList<UserVocab> userVocabList = helper.getAllUserVocab();
-        Log.e("userVocab", "" + userVocabList.size());
-                Log.e("adapter count",""+ adapter.getItemCount());
-        adapter.replaceData(userVocabList);
-        adapter.notifyDataSetChanged();
-    }
+//    public void refreshRecycler () {
+//        // todo variable to keep track if there are changes so this activity doesnt have to keep reloading the entire sqlite
+//        helper = UserVocabHelper.getInstance(getApplicationContext());
+//        ArrayList<UserVocab> userVocabList = helper.getAllUserVocab();
+//        Log.e("userVocab", "" + userVocabList.size());
+//                Log.e("adapter count",""+ adapter.getItemCount());
+//        adapter.replaceData(userVocabList);
+//        adapter.notifyDataSetChanged();
+//    }
 
     public void recyclerViewListClicked(View v, int position) {
         String userVocabString = (new Gson()).toJson(adapter.sortedDataSet.get(position));
@@ -361,26 +361,26 @@ public class UserVocabActivity extends AppCompatActivity implements RecyclerView
 
             return true;
         } else if (id == R.id.drop_table) {
-            try {
-
-                UserVocabHelper helper = UserVocabHelper.getInstance(getApplicationContext());
-                helper.deleteAllUserVocab();
-
-                adapter.replaceData(helper.getAllUserVocab());
-                adapter.notifyDataSetChanged();
-//                SQLiteDatabase vocabDB = openOrCreateDatabase("vocab.db", MODE_PRIVATE, null);
-//                Toast.makeText(this, "Resetting table...", Toast.LENGTH_SHORT).show();
-//                vocabDB.execSQL("DELETE FROM words;");
+//            try {
 //
-//                String query = "SELECT * FROM words;"; // get an empty cursor
-//                Cursor emptyCursor= vocabDB.rawQuery(query, null);
-//                emptyCursor.moveToFirst();
+//                UserVocabHelper helper = UserVocabHelper.getInstance(getApplicationContext());
+//                helper.deleteAllUserVocab();
 //
-//                wordDisplayCursorAdapter.swapCursor(emptyCursor);
-            }catch (Exception e) {
-                Log.d("lol", e.toString());
-            }
-            return true;
+//                adapter.replaceData(helper.getAllUserVocab());
+//                adapter.notifyDataSetChanged();
+////                SQLiteDatabase vocabDB = openOrCreateDatabase("vocab.db", MODE_PRIVATE, null);
+////                Toast.makeText(this, "Resetting table...", Toast.LENGTH_SHORT).show();
+////                vocabDB.execSQL("DELETE FROM words;");
+////
+////                String query = "SELECT * FROM words;"; // get an empty cursor
+////                Cursor emptyCursor= vocabDB.rawQuery(query, null);
+////                emptyCursor.moveToFirst();
+////
+////                wordDisplayCursorAdapter.swapCursor(emptyCursor);
+//            }catch (Exception e) {
+//                Log.d("lol", e.toString());
+//            }
+//            return true;
         }
 
         return super.onOptionsItemSelected(item);

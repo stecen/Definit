@@ -5,10 +5,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.steven.android.vocabkeepernew.get.CallbackAsyncInterface;
 import com.steven.android.vocabkeepernew.utility.PearsonAnswer;
 
 import java.util.ArrayList;
@@ -145,11 +147,6 @@ public class UserVocabHelper extends SQLiteOpenHelper {
         return historyVocabs;
     }
 
-
-
-
-
-
     //region user vocab
 
 //    public Cursor getAllUserVocabCursor() { // make sure to close cursor!
@@ -169,51 +166,123 @@ public class UserVocabHelper extends SQLiteOpenHelper {
 //        return cursor;
 //    }
 
-    public ArrayList<UserVocab> getAllUserVocab() {
-        ArrayList<UserVocab> userVocabs = new ArrayList<>();
+    public void getAllUserVocab(GetAllWordsAsyncInterface asyncInterface) {
+        GetAllWordsAsyncTask task = new GetAllWordsAsyncTask(getReadableDatabase(), asyncInterface);
+        task.execute();
 
-        // SELECT * FROM POSTS
-        // LEFT OUTER JOIN USERS
-        // ON POSTS.KEY_POST_USER_ID_FK = USERS.KEY_USER_ID
+//        ArrayList<UserVocab> userVocabs = new ArrayList<>();
+//
+//        // SELECT * FROM POSTS
+//        // LEFT OUTER JOIN USERS
+//        // ON POSTS.KEY_POST_USER_ID_FK = USERS.KEY_USER_ID
+//        String USER_VOCAB_SELECT_QUERY =
+//                String.format("SELECT * FROM %s ORDER BY %s DESC;",
+//                        TABLE_WORDS,
+//                        KEY_DATE);
+//
+//
+//        SQLiteDatabase db = getReadableDatabase();
+//        Log.e("userVocab", "querying: " + USER_VOCAB_SELECT_QUERY);
+//        Cursor cursor = db.rawQuery(USER_VOCAB_SELECT_QUERY, null);
+//        try {
+//            if (cursor.moveToFirst()) {
+//                do {
+//                    UserVocab userVocab = new UserVocab();
+//                    userVocab.word = cursor.getString(cursor.getColumnIndex(KEY_WORD));
+//                    String json = cursor.getString(cursor.getColumnIndex(KEY_JSON));
+//                    Log.e("getAllUserVocab", json);
+//                    userVocab.listOfDefEx = (new Gson()).fromJson(json, new TypeToken<ArrayList<PearsonAnswer.DefinitionExamples>>(){}.getType());
+//                    Log.e("getAllUserVocab", ""+ userVocab.listOfDefEx.size());
+//                    userVocab.date = cursor.getLong(cursor.getColumnIndex(KEY_DATE));
+//
+//                    int faveInt = cursor.getInt(cursor.getColumnIndex(KEY_FAVE));
+//                    userVocab.fave = (faveInt == IS_FAVE);
+////                    Log.e("byte", (long)cursor.getLong(cursor.getColumnIndex(KEY_DATE)) + "");
+////                    userVocab.dateText = cursor.getString(cursor.getColumnIndex(KEY_DATETEXT));
+//
+//                    userVocabs.add(userVocab);
+//
+//                } while(cursor.moveToNext());
+//            }
+//        } catch (Exception e) {
+//            Log.d("userVocab", "error getting user vocab "  + e.toString());
+//        } finally {
+//            if (cursor != null && !cursor.isClosed()) {
+//                cursor.close();
+//            }
+//        }
+////        Collections.reverse(userVocabs);
+//        return userVocabs;
+    }
+
+
+    private class GetAllWordsAsyncTask extends AsyncTask<Void, Void, ArrayList<UserVocab>> { // class to allow the get all query to happen on a seperate thread
+        GetAllWordsAsyncInterface asyncInterface;
+        SQLiteDatabase db;
+        ArrayList<UserVocab> userVocabs;
+
         String USER_VOCAB_SELECT_QUERY =
                 String.format("SELECT * FROM %s ORDER BY %s DESC;",
                         TABLE_WORDS,
                         KEY_DATE);
 
+        public GetAllWordsAsyncTask(SQLiteDatabase db, GetAllWordsAsyncInterface asyncInterface) {
+            super();
+            this.db = db;
+            this.asyncInterface = asyncInterface;
 
-        SQLiteDatabase db = getReadableDatabase();
-        Log.e("userVocab", "querying: " + USER_VOCAB_SELECT_QUERY);
-        Cursor cursor = db.rawQuery(USER_VOCAB_SELECT_QUERY, null);
-        try {
-            if (cursor.moveToFirst()) {
-                do {
-                    UserVocab userVocab = new UserVocab();
-                    userVocab.word = cursor.getString(cursor.getColumnIndex(KEY_WORD));
-                    String json = cursor.getString(cursor.getColumnIndex(KEY_JSON));
-                    Log.e("getAllUserVocab", json);
-                    userVocab.listOfDefEx = (new Gson()).fromJson(json, new TypeToken<ArrayList<PearsonAnswer.DefinitionExamples>>(){}.getType());
-                    Log.e("getAllUserVocab", ""+ userVocab.listOfDefEx.size());
-                    userVocab.date = cursor.getLong(cursor.getColumnIndex(KEY_DATE));
+            userVocabs = new ArrayList<>();
 
-                    int faveInt = cursor.getInt(cursor.getColumnIndex(KEY_FAVE));
-                    userVocab.fave = (faveInt == IS_FAVE);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+
+        @Override
+        protected ArrayList<UserVocab> doInBackground(Void... voids) {
+            Log.e("userVocab", "querying: " + USER_VOCAB_SELECT_QUERY);
+            Cursor cursor = db.rawQuery(USER_VOCAB_SELECT_QUERY, null);
+            try {
+                if (cursor.moveToFirst()) {
+                    do {
+                        UserVocab userVocab = new UserVocab();
+                        userVocab.word = cursor.getString(cursor.getColumnIndex(KEY_WORD));
+                        String json = cursor.getString(cursor.getColumnIndex(KEY_JSON));
+                        Log.e("getAllUserVocab", json);
+                        userVocab.listOfDefEx = (new Gson()).fromJson(json, new TypeToken<ArrayList<PearsonAnswer.DefinitionExamples>>(){}.getType());
+                        Log.e("getAllUserVocab", ""+ userVocab.listOfDefEx.size());
+                        userVocab.date = cursor.getLong(cursor.getColumnIndex(KEY_DATE));
+
+                        int faveInt = cursor.getInt(cursor.getColumnIndex(KEY_FAVE));
+                        userVocab.fave = (faveInt == IS_FAVE);
 //                    Log.e("byte", (long)cursor.getLong(cursor.getColumnIndex(KEY_DATE)) + "");
 //                    userVocab.dateText = cursor.getString(cursor.getColumnIndex(KEY_DATETEXT));
 
-                    userVocabs.add(userVocab);
+                        userVocabs.add(userVocab);
 
-                } while(cursor.moveToNext());
+                    } while(cursor.moveToNext());
+                }
+            } catch (Exception e) {
+                Log.d("userVocab", "error getting user vocab "  + e.toString());
+            } finally {
+                if (cursor != null && !cursor.isClosed()) {
+                    cursor.close();
+                }
             }
-        } catch (Exception e) {
-            Log.d("userVocab", "error getting user vocab "  + e.toString());
-        } finally {
-            if (cursor != null && !cursor.isClosed()) {
-                cursor.close();
-            }
+            return userVocabs;
         }
-//        Collections.reverse(userVocabs);
-        return userVocabs;
+
+        @Override
+        protected void onPostExecute(ArrayList<UserVocab> userVocabArrayList) {
+            super.onPostExecute(userVocabArrayList);
+            asyncInterface.setWordsData(userVocabArrayList);
+        }
     }
+
+
 
     public ArrayList<UserVocab> getFaveVocabList() {
         ArrayList<UserVocab> userVocabs = new ArrayList<>();
@@ -268,38 +337,42 @@ public class UserVocabHelper extends SQLiteOpenHelper {
 
         Log.e("addWordUV", (new Gson()).toJson(userVocab));
 
-        // It's a good idea to wrap our insert in a transaction. This helps with performance and ensures
-        // consistency of the database.
-        db.beginTransaction();
-        try {
-            // The user might already exist in the database (i.e. the same user created multiple posts).
-            //long userId = addOrUpdateWord(userVocab.word); //todo: check for duplicates
 
-            ContentValues values = new ContentValues();
-            values.put(KEY_WORD, userVocab.word.trim());
+        for (int i = 0; i < 100; i++) {
 
-            String json =  (new Gson()).toJson(userVocab.listOfDefEx);
-            values.put(KEY_JSON, json);
-            Log.e("adding word json", json);
+            // It's a good idea to wrap our insert in a transaction. This helps with performance and ensures
+            // consistency of the database.
+            db.beginTransaction();
+            try {
+                // The user might already exist in the database (i.e. the same user created multiple posts).
+                //long userId = addOrUpdateWord(userVocab.word); //todo: check for duplicates
 
-            values.put(KEY_DATE, userVocab.date);
-            values.put(KEY_FAVE, (userVocab.fave) ? IS_FAVE : NOT_FAVE);
+                ContentValues values = new ContentValues();
+                values.put(KEY_WORD, userVocab.word.trim());
 
-            String queryString = String.format(Locale.US, "INSERT INTO %s VALUES (%s, %s, %s, %s) VALUES (\"%s\", \"%s\", \"%d\", \"%d\");",
-                    TABLE_WORDS,
-                    KEY_WORD, KEY_JSON, KEY_DATE, KEY_FAVE,
-                    userVocab.word.trim(), (new Gson()).toJson(userVocab.listOfDefEx), userVocab.date, (userVocab.fave)?IS_FAVE:NOT_FAVE);
+                String json = (new Gson()).toJson(userVocab.listOfDefEx);
+                values.put(KEY_JSON, json);
+                Log.e("adding word json", json);
+
+                values.put(KEY_DATE, userVocab.date + (long)i);
+                values.put(KEY_FAVE, (userVocab.fave) ? IS_FAVE : NOT_FAVE);
+
+                String queryString = String.format(Locale.US, "INSERT INTO %s VALUES (%s, %s, %s, %s) VALUES (\"%s\", \"%s\", \"%d\", \"%d\");",
+                        TABLE_WORDS,
+                        KEY_WORD, KEY_JSON, KEY_DATE, KEY_FAVE,
+                        userVocab.word.trim(), (new Gson()).toJson(userVocab.listOfDefEx), userVocab.date, (userVocab.fave) ? IS_FAVE : NOT_FAVE);
 
 
-            Log.e("userVocab", "adding: " + queryString);
+                Log.e("userVocab", "adding: " + queryString);
 
-            // Notice how we haven't specified the primary key. SQLite auto increments the primary key column.
-            db.insertOrThrow(TABLE_WORDS, null, values);
-            db.setTransactionSuccessful();
-        } catch (Exception e) {
-            Log.d("userVocab", "\n\n\n\n\n\n\n\n\n\n\n\nEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEError while trying to add post to database + " + e.toString() + "\n\n");
-        } finally {
-            db.endTransaction();
+                // Notice how we haven't specified the primary key. SQLite auto increments the primary key column.
+                db.insertOrThrow(TABLE_WORDS, null, values);
+                db.setTransactionSuccessful();
+            } catch (Exception e) {
+                Log.d("userVocab", "\n\n\n\n\n\n\n\n\n\n\n\nEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEError while trying to add post to database + " + e.toString() + "\n\n");
+            } finally {
+                db.endTransaction();
+            }
         }
     }
 
