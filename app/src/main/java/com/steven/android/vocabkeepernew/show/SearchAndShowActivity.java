@@ -25,6 +25,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
@@ -135,6 +136,8 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 
     public int lastIdx = -1;//for adapter to know where to add the bottom filler
 
+    TextView searchInnerText; // for getting the text in it
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -195,6 +198,8 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
             ViewUtility.setMarginsLinear(0f, 0f, 0f, 0f, closeButton, this);
             closeButton.setPadding(0,16,16,0);
         }
+        searchInnerText = (TextView) plateLinear.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+
 
         LinearLayout submitLinear = (LinearLayout) frameLinear.findViewById(android.support.v7.appcompat.R.id.submit_area);
         int childcount4 = submitLinear.getChildCount();
@@ -366,6 +371,11 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
             recognizeSpeech();
             // recognize speech
         }*/
+        else { // no one sent anything, so show the keyboard and allow the user to type
+            ((InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE)).
+                    toggleSoftInput(InputMethodManager.SHOW_FORCED,
+                            InputMethodManager.HIDE_IMPLICIT_ONLY);
+        }
         //endregion search
 
 
@@ -491,6 +501,10 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 
 
 
+        } else { // show keyboard
+            ((InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE)).
+                    toggleSoftInput(InputMethodManager.SHOW_FORCED,
+                            InputMethodManager.HIDE_IMPLICIT_ONLY);
         }
 
         /*else if (intent.hasExtra(KEY_RECOG_NOW)) {
@@ -782,14 +796,53 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
     public void onPause() {
         super.onPause();
 
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+//            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        }
+
 //        coordinatorLayout.setVisibility(View.INVISIBLE);
 //        ViewUtility.circleReveal(frame); // lmfao
 //        DisplayDefinitionPopupActivity.shouldShowPreviousTypeWordPopup = true; // reset to true, in case
     }
 
+//    @Override
+//    public void onBackPressed() {
+//        Log.e("onBackPressed", " " );
+//        super.onBackPressed();
+//    }
+
+//    @Override
+//    public boolean onKeyDown(int code, KeyEvent e) {
+//
+//        if(code == KeyEvent.KEYCODE_BACK){
+//            Log.e("onBackPressed", "down = " + code);
+//            finish();
+//            return true;
+//        }else{
+//            return super.onKeyDown(code, e);
+//        }
+//    }
+
     @Override
     public void onResume() {
         super.onResume();
+
+        try {
+            if (searchInnerText != null && searchInnerText.getText().toString().equals("") && searchInnerText.getText().toString().trim().equals("")) {
+                Log.e("searchInnerText yassss", searchInnerText.getText().toString() + " ");
+                searchView.requestFocus();
+                ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).
+                        toggleSoftInput(InputMethodManager.SHOW_FORCED,
+                                InputMethodManager.HIDE_IMPLICIT_ONLY); // show keyboard XD
+            } else {
+                Log.e("searchInnerText", "NULL +" + searchInnerText.getText().toString() + ".");
+            }
+        } catch (NullPointerException e) {
+            Log.e("searchinnertext", "null pointer exception at " + e.toString());
+        }
 
 
         if (!iAlreadyExist) { // make sure it's not jut a onNewIntent
@@ -807,6 +860,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 //                ViewTreeObserver obs = tv.getViewTreeObserver();
 
                     ViewUtility.circleRevealExtra(coordinatorLayout); // lmfao
+//                    ViewUtility.zoomIntoView(coordinatorLayout);
                     Log.e("vto", "circle revealing");
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                         fview.getViewTreeObserver().removeOnGlobalLayoutListener(this);
@@ -817,6 +871,8 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 
             });
         }
+
+//        if (searchVie)
 
 
 //        DisplayDefinitionPopupActivity.shouldShowPreviousTypeWordPopup = true; // reset to true, in case
@@ -853,7 +909,8 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 //                fab.setVisibility(View.VISIBLE);
                     Log.e("selected", "" + selectedCount);
                     if (selectedCount == 1) {
-                        ViewUtility.circleReveal(fab);
+//                        ViewUtility.circleReveal(fab);
+                        fab.show();
                     }
 
                     Log.e("click", "click @ " + Integer.toString(position));
@@ -935,7 +992,8 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 
                     fab.requestLayout();
 //                    fab.setVisibility(View.GONE);
-                    ViewUtility.circleExit(fab);
+//                    ViewUtility.circleExit(fab);
+                    fab.hide();
                 }
 
                 int colorFrom = Color.parseColor(COLOR_PRESSED);
@@ -1077,6 +1135,10 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
         if (view != null) {
             InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+
+        if (searchView != null) {
+            searchView.clearFocus();
         }
 
         pA = pearsonAnswer;

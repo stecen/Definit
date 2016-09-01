@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
+import android.view.animation.OvershootInterpolator;
+import android.view.animation.ScaleAnimation;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -52,6 +54,16 @@ public class ViewUtility {
         //    // make the view visible and start the animation
             myView.setVisibility(View.VISIBLE);
         }
+    }
+
+    public static void zoomIntoView(View view) {
+        ScaleAnimation anim = new ScaleAnimation(0,1,0,1);
+        anim.setFillBefore(true);
+        anim.setFillAfter(true);
+        anim.setFillEnabled(true);
+        anim.setDuration(500);
+        anim.setInterpolator(new OvershootInterpolator());
+        view.startAnimation(anim);
     }
 
 

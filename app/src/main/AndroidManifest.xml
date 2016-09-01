@@ -82,10 +82,12 @@
             android:theme="@style/VocabDialogTheme"
             android:label="Definition"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:windowSoftInputMode="adjustPan"
+
             android:taskAffinity=""
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            >
             <!--android:windowSoftInputMode="stateVisible"-->
+            <!--android:windowSoftInputMode="adjustPan"-->
 
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />

@@ -50,9 +50,11 @@ public class ClipboardWatcherService extends Service {
             if (cd.getDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN) || cd.getDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_HTML)) {
 
                 String word = cd.getItemAt(0).coerceToText(this).toString().trim();
-                if (previousText.equals(word)) {
-                    return; // don't duplicate
-                }
+//                if (previousText.equals(word)) {
+//                    return; // don't duplicate
+//                }
+
+
                 previousText = word;
 
                 Log.e("tag", "Kyle Landry just copied " + word);

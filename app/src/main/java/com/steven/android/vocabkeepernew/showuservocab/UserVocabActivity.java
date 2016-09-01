@@ -21,6 +21,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.OvershootInterpolator;
+import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,6 +40,7 @@ import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocabHelper;
 import com.steven.android.vocabkeepernew.useless.WordDisplayCursorAdapter;
 import com.steven.android.vocabkeepernew.utility.DividerItemDecoration;
 import com.steven.android.vocabkeepernew.utility.NotificationUtility;
+import com.steven.android.vocabkeepernew.utility.ViewUtility;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -253,6 +256,8 @@ public class UserVocabActivity extends AppCompatActivity implements RecyclerView
 
         // set default preferences
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+
+//        ViewUtility.zoomIntoView(fab);
 
 //        animationText = (TextView) findViewById(R.id.animation_text);
     }

@@ -111,7 +111,8 @@ public class FloatingWindowService extends Service {
         icon.post(new Runnable() {
             @Override
             public void run() {
-                ViewUtility.circleReveal(fIcon);
+//                ViewUtility.circleReveal(fIcon);
+                ViewUtility.zoomIntoView(fIcon);
             }
         });
 
