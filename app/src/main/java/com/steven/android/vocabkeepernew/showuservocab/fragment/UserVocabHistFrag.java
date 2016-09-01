@@ -29,78 +29,12 @@ import java.util.ArrayList;
 /**
  * Created by Steven on 8/30/2016.
  */
-public class UserVocabHistFrag extends Fragment implements RecyclerViewClickListener, FragmentRefresher {
-//    RecyclerView recyclerView;
-//    DividerItemDecoration dividerItemDecoration;
-//    UserVocabHelper helper;
-//    UserVocabAdapter adapter;
-//
-//    Context appContext;
-//
-//
-//    @Override
-//    public void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        appContext = getActivity().getApplicationContext();
-//    }
-//
-//    //Overriden method onCreateView
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//
-//        //Returning the layout file after inflating
-//        //Change R.layout.tab1 in you classes
-//        return inflater.inflate(R.layout.fragment_uservocab_history, container, false);
-//    }
-//
-//    @Override
-//    public void onActivityCreated(Bundle savedInstanceState) {
-//        super.onActivityCreated(savedInstanceState);
-//        // recycler stuff
-//        recyclerView = (RecyclerView) getView().findViewById(R.id.inner_recycler);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(appContext));
-//
-//        dividerItemDecoration = new DividerItemDecoration(appContext);
-//
-//        helper = UserVocabHelper.getInstance(appContext);
-//        ArrayList<UserVocab> userVocabList = helper.getAllUserVocab();
-//        Log.e("userVocab", "" + userVocabList.size());
-//        adapter = new UserVocabAdapter(userVocabList, this, appContext);
-////        recyclerView.addItemDecoration(dividerItemDecoration);
-//        recyclerView.setAdapter(/*new SlideInLeftAnimationAdapter(*/adapter/*)*/);
-////        Log.e("adapter count",""+ adapter.getItemCount());
-//
-//    }
-//
-//    public void refreshRecycler () {
-//        // todo variable to keep track if there are changes so this activity doesnt have to keep reloading the entire sqlite
-//        helper = UserVocabHelper.getInstance(appContext);
-//        ArrayList<UserVocab> userVocabList = helper.getAllUserVocab();
-//        Log.e("userVocab", "" + userVocabList.size());
-//        Log.e("adapter count",""+ adapter.getItemCount());
-//        adapter.replaceData(userVocabList);
-//        adapter.notifyDataSetChanged();
-//    }
-//
-//    public void recyclerViewListClicked(View v, int position) {
-//        String userVocabString = (new Gson()).toJson(adapter.sortedDataSet.get(position));
-//        Log.e("userVocab", "clicked " + position +". " + userVocabString);
-//
-//        Intent detailIntent = new Intent(appContext, UserDetailsActivity.class);
-//        detailIntent.putExtra(UserDetailsActivity.KEY_JSON, userVocabString);
-//        startActivity(detailIntent);
-//    }
-//
-//}
-
-
-
-
-
+public class UserVocabHistFrag extends Fragment implements RecyclerViewClickListener, FragmentRefresher, FragmentReselected {
     RecyclerView recyclerView;
     Context appContext;
     UserVocabHelper helper;
     SheetHistoryAdapter adapter;
+    LinearLayoutManager linearLayoutManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -121,7 +55,7 @@ public class UserVocabHistFrag extends Fragment implements RecyclerViewClickList
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         recyclerView = (RecyclerView) getView().findViewById(R.id.inner_recycler);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(appContext);
+        linearLayoutManager = new LinearLayoutManager(appContext);
         linearLayoutManager.setAutoMeasureEnabled(true);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setHasFixedSize(true);
@@ -148,6 +82,24 @@ public class UserVocabHistFrag extends Fragment implements RecyclerViewClickList
 
             }
         });
+    }
+
+    @Override
+    public void reselect() {
+////        if (linearLayoutManager != null) {
+////            linearLayoutManager.scrollToPosition(0);
+////        }
+//        View firstView = recyclerView.getChildAt(0);
+//        int toY = firstView.getTop();
+//        int firstPosition = recyclerView.getChildAdapterPosition(firstView);
+//        int toScrollTo = 0;
+//        View thisView = recyclerView.getChildAt(toScrollTo - firstPosition);
+//        int fromY = thisView.getTop();
+//
+//        recyclerView.smoothScrollBy(0, fromY - toY);
+        if (recyclerView != null) {
+            recyclerView.smoothScrollToPosition(0);
+        }
     }
 
     @Override

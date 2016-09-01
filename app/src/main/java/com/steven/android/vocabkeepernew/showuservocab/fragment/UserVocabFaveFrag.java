@@ -19,6 +19,7 @@ import com.steven.android.vocabkeepernew.showuservocab.UserDetailsActivity;
 import com.steven.android.vocabkeepernew.showuservocab.UserVocabActivity;
 import com.steven.android.vocabkeepernew.showuservocab.UserVocabAdapter;
 import com.steven.android.vocabkeepernew.showuservocab.sheet.SheetHistoryAdapter;
+import com.steven.android.vocabkeepernew.showuservocab.sqlite.GetAllWordsAsyncInterface;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.HistoryVocab;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocab;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocabHelper;
@@ -29,11 +30,12 @@ import java.util.ArrayList;
 /**
  * Created by Steven on 8/30/2016.
  */
-public class UserVocabFaveFrag extends Fragment implements RecyclerViewClickListener, FragmentRefresher{
+public class UserVocabFaveFrag extends Fragment implements RecyclerViewClickListener, FragmentRefresher, FragmentReselected{
     RecyclerView recyclerView;
     DividerItemDecoration dividerItemDecoration;
     UserVocabHelper helper;
     UserVocabAdapter adapter;
+    LinearLayoutManager linearLayoutManager;
 
     Context appContext;
 
@@ -60,17 +62,41 @@ public class UserVocabFaveFrag extends Fragment implements RecyclerViewClickList
         Log.e("favorite", "on activity created");
         // recycler stuff
         recyclerView = (RecyclerView) getView().findViewById(R.id.fave_recycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(appContext));
+        linearLayoutManager = new LinearLayoutManager(appContext);
+        recyclerView.setLayoutManager(linearLayoutManager);
 
 //        dividerItemDecoration = new DividerItemDecoration(appContext);
 
         helper = UserVocabHelper.getInstance(appContext);
-        ArrayList<UserVocab> userVocabList = helper.getFaveVocabList();
-        Log.e("userVocab", "" + userVocabList.size());
-        adapter = new UserVocabAdapter(userVocabList, this, appContext, true);
+//        ArrayList<UserVocab> userVocabList = helper.getFaveVocabList();
+//        Log.e("userVocab", "" + userVocabList.size());
+//        adapter = new UserVocabAdapter(userVocabList, this, appContext, true);
+////        recyclerView.addItemDecoration(dividerItemDecoration);
+//        recyclerView.setAdapter(/*new SlideInLeftAnimationAdapter(*/adapter/*)*/);
+////        Log.e("adapter count",""+ adapter.getItemCount());
+
+        final RecyclerViewClickListener listener = this;
+        helper.getFaveVocabList(new GetAllWordsAsyncInterface() {
+            @Override
+            public void setWordsData(ArrayList<UserVocab> userVocabList) {
+                Log.e("faveVocab", "" + userVocabList.size());
+                adapter = new UserVocabAdapter(userVocabList, listener, appContext, true);
 //        recyclerView.addItemDecoration(dividerItemDecoration);
-        recyclerView.setAdapter(/*new SlideInLeftAnimationAdapter(*/adapter/*)*/);
+                recyclerView.setAdapter(/*new SlideInLeftAnimationAdapter(*/adapter/*)*/);
 //        Log.e("adapter count",""+ adapter.getItemCount());
+            }
+        },
+                100);
+
+        helper.getFaveVocabList(new GetAllWordsAsyncInterface() {
+            @Override
+            public void setWordsData(ArrayList<UserVocab> userVocabList) {
+                Log.e("fave", "" + userVocabList.size());
+                adapter.replaceData(userVocabList);
+                Log.e("adapter count",""+ adapter.getItemCount());
+            }
+        },
+        UserVocabHelper.GET_ALL);
 
         final UserVocabActivity fActivity = (UserVocabActivity) getActivity();
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -89,6 +115,16 @@ public class UserVocabFaveFrag extends Fragment implements RecyclerViewClickList
 
     }
 
+    @Override
+    public void reselect() {
+//        if (linearLayoutManager != null) {
+//            linearLayoutManager.scrollToPosition(0);
+//        }
+        if (recyclerView != null) {
+            recyclerView.smoothScrollToPosition(0);
+        }
+    }
+
 
     @Override
     public void onResume() {
@@ -103,18 +139,27 @@ public class UserVocabFaveFrag extends Fragment implements RecyclerViewClickList
     }
 
     public void refreshRecycler () {
-        // todo variable to keep track if there are changes so this activity doesnt have to keep reloading the entire sqlite
-        helper = UserVocabHelper.getInstance(appContext);
-        ArrayList<UserVocab> userVocabList = helper.getFaveVocabList();
-        if (adapter == null) {
-            recyclerView = (RecyclerView) getView().findViewById(R.id.fave_recycler);
-            adapter = new UserVocabAdapter(userVocabList, this, appContext, true);
-            recyclerView.setAdapter(/*new SlideInLeftAnimationAdapter(*/adapter/*)*/);
-        }
-        Log.e("userVocabfave", "" + userVocabList.size());
-        Log.e("adapter fave count",""+ adapter.getItemCount());
-        adapter.replaceData(userVocabList);
-        adapter.notifyDataSetChanged();
+        helper.getFaveVocabList(new GetAllWordsAsyncInterface() {
+                                    @Override
+                                    public void setWordsData(ArrayList<UserVocab> userVocabList) {
+                                        Log.e("fave", "" + userVocabList.size());
+                                        adapter.replaceData(userVocabList);
+                                        Log.e("adapter count",""+ adapter.getItemCount());
+                                    }
+                                },
+                UserVocabHelper.GET_ALL);
+//        // todo variable to keep track if there are changes so this activity doesnt have to keep reloading the entire sqlite
+//        helper = UserVocabHelper.getInstance(appContext);
+//        ArrayList<UserVocab> userVocabList = helper.getFaveVocabList();
+//        if (adapter == null) {
+//            recyclerView = (RecyclerView) getView().findViewById(R.id.fave_recycler);
+//            adapter = new UserVocabAdapter(userVocabList, this, appContext, true);
+//            recyclerView.setAdapter(/*new SlideInLeftAnimationAdapter(*/adapter/*)*/);
+//        }
+//        Log.e("userVocabfave", "" + userVocabList.size());
+//        Log.e("adapter fave count",""+ adapter.getItemCount());
+//        adapter.replaceData(userVocabList);
+//        adapter.notifyDataSetChanged();
     }
 
     public void recyclerViewListClicked(View v, int position) {

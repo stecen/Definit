@@ -35,6 +35,7 @@ import com.steven.android.vocabkeepernew.input.ClipboardWatcherService;
 import com.steven.android.vocabkeepernew.settings.PreferencesActivity;
 import com.steven.android.vocabkeepernew.show.RecyclerViewClickListener;
 import com.steven.android.vocabkeepernew.showuservocab.fragment.FragmentRefresher;
+import com.steven.android.vocabkeepernew.showuservocab.fragment.FragmentReselected;
 import com.steven.android.vocabkeepernew.showuservocab.fragment.Pager;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocab;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocabHelper;
@@ -118,6 +119,7 @@ public class UserVocabActivity extends AppCompatActivity implements RecyclerView
         tabLayout.getTabAt(2).getIcon().setAlpha(UNSEL_TAB_ALPHA);
         tabLayout.getTabAt(3).getIcon().setAlpha(UNSEL_TAB_ALPHA);
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
+
 
         viewPager = (ViewPager) findViewById(R.id.pager);
         Pager adapter = new Pager(getSupportFragmentManager(), tabLayout.getTabCount());
@@ -204,7 +206,32 @@ public class UserVocabActivity extends AppCompatActivity implements RecyclerView
 
             }
         });
-        tabLayout.setOnTabSelectedListener(this); // for view swiping
+        tabLayout.addOnTabSelectedListener(this); // for view swiping
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+//                super.onTabSelected(tab);
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                int position = tab.getPosition();
+                Log.e("tab", "reselected  " + position);
+
+                FragmentReselected fragment = (FragmentReselected) finalAdapter.instantiateItem(viewPager, position);
+                if (fragment != null) {
+                    fragment.reselect();
+                }
+
+                appBarLayout.setExpanded(true, true);
+            }
+        });
 
 
         // recycler stuff

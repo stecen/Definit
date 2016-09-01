@@ -11,6 +11,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.steven.android.vocabkeepernew.get.CallbackAsyncInterface;
+import com.steven.android.vocabkeepernew.utility.CustomUVStringAdapter;
 import com.steven.android.vocabkeepernew.utility.PearsonAnswer;
 
 import java.util.ArrayList;
@@ -259,7 +260,8 @@ public class UserVocabHelper extends SQLiteOpenHelper {
                         userVocab.word = cursor.getString(cursor.getColumnIndex(KEY_WORD));
                         String json = cursor.getString(cursor.getColumnIndex(KEY_JSON));
                         Log.e("getAllUserVocab", json);
-                        userVocab.listOfDefEx = (new Gson()).fromJson(json, new TypeToken<ArrayList<PearsonAnswer.DefinitionExamples>>(){}.getType());
+//                        userVocab.listOfDefEx = (new Gson()).fromJson(json, new TypeToken<ArrayList<PearsonAnswer.DefinitionExamples>>(){}.getType());
+                        userVocab.listOfDefEx = CustomUVStringAdapter.fromString(json);
                         Log.e("getAllUserVocab", ""+ userVocab.listOfDefEx.size());
                         userVocab.date = cursor.getLong(cursor.getColumnIndex(KEY_DATE));
 
@@ -276,7 +278,7 @@ public class UserVocabHelper extends SQLiteOpenHelper {
 
                 }
             } catch (Exception e) {
-                Log.d("userVocab", "error getting user vocab "  + e.toString());
+                Log.d("userVocab", "error getting user vocab "  + "" );e.printStackTrace();
             } finally {
                 if (cursor != null && !cursor.isClosed()) {
                     cursor.close();
@@ -294,48 +296,124 @@ public class UserVocabHelper extends SQLiteOpenHelper {
 
 
 
-    public ArrayList<UserVocab> getFaveVocabList() {
-        ArrayList<UserVocab> userVocabs = new ArrayList<>();
+    public void getFaveVocabList(GetAllWordsAsyncInterface asyncInterface, int howMany) {
+        GetFaveAsyncTask task = new GetFaveAsyncTask(getReadableDatabase(), asyncInterface, howMany);
+        task.execute();
 
-        // SELECT * FROM POSTS
-        // LEFT OUTER JOIN USERS
-        // ON POSTS.KEY_POST_USER_ID_FK = USERS.KEY_USER_ID
+//        ArrayList<UserVocab> userVocabs = new ArrayList<>();
+//
+//        // SELECT * FROM POSTS
+//        // LEFT OUTER JOIN USERS
+//        // ON POSTS.KEY_POST_USER_ID_FK = USERS.KEY_USER_ID
+//        String USER_VOCAB_SELECT_QUERY =
+//                String.format(Locale.US, "SELECT * FROM %s WHERE %s = %d ORDER BY %s DESC ;",
+//                        TABLE_WORDS, KEY_FAVE,
+//                        IS_FAVE,
+//                        KEY_FAVE_DATE);
+//
+//
+//        SQLiteDatabase db = getReadableDatabase();
+//        Log.e("userVocab", "fave querying: " + USER_VOCAB_SELECT_QUERY);
+//        Cursor cursor = db.rawQuery(USER_VOCAB_SELECT_QUERY, null);
+//        try {
+//            if (cursor.moveToFirst()) {
+//                do {
+//                    UserVocab userVocab = new UserVocab();
+//                    userVocab.word = cursor.getString(cursor.getColumnIndex(KEY_WORD));
+//                    String json = cursor.getString(cursor.getColumnIndex(KEY_JSON));
+////                    userVocab.listOfDefEx = (new Gson()).fromJson(json, new TypeToken<ArrayList<PearsonAnswer.DefinitionExamples>>(){}.getType());
+//                    userVocab.listOfDefEx = CustomUVStringAdapter.fromString(json);
+//                    userVocab.date = cursor.getLong(cursor.getColumnIndex(KEY_DATE));
+//
+//                    int faveInt = cursor.getInt(cursor.getColumnIndex(KEY_FAVE));
+//                    userVocab.fave = (faveInt == IS_FAVE);
+////                    Log.e("byte", (long)cursor.getLong(cursor.getColumnIndex(KEY_DATE)) + "");
+////                    userVocab.dateText = cursor.getString(cursor.getColumnIndex(KEY_DATETEXT));
+//
+//                    userVocabs.add(userVocab);
+//
+//                } while(cursor.moveToNext());
+//            }
+//        } catch (Exception e) {
+//            Log.d("userVocab", "fave error getting user vocab "  + e.toString());
+//        } finally {
+//            if (cursor != null && !cursor.isClosed()) {
+//                cursor.close();
+//            }
+//        }
+//        return userVocabs;
+    }
+
+    private class GetFaveAsyncTask extends AsyncTask<Void, Void, ArrayList<UserVocab>> { // class to allow the get all query to happen on a seperate thread
+        GetAllWordsAsyncInterface asyncInterface;
+        SQLiteDatabase db;
+        ArrayList<UserVocab> userVocabs;
+        int howMany; // how many elements to load
+
         String USER_VOCAB_SELECT_QUERY =
                 String.format(Locale.US, "SELECT * FROM %s WHERE %s = %d ORDER BY %s DESC ;",
                         TABLE_WORDS, KEY_FAVE,
                         IS_FAVE,
                         KEY_FAVE_DATE);
 
+        public GetFaveAsyncTask(SQLiteDatabase db, GetAllWordsAsyncInterface asyncInterface, int howMany) {
+            super();
+            this.db = db;
+            this.asyncInterface = asyncInterface;
 
-        SQLiteDatabase db = getReadableDatabase();
-        Log.e("userVocab", "fave querying: " + USER_VOCAB_SELECT_QUERY);
-        Cursor cursor = db.rawQuery(USER_VOCAB_SELECT_QUERY, null);
-        try {
-            if (cursor.moveToFirst()) {
-                do {
-                    UserVocab userVocab = new UserVocab();
-                    userVocab.word = cursor.getString(cursor.getColumnIndex(KEY_WORD));
-                    String json = cursor.getString(cursor.getColumnIndex(KEY_JSON));
-                    userVocab.listOfDefEx = (new Gson()).fromJson(json, new TypeToken<ArrayList<PearsonAnswer.DefinitionExamples>>(){}.getType());
-                    userVocab.date = cursor.getLong(cursor.getColumnIndex(KEY_DATE));
+            userVocabs = new ArrayList<>();
 
-                    int faveInt = cursor.getInt(cursor.getColumnIndex(KEY_FAVE));
-                    userVocab.fave = (faveInt == IS_FAVE);
+            this.howMany = howMany;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+
+        @Override
+        protected ArrayList<UserVocab> doInBackground(Void... voids) {
+
+            int i = 0;
+
+            Log.e("userVocab", "fave querying: " + USER_VOCAB_SELECT_QUERY);
+            Cursor cursor = db.rawQuery(USER_VOCAB_SELECT_QUERY, null);
+            try {
+                if (cursor.moveToFirst()) {
+                    do {
+                        UserVocab userVocab = new UserVocab();
+                        userVocab.word = cursor.getString(cursor.getColumnIndex(KEY_WORD));
+                        String json = cursor.getString(cursor.getColumnIndex(KEY_JSON));
+//                    userVocab.listOfDefEx = (new Gson()).fromJson(json, new TypeToken<ArrayList<PearsonAnswer.DefinitionExamples>>(){}.getType());
+                        userVocab.listOfDefEx = CustomUVStringAdapter.fromString(json);
+                        userVocab.date = cursor.getLong(cursor.getColumnIndex(KEY_DATE));
+
+                        int faveInt = cursor.getInt(cursor.getColumnIndex(KEY_FAVE));
+                        userVocab.fave = (faveInt == IS_FAVE);
 //                    Log.e("byte", (long)cursor.getLong(cursor.getColumnIndex(KEY_DATE)) + "");
 //                    userVocab.dateText = cursor.getString(cursor.getColumnIndex(KEY_DATETEXT));
 
-                    userVocabs.add(userVocab);
+                        userVocabs.add(userVocab);
 
-                } while(cursor.moveToNext());
+                    } while(cursor.moveToNext() && ((howMany == GET_ALL || (++i <= howMany))));
+                }
+            } catch (Exception e) {
+                Log.d("userVocab", "fave error getting user vocab "  + e.toString());
+            } finally {
+                if (cursor != null && !cursor.isClosed()) {
+                    cursor.close();
+                }
             }
-        } catch (Exception e) {
-            Log.d("userVocab", "fave error getting user vocab "  + e.toString());
-        } finally {
-            if (cursor != null && !cursor.isClosed()) {
-                cursor.close();
-            }
+
+            return userVocabs;
         }
-        return userVocabs;
+
+        @Override
+        protected void onPostExecute(ArrayList<UserVocab> userVocabArrayList) {
+            super.onPostExecute(userVocabArrayList);
+            asyncInterface.setWordsData(userVocabArrayList);
+        }
     }
 
 
@@ -345,10 +423,10 @@ public class UserVocabHelper extends SQLiteOpenHelper {
         // Create and/or open the database for writing
         SQLiteDatabase db = getWritableDatabase();
 
-        Log.e("addWordUV", (new Gson()).toJson(userVocab));
+//        Log.e("addWordUV", (new Gson()).toJson(userVocab));
 
 
-//        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 1000; i++) {
 
             // It's a good idea to wrap our insert in a transaction. This helps with performance and ensures
             // consistency of the database.
@@ -360,7 +438,8 @@ public class UserVocabHelper extends SQLiteOpenHelper {
                 ContentValues values = new ContentValues();
                 values.put(KEY_WORD, userVocab.word.trim());
 
-                String json = (new Gson()).toJson(userVocab.listOfDefEx);
+//                String json = (new Gson()).toJson(userVocab.listOfDefEx);
+                String json = CustomUVStringAdapter.toString(userVocab.listOfDefEx);
                 values.put(KEY_JSON, json);
                 Log.e("adding word json", json);
 
@@ -370,7 +449,7 @@ public class UserVocabHelper extends SQLiteOpenHelper {
                 String queryString = String.format(Locale.US, "INSERT INTO %s VALUES (%s, %s, %s, %s, %s) VALUES (\"%s\", \"%s\", \"%d\", \"%d\");",
                         TABLE_WORDS,
                         KEY_WORD, KEY_JSON, KEY_DATE, KEY_FAVE, KEY_FAVE_DATE,
-                        userVocab.word.trim(), (new Gson()).toJson(userVocab.listOfDefEx), userVocab.date, (userVocab.fave) ? IS_FAVE : NOT_FAVE, 1+"");
+                        userVocab.word.trim(), json, userVocab.date, (userVocab.fave) ? IS_FAVE : NOT_FAVE, 1+"");
 
 
                 Log.e("userVocab", "adding: " + queryString);
@@ -383,7 +462,7 @@ public class UserVocabHelper extends SQLiteOpenHelper {
             } finally {
                 db.endTransaction();
             }
-//        }
+        }
     }
 
     public void toggleFavorite(UserVocab userVocab) {
@@ -467,6 +546,7 @@ public class UserVocabHelper extends SQLiteOpenHelper {
 //        }
 //        return userId;
 //    }
+    //endregion
 
     public void deleteAllUserVocab() {
         SQLiteDatabase db = getWritableDatabase();

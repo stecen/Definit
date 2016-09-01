@@ -290,7 +290,7 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
         String s = CustomUVStringAdapter.toString(userVocab.listOfDefEx);
         Log.e("testUV", "\n" + s );
         ArrayList<PearsonAnswer.DefinitionExamples> list = CustomUVStringAdapter.fromString(s);
-        Log.e("testUV json", (new Gson()).toJson(list));
+//        Log.e("testUV json", (new Gson()).toJson(list));
 
 
 

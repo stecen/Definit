@@ -99,8 +99,8 @@ public class PearsonAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
 
         PearsonAnswer pearsonDefinition = getDefinitionPearson(wordText);
 
-        Gson gson = new Gson();
-        Log.e("obj", gson.toJson(pearsonDefinition));
+//        Gson gson = new Gson();
+//        Log.e("obj", gson.toJson(pearsonDefinition));
 
         return pearsonDefinition;
 

@@ -27,11 +27,12 @@ import java.util.ArrayList;
 /**
  * Created by Steven on 8/30/2016.
  */
-public class UserVocabMainFrag extends Fragment implements RecyclerViewClickListener, FragmentRefresher {
+public class UserVocabMainFrag extends Fragment implements RecyclerViewClickListener, FragmentRefresher, FragmentReselected {
     RecyclerView recyclerView;
     DividerItemDecoration dividerItemDecoration;
     UserVocabHelper helper;
     UserVocabAdapter adapter;
+    LinearLayoutManager linearLayoutManager;
 
     Context appContext;
 
@@ -56,9 +57,10 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
         super.onActivityCreated(savedInstanceState);
         // recycler stuff
         recyclerView = (RecyclerView) getView().findViewById(R.id.user_vocab_recycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(appContext));
+        linearLayoutManager = new LinearLayoutManager(appContext);
+        recyclerView.setLayoutManager(linearLayoutManager);
 
-        dividerItemDecoration = new DividerItemDecoration(appContext);
+//        dividerItemDecoration = new DividerItemDecoration(appContext);
 
 //        helper = UserVocabHelper.getInstance(appContext);
 //        ArrayList<UserVocab> userVocabList = helper.getAllUserVocab();
@@ -77,7 +79,7 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
                 recyclerView.setAdapter(/*new SlideInLeftAnimationAdapter(*/adapter/*)*/);
             }
         },
-        25); // first only get 25
+        100); // first only get 100
 
         helper.getAllUserVocab(new GetAllWordsAsyncInterface() {
                                    @Override
@@ -88,6 +90,7 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
                                    }
                                },
                 UserVocabHelper.GET_ALL); // then get ALL of them!
+
 
         final UserVocabActivity fActivity = (UserVocabActivity) getActivity();
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -103,6 +106,16 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
 
             }
         });
+    }
+
+    @Override
+    public void reselect() {
+//        if (linearLayoutManager != null) {
+//            linearLayoutManager.scrollToPosition(0);
+//        }
+        if (recyclerView != null) {
+            recyclerView.smoothScrollToPosition(0);
+        }
     }
 
     @Override

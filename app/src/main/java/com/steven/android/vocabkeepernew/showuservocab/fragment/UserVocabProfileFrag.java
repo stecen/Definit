@@ -25,7 +25,7 @@ import java.util.ArrayList;
 /**
  * Created by Steven on 8/30/2016.
  */
-public class UserVocabProfileFrag extends Fragment implements FragmentRefresher {
+public class UserVocabProfileFrag extends Fragment implements FragmentRefresher, FragmentReselected {
     Context appContext;
 
 
@@ -50,6 +50,13 @@ public class UserVocabProfileFrag extends Fragment implements FragmentRefresher 
 //        // recycler stuff
 //        recyclerView = (RecyclerView) getView().findViewById(R.id.user_vocab_recycler);
 
+    }
+
+    @Override
+    public void reselect() {
+//        if (linearLayoutManager != null) {
+//            linearLayoutManager.scrollToPosition(0);
+//        }
     }
 
     @Override
