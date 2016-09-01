@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.steven.android.vocabkeepernew.settings.PreferencesActivity;
+import com.steven.android.vocabkeepernew.utility.CustomUVStringAdapter;
 import com.steven.android.vocabkeepernew.utility.PearsonAnswer;
 
 import org.json.JSONArray;
@@ -186,7 +187,7 @@ public class PearsonAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
                                         if (sense0.has("definition") && !sense0.isNull("definition")) { // "definition" or "translation" depending on the language
                                             JSONArray definitions = sense0.getJSONArray("definition");
                                             if (definitions.length() > 0) {
-                                                definitionExamples.definition = definitions.getString(0);
+                                                definitionExamples.definition = definitions.getString(0).replace(CustomUVStringAdapter.BETWEEN_BREAK, "");
                                             } else {
                                                 definitionExamples.definition = PearsonAnswer.DEFAULT_NO_DEFINITION;
                                             }
@@ -198,7 +199,7 @@ public class PearsonAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
                                             JSONArray examples = sense0.getJSONArray("examples");
                                             if (examples.length() > 0) {
                                                 if (examples.getJSONObject(0).has("text") && !examples.getJSONObject(0).isNull("text")) {
-                                                    definitionExamples.examples.add(examples.getJSONObject(0).getString("text"));
+                                                    definitionExamples.examples.add(examples.getJSONObject(0).getString("text").replace(CustomUVStringAdapter.BETWEEN_BREAK, ""));
                                                 } else {
                                                     definitionExamples.examples.add(PearsonAnswer.DEFAULT_NO_EXAMPLE);
                                                 }
@@ -212,7 +213,7 @@ public class PearsonAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
                                         if (sense0.has("translation") && !sense0.isNull("translation")) {
                                             String translation = sense0.getString("translation");
                                             if (translation != null) {
-                                                definitionExamples.definition = translation;
+                                                definitionExamples.definition = translation.replace(CustomUVStringAdapter.BETWEEN_BREAK, "");
                                             } else {
                                                 definitionExamples.definition = PearsonAnswer.DEFAULT_NO_DEFINITION;
                                             }
@@ -224,7 +225,7 @@ public class PearsonAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
                                             JSONArray examples = sense0.getJSONArray("examples");
                                             if (examples.length() > 0) {
                                                 if (examples.getJSONObject(0).has("text") && !examples.getJSONObject(0).isNull("text")) {
-                                                    definitionExamples.examples.add(examples.getJSONObject(0).getString("text"));
+                                                    definitionExamples.examples.add(examples.getJSONObject(0).getString("text").replace(CustomUVStringAdapter.BETWEEN_BREAK, ""));
                                                 } else {
                                                     definitionExamples.examples.add(PearsonAnswer.DEFAULT_NO_EXAMPLE);
                                                 }
@@ -242,7 +243,7 @@ public class PearsonAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
                                                 if (translations.getJSONObject(0).has("text") && !translations.getJSONObject(0).isNull("text")) {
                                                     JSONArray text = translations.getJSONObject(0).getJSONArray("text");
                                                     if (text.length() > 0 && !text.isNull(0)) {
-                                                        definitionExamples.definition = text.getString(0);
+                                                        definitionExamples.definition = text.getString(0).replace(CustomUVStringAdapter.BETWEEN_BREAK, "");
                                                     } else {
                                                         definitionExamples.definition = PearsonAnswer.DEFAULT_NO_DEFINITION;
                                                     }
@@ -255,7 +256,7 @@ public class PearsonAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
                                                     JSONArray examples = translations.getJSONObject(0).getJSONArray("example");
                                                     if (examples.length() > 0) {
                                                         if (examples.getJSONObject(0).has("text") && !examples.getJSONObject(0).isNull("text")) {
-                                                            definitionExamples.examples.add(examples.getJSONObject(0).getString("text"));
+                                                            definitionExamples.examples.add(examples.getJSONObject(0).getString("text").replace(CustomUVStringAdapter.BETWEEN_BREAK, ""));
                                                         } else {
                                                             definitionExamples.examples.add(PearsonAnswer.DEFAULT_NO_EXAMPLE);
                                                         }

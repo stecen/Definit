@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.HistoryVocab;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocabHelper;
+import com.steven.android.vocabkeepernew.utility.CustomUVStringAdapter;
 import com.steven.android.vocabkeepernew.utility.DateUtility;
 import com.steven.android.vocabkeepernew.utility.PearsonAnswer;
 import com.steven.android.vocabkeepernew.R;
@@ -61,10 +62,10 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
         RelativeLayout headerRelative, mainRelative; // main , clickable content. exists because if there is a date header, you don't want ripplies showing through that because it's not supposed to be a part of the item
         TextView dateHeaderText;
 
-        TextView exampleText;
-        View fillerView;
+//        TextView exampleText;
+//        View fillerView, upShaView, loShaView;
         TextView faveColorView;
-        RelativeLayout colorView;
+//        RelativeLayout colorView;
 //            RelativeLayout relativeLayout;
 
         public ViewHolder(View v) {
@@ -84,6 +85,9 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
 //            fillerView = v.findViewById(R.id.filler);
 //                relativeLayout = (RelativeLayout) v;
             mainRelative.setOnClickListener(this);
+
+//            loShaView = v.findViewById(R.id.lower_shadow);
+//            upShaView = v.findViewById(R.id.upper_shadow);
 //            faveImage.setOnClickListener(this);
         }
 
@@ -221,30 +225,33 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
             });
         }
 
-
-        // if this item is the first
-        String date = DateUtility.getFullDate(userVocab.date, "MM/dd");
-        String prevDate = " ";
-        if (position != 0) {
-            prevDate = (DateUtility.getFullDate(sortedDataSet.get(position-1).date, "MM/dd"));
-        }
+        if (!isFaveList) { // don't show the date header if this is just a list for favorites
+            // if this item is the first
+            String date = DateUtility.getFullDate(userVocab.date, "MM/dd");
+            String prevDate = " ";
+            if (position != 0) {
+                prevDate = (DateUtility.getFullDate(sortedDataSet.get(position - 1).date, "MM/dd"));
+            }
 //        Log.e("datecmp", date + " vs " + prevDate + "...    " + date.equals(prevDate));
-        if (position != 0 && !(date.equals(prevDate))) {
-            holder.headerRelative.setVisibility(View.VISIBLE);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                holder.mainRelative.setElevation(8);
-            }
-            holder.dateHeaderText.setText(date);
-        } else if (position != 0) {
+            if (position != 0 && !(date.equals(prevDate))) {
+                holder.headerRelative.setVisibility(View.VISIBLE);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    holder.mainRelative.setElevation(8);
+                }
+                holder.dateHeaderText.setText(date);
+            } else if (position != 0) {
 //            holder.dateHeaderText.setText(" "); // if is the same date as yesterday
-            holder.headerRelative.setVisibility(View.GONE);
-        } else { // exclusive for pos == 0
-            holder.headerRelative.setVisibility(View.VISIBLE);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                holder.mainRelative.setElevation(9);
+                holder.headerRelative.setVisibility(View.GONE);
+            } else { // exclusive for pos == 0
+                holder.headerRelative.setVisibility(View.VISIBLE);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    holder.mainRelative.setElevation(9);
+                }
+                holder.dateHeaderText.setPadding(0, 0, 0, 0);
+                holder.dateHeaderText.setText(date);
             }
-            holder.dateHeaderText.setPadding(0,0,0,0);
-            holder.dateHeaderText.setText(date);
+        } else {
+            holder.headerRelative.setVisibility(View.GONE);
         }
 
         // toggle fave image
@@ -280,10 +287,10 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
             }
         });
 
-
-
-
-
+        String s = CustomUVStringAdapter.toString(userVocab.listOfDefEx);
+        Log.e("testUV", "\n" + s );
+        ArrayList<PearsonAnswer.DefinitionExamples> list = CustomUVStringAdapter.fromString(s);
+        Log.e("testUV json", (new Gson()).toJson(list));
 
 
 

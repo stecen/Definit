@@ -188,7 +188,7 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
             Log.e("wat", "listToSend is empty");
         } else {
             Intent insertIntent = new Intent(searchAndShowActivity.getApplicationContext(), UserVocabInsertService.class);
-            Log.e("listToSend", (new Gson()).toJson(listToSend));
+//            Log.e("listToSend", (new Gson()).toJson(listToSend));
             insertIntent.putExtra(UserVocabInsertService.JSON_KEY, (new Gson()).toJson(listToSend));
             searchAndShowActivity.startService(insertIntent);
         }

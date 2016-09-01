@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 import com.steven.android.vocabkeepernew.R;
 import com.steven.android.vocabkeepernew.show.RecyclerViewClickListener;
 import com.steven.android.vocabkeepernew.showuservocab.UserDetailsActivity;
+import com.steven.android.vocabkeepernew.showuservocab.UserVocabActivity;
 import com.steven.android.vocabkeepernew.showuservocab.UserVocabAdapter;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.GetAllWordsAsyncInterface;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocab;
@@ -75,9 +76,33 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
                 adapter = new UserVocabAdapter(userVocabList, listener, appContext, false);
                 recyclerView.setAdapter(/*new SlideInLeftAnimationAdapter(*/adapter/*)*/);
             }
+        },
+        25); // first only get 25
+
+        helper.getAllUserVocab(new GetAllWordsAsyncInterface() {
+                                   @Override
+                                   public void setWordsData(ArrayList<UserVocab> userVocabList) {
+                                       Log.e("userVocab", "" + userVocabList.size());
+                                       adapter.replaceData(userVocabList);
+                                       Log.e("adapter count",""+ adapter.getItemCount());
+                                   }
+                               },
+                UserVocabHelper.GET_ALL); // then get ALL of them!
+
+        final UserVocabActivity fActivity = (UserVocabActivity) getActivity();
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (fActivity.fab != null) {
+                    if (dy > 0)
+                        fActivity.fab.hide();
+                    else if (dy < 0)
+                        fActivity.fab.show();
+                }
+
+            }
         });
-
-
     }
 
     @Override
@@ -107,7 +132,8 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
                 adapter.replaceData(userVocabList);
                 Log.e("adapter count",""+ adapter.getItemCount());
             }
-        });
+        },
+        UserVocabHelper.GET_ALL);
     }
 
     public void recyclerViewListClicked(View v, int position) {

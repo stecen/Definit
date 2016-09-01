@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class UserVocab { // for sqlite database easiness
     public String word;
     public ArrayList<PearsonAnswer.DefinitionExamples> listOfDefEx;
-    public long date;
+    public long date, lastFaveDate;
     public String dateText;
     public boolean fave = false;
 

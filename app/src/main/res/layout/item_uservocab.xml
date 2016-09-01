@@ -119,6 +119,7 @@
         android:background="@color/dateHeader">
 
         <View
+            android:id="@+id/upper_shadow"
             android:layout_width="match_parent"
             android:layout_height="8dp"
             android:alpha=".7"
@@ -145,6 +146,7 @@
         <!--android:alpha=".57"-->
 
         <View
+            android:id="@+id/lower_shadow"
             android:layout_width="match_parent"
             android:layout_height="8dp"
             android:alpha=".7"

@@ -140,6 +140,10 @@ public class NotificationUtility {
 
             nm.notify(NOTIF_ID, n);
         }
+
+        // close notification bar
+            Intent it = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+            context.sendBroadcast(it);
     }
 
     public static void cancelConvenienceNotif(Context context) {

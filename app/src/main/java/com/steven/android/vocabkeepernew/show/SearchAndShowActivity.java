@@ -1222,65 +1222,65 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
     // android N exclusive
     public void finishReplyInputNotif () { // todo: make centralized with the notification creation in UserVocabActivity
 
+        NotificationUtility.createConvenienceNotif(getApplicationContext());
 
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-
-            NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-            Intent typeWordIntent = new Intent(getApplicationContext(), SearchAndShowActivity.class);
-            typeWordIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK /*| Intent.FLAG_ACTIVITY_NO_HISTORY*/);
-//        typeWordIntent.putExtra(TypeWordPopupActivity.KEY_RECOG_NOW, TypeWordPopupActivity.NO);
-//        typeWordIntent.setAction(Long.toString(System.currentTimeMillis())); // for keeping extras
-            PendingIntent typeWordPendingIntent = PendingIntent.getActivity(this, 0, typeWordIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            Notification.Builder builder = new Notification.Builder(this)
-                    .setContentTitle("Define a word...")
-                    .setSubText("Definit")
-                    .setAutoCancel(false)
-//                .addAction(pasteAction)
-//                .addAction(android.R.drawable.arrow_up_float, "Custom", typeWordPendingIntent) // use stop action
-                    .setContentIntent(typeWordPendingIntent) // use add pending intent
-                    .setSmallIcon(R.drawable.definit_icon_bs)
-                    .setPriority(Notification.PRIORITY_LOW);
-
-            Intent speechIntent = new Intent(getApplicationContext(), RelaySpeechActivity.class);
-            speechIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //todo: revise flags
-//        speechIntent.putExtra(SearchAndShowActivity.KEY_RECOG_NOW, true);
-            speechIntent.setFlags(/*Intent.FLAG_ACTIVITY_NEW_TASK | */Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            PendingIntent pendingSpeechIntent = PendingIntent.getActivity(this, 2, speechIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            int speechIconInt;
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) { // because the background on kitkat notifications is black, use white icons
-                speechIconInt = R.drawable.ic_mic_white_24dp;
-            } else {
-                speechIconInt = R.drawable.ic_mic_black_24dp;
-            }
-            Notification.Action speechAction = new Notification.Action.Builder(speechIconInt, "Speech", pendingSpeechIntent)
-                    .build();
-            builder.addAction(speechAction);
-
-
-            Intent replyIntent = new Intent(getApplicationContext(), SearchAndShowActivity.class);
-            replyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //todo: revise flags
-//        speechIntent.putExtra(SearchAndShowActivity.KEY_RECOG_NOW, true);
-            replyIntent.setFlags(/*Intent.FLAG_ACTIVITY_NEW_TASK | */Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            PendingIntent pendingReplyIntent = PendingIntent.getActivity(this, 2, replyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            String replyLabel = "Define...";//getResources().getString(R.string.reply_label);
-            RemoteInput remoteInputNotif = new RemoteInput.Builder(SearchAndShowActivity.KEY_TEXT_REPLY)
-                    .setLabel(replyLabel)
-                    .build();
-            Notification.Action replyAction =
-                    new Notification.Action.Builder(R.drawable.ic_send_white_24dp,
-                            "Define inline", pendingReplyIntent)
-                            .addRemoteInput(remoteInputNotif)
-                            .build();
-            builder.addAction(replyAction);
-            Notification n = builder.build();
-            nm.notify(NotificationUtility.NOTIF_ID, n);
-
-
-                        Intent it = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
-            this.sendBroadcast(it);
-
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+//
+//            NotificationManager nm = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+//            Intent typeWordIntent = new Intent(getApplicationContext(), SearchAndShowActivity.class);
+//            typeWordIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK /*| Intent.FLAG_ACTIVITY_NO_HISTORY*/);
+////        typeWordIntent.putExtra(TypeWordPopupActivity.KEY_RECOG_NOW, TypeWordPopupActivity.NO);
+////        typeWordIntent.setAction(Long.toString(System.currentTimeMillis())); // for keeping extras
+//            PendingIntent typeWordPendingIntent = PendingIntent.getActivity(this, 0, typeWordIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//            Notification.Builder builder = new Notification.Builder(this)
+//                    .setContentTitle("Define a word...")
+//                    .setSubText("Definit")
+//                    .setAutoCancel(false)
+////                .addAction(pasteAction)
+////                .addAction(android.R.drawable.arrow_up_float, "Custom", typeWordPendingIntent) // use stop action
+//                    .setContentIntent(typeWordPendingIntent) // use add pending intent
+//                    .setSmallIcon(R.drawable.definit_icon_bs)
+//                    .setPriority(Notification.PRIORITY_LOW);
+//
+//            Intent speechIntent = new Intent(getApplicationContext(), RelaySpeechActivity.class);
+//            speechIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //todo: revise flags
+////        speechIntent.putExtra(SearchAndShowActivity.KEY_RECOG_NOW, true);
+//            speechIntent.setFlags(/*Intent.FLAG_ACTIVITY_NEW_TASK | */Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//            PendingIntent pendingSpeechIntent = PendingIntent.getActivity(this, 2, speechIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//            int speechIconInt;
+//            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) { // because the background on kitkat notifications is black, use white icons
+//                speechIconInt = R.drawable.ic_mic_white_24dp;
+//            } else {
+//                speechIconInt = R.drawable.ic_mic_black_24dp;
+//            }
+//            Notification.Action speechAction = new Notification.Action.Builder(speechIconInt, "Speech", pendingSpeechIntent)
+//                    .build();
+//            builder.addAction(speechAction);
+//
+//
+//            Intent replyIntent = new Intent(getApplicationContext(), SearchAndShowActivity.class);
+//            replyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //todo: revise flags
+////        speechIntent.putExtra(SearchAndShowActivity.KEY_RECOG_NOW, true);
+//            replyIntent.setFlags(/*Intent.FLAG_ACTIVITY_NEW_TASK | */Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//            PendingIntent pendingReplyIntent = PendingIntent.getActivity(this, 2, replyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//            String replyLabel = "Define...";//getResources().getString(R.string.reply_label);
+//            RemoteInput remoteInputNotif = new RemoteInput.Builder(SearchAndShowActivity.KEY_TEXT_REPLY)
+//                    .setLabel(replyLabel)
+//                    .build();
+//            Notification.Action replyAction =
+//                    new Notification.Action.Builder(R.drawable.ic_send_white_24dp,
+//                            "Define inline", pendingReplyIntent)
+//                            .addRemoteInput(remoteInputNotif)
+//                            .build();
+//            builder.addAction(replyAction);
+//            Notification n = builder.build();
+//            nm.notify(NotificationUtility.NOTIF_ID, n);
+//
+//
+//                        Intent it = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+//            this.sendBroadcast(it);
+//
+//        }
     }
 
 }

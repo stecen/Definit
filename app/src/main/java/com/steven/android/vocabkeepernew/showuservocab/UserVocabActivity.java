@@ -11,6 +11,7 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -62,6 +63,8 @@ public class UserVocabActivity extends AppCompatActivity implements RecyclerView
     RecyclerView recyclerView;
     UserVocabAdapter adapter;
 
+    public FloatingActionButton fab;
+
     WordDisplayCursorAdapter wordDisplayCursorAdapter;
 
     UserVocabHelper helper;
@@ -98,11 +101,9 @@ public class UserVocabActivity extends AppCompatActivity implements RecyclerView
             }
         }
 
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+
 //        toolbarText = (TextView) findViewById(R.id.uservocab_toolbar_text);
-
-
-
-
 
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -138,7 +139,7 @@ public class UserVocabActivity extends AppCompatActivity implements RecyclerView
                 FragmentRefresher fragment = (FragmentRefresher) finalAdapter.instantiateItem(viewPager, position);
                 fragment.refreshViews();
 
-//                appBarLayout.setExpanded(true, true);
+                appBarLayout.setExpanded(true, true);
                 try {
                     switch (position) {
                         case 0:
@@ -155,6 +156,8 @@ public class UserVocabActivity extends AppCompatActivity implements RecyclerView
                             if (icon2!=null) icon2.setAlpha(UNSEL_TAB_ALPHA);
 
                             tabLayout.getTabAt(3).getIcon().setAlpha(UNSEL_TAB_ALPHA);
+
+                            fab.show();
                             break;
                         case 1:
 //                            ftext.setText("Starred");
@@ -164,6 +167,8 @@ public class UserVocabActivity extends AppCompatActivity implements RecyclerView
                             tabLayout.getTabAt(1).getIcon().setAlpha(255);
                             tabLayout.getTabAt(2).getIcon().setAlpha(UNSEL_TAB_ALPHA);
                             tabLayout.getTabAt(3).getIcon().setAlpha(UNSEL_TAB_ALPHA);
+
+                            fab.show();
                             break;
                         case 2:
 //                            ftext.setText("History");
@@ -173,6 +178,8 @@ public class UserVocabActivity extends AppCompatActivity implements RecyclerView
                             tabLayout.getTabAt(1).getIcon().setAlpha(UNSEL_TAB_ALPHA);
                             tabLayout.getTabAt(2).getIcon().setAlpha(255);
                             tabLayout.getTabAt(3).getIcon().setAlpha(UNSEL_TAB_ALPHA);
+
+                            fab.show();
                             break;
                         case 3:
 //                            ftext.setText("User");
@@ -182,6 +189,8 @@ public class UserVocabActivity extends AppCompatActivity implements RecyclerView
                             tabLayout.getTabAt(1).getIcon().setAlpha(UNSEL_TAB_ALPHA);
                             tabLayout.getTabAt(2).getIcon().setAlpha(UNSEL_TAB_ALPHA);
                             tabLayout.getTabAt(3).getIcon().setAlpha(255);
+
+                            fab.hide();
                             break;
                     }
                 } catch (NullPointerException e) {
@@ -196,9 +205,6 @@ public class UserVocabActivity extends AppCompatActivity implements RecyclerView
             }
         });
         tabLayout.setOnTabSelectedListener(this); // for view swiping
-
-
-
 
 
         // recycler stuff

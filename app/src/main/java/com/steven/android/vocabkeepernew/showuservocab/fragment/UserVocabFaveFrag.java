@@ -16,6 +16,7 @@ import com.steven.android.vocabkeepernew.R;
 import com.steven.android.vocabkeepernew.show.RecyclerViewClickListener;
 import com.steven.android.vocabkeepernew.show.SearchAndShowActivity;
 import com.steven.android.vocabkeepernew.showuservocab.UserDetailsActivity;
+import com.steven.android.vocabkeepernew.showuservocab.UserVocabActivity;
 import com.steven.android.vocabkeepernew.showuservocab.UserVocabAdapter;
 import com.steven.android.vocabkeepernew.showuservocab.sheet.SheetHistoryAdapter;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.HistoryVocab;
@@ -70,6 +71,21 @@ public class UserVocabFaveFrag extends Fragment implements RecyclerViewClickList
 //        recyclerView.addItemDecoration(dividerItemDecoration);
         recyclerView.setAdapter(/*new SlideInLeftAnimationAdapter(*/adapter/*)*/);
 //        Log.e("adapter count",""+ adapter.getItemCount());
+
+        final UserVocabActivity fActivity = (UserVocabActivity) getActivity();
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (fActivity.fab != null) {
+                    if (dy > 0)
+                        fActivity.fab.hide();
+                    else if (dy < 0)
+                        fActivity.fab.show();
+                }
+
+            }
+        });
 
     }
 
