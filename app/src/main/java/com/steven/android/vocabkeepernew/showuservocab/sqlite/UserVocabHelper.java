@@ -111,42 +111,113 @@ public class UserVocabHelper extends SQLiteOpenHelper {
         }
     }
 
-    public ArrayList<HistoryVocab> getHistory50() {
-        ArrayList<HistoryVocab> historyVocabs = new ArrayList<>();
+    public void getHistory50(GetHistoryInterface asyncInterface, int howMany) {
+        GetHistoryAsyncTask task = new GetHistoryAsyncTask(getReadableDatabase(), asyncInterface, howMany);
+        task.execute();
+//        ArrayList<HistoryVocab> historyVocabs = new ArrayList<>();
+//
+//        // SELECT * FROM POSTS
+//        // LEFT OUTER JOIN USERS
+//        // ON POSTS.KEY_POST_USER_ID_FK = USERS.KEY_USER_ID
+//        String HISTORY_SELECT_QUERY =
+//                String.format("SELECT * FROM %s ORDER BY %s DESC;",
+//                        TABLE_HISTORY,
+//                        KEY_DATE);
+//
+//
+//        SQLiteDatabase db = getReadableDatabase();
+//        Log.e("hist", "querying: " + HISTORY_SELECT_QUERY);
+//        Cursor cursor = db.rawQuery(HISTORY_SELECT_QUERY, null);
+//        try {
+//            if (cursor.moveToFirst()) {
+//                do {
+//                    HistoryVocab histVocab = new HistoryVocab();
+//                    histVocab.word = cursor.getString(cursor.getColumnIndex(KEY_WORD));
+//                    histVocab.date = cursor.getLong(cursor.getColumnIndex(KEY_DATE));
+//
+//                    historyVocabs.add(histVocab);
+//
+//                } while(cursor.moveToNext());
+//            }
+//        } catch (Exception e) {
+//            Log.d("hist", "error getting hist "  + e.toString());
+//        } finally {
+//            if (cursor != null && !cursor.isClosed()) {
+//                cursor.close();
+//            }
+//        }
+//
+////        Collections.reverse(historyVocabs);
+//        return historyVocabs;
+    }
 
-        // SELECT * FROM POSTS
-        // LEFT OUTER JOIN USERS
-        // ON POSTS.KEY_POST_USER_ID_FK = USERS.KEY_USER_ID
-        String HISTORY_SELECT_QUERY =
-                String.format("SELECT * FROM %s ORDER BY %s DESC;",
-                        TABLE_HISTORY,
-                        KEY_DATE);
+    private class GetHistoryAsyncTask extends AsyncTask<Void, Void, ArrayList<HistoryVocab>> { // class to allow the get all query to happen on a seperate thread
+        GetHistoryInterface asyncInterface;
+        SQLiteDatabase db;
+        ArrayList<HistoryVocab> historyVocabs;
+        int howMany; // how many elements to load
 
+        public GetHistoryAsyncTask(SQLiteDatabase db, GetHistoryInterface asyncInterface, int howMany) {
+            super();
+            this.db = db;
+            this.asyncInterface = asyncInterface;
 
-        SQLiteDatabase db = getReadableDatabase();
-        Log.e("hist", "querying: " + HISTORY_SELECT_QUERY);
-        Cursor cursor = db.rawQuery(HISTORY_SELECT_QUERY, null);
-        try {
-            if (cursor.moveToFirst()) {
-                do {
-                    HistoryVocab histVocab = new HistoryVocab();
-                    histVocab.word = cursor.getString(cursor.getColumnIndex(KEY_WORD));
-                    histVocab.date = cursor.getLong(cursor.getColumnIndex(KEY_DATE));
+            historyVocabs = new ArrayList<>();
 
-                    historyVocabs.add(histVocab);
-
-                } while(cursor.moveToNext());
-            }
-        } catch (Exception e) {
-            Log.d("hist", "error getting hist "  + e.toString());
-        } finally {
-            if (cursor != null && !cursor.isClosed()) {
-                cursor.close();
-            }
+            this.howMany = howMany;
         }
 
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+
+        @Override
+        protected ArrayList<HistoryVocab> doInBackground(Void... voids) {
+
+            int i = 0;
+
+            // SELECT * FROM POSTS
+            // LEFT OUTER JOIN USERS
+            // ON POSTS.KEY_POST_USER_ID_FK = USERS.KEY_USER_ID
+            String HISTORY_SELECT_QUERY =
+                    String.format("SELECT * FROM %s ORDER BY %s DESC;",
+                            TABLE_HISTORY,
+                            KEY_DATE);
+
+
+            SQLiteDatabase db = getReadableDatabase();
+            Log.e("hist", "querying: " + HISTORY_SELECT_QUERY);
+            Cursor cursor = db.rawQuery(HISTORY_SELECT_QUERY, null);
+            try {
+                if (cursor.moveToFirst()) {
+                    do {
+                        HistoryVocab histVocab = new HistoryVocab();
+                        histVocab.word = cursor.getString(cursor.getColumnIndex(KEY_WORD));
+                        histVocab.date = cursor.getLong(cursor.getColumnIndex(KEY_DATE));
+
+                        historyVocabs.add(histVocab);
+
+                    } while(cursor.moveToNext() && ((howMany == GET_ALL || (++i <= howMany))));
+                }
+            } catch (Exception e) {
+                Log.d("hist", "error getting hist "  + e.toString());
+            } finally {
+                if (cursor != null && !cursor.isClosed()) {
+                    cursor.close();
+                }
+            }
+
 //        Collections.reverse(historyVocabs);
-        return historyVocabs;
+            return historyVocabs;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<HistoryVocab> historyVocabArrayList) {
+            super.onPostExecute(historyVocabArrayList);
+            asyncInterface.setHistoryData(historyVocabArrayList);
+        }
     }
 
     //region user vocab

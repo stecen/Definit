@@ -501,7 +501,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 
 
 
-        } else { // show keyboard
+        } else { // show keyboard, when no one sent anything
             ((InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE)).
                     toggleSoftInput(InputMethodManager.SHOW_FORCED,
                             InputMethodManager.HIDE_IMPLICIT_ONLY);
@@ -566,6 +566,8 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
         query = query.replaceAll("\"","");
         query = query.replace("\\", "/");
         searchView.setQuery(query,false);
+
+        searchView.clearFocus();
 
 //        defExRecycler.invalidateItemDecorations(); //todo why is this null when oncreate is already called
 
@@ -831,12 +833,40 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
         super.onResume();
 
         try {
-            if (searchInnerText != null && searchInnerText.getText().toString().equals("") && searchInnerText.getText().toString().trim().equals("")) {
+            if (searchInnerText != null &&
+                    (searchInnerText.getText().toString().equals("") || searchInnerText.getText().toString().trim().equals(""))) {
+
+
                 Log.e("searchInnerText yassss", searchInnerText.getText().toString() + " ");
-                searchView.requestFocus();
+//                searchView.requestFocus();
+
+                searchInnerText.requestFocus();
+
                 ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).
                         toggleSoftInput(InputMethodManager.SHOW_FORCED,
                                 InputMethodManager.HIDE_IMPLICIT_ONLY); // show keyboard XD
+                /// Show Keyboard
+//                final Handler handler = new Handler();
+//                handler.postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        InputMethodManager imm = (InputMethodManager) getSystemService(
+//                                Context.INPUT_METHOD_SERVICE);
+//                        imm.showSoftInput(searchView, InputMethodManager.SHOW_IMPLICIT);
+//                    }
+//                }, 1000);
+
+                final InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                searchInnerText.postDelayed(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        searchInnerText.requestFocus();
+                        imm.showSoftInput(searchInnerText, 0);
+                    }
+                }, 100);
+
             } else {
                 Log.e("searchInnerText", "NULL +" + searchInnerText.getText().toString() + ".");
             }

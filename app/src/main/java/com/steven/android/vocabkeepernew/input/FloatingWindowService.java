@@ -52,14 +52,14 @@ public class FloatingWindowService extends Service {
         if (intent != null) {
             word = intent.getStringExtra(KEY_WORD);
         } else {
-            Toast.makeText(this, "Error...", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "Error...", Toast.LENGTH_SHORT).show();
         }
         return START_NOT_STICKY;
     }
 
     @Override
     public void onDestroy() {
-        Toast.makeText(this, "service onDestroy", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "service onDestroy", Toast.LENGTH_SHORT).show();
 //        customHandler
         super.onDestroy();
     }

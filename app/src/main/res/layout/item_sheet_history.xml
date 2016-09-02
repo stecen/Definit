@@ -15,6 +15,14 @@
         android:layout_margin="0dp"
         android:background="#eee">
 
+        <View
+            android:id="@+id/upper_shadow"
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:alpha=".7"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/drop_shadow2" />
+
         <TextView
             android:alpha=".57"
             android:textSize="16sp"
@@ -26,6 +34,14 @@
             android:textAlignment="textEnd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
+        <View
+            android:id="@+id/lower_shadow"
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:alpha=".7"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/drop_shadow" />
     </RelativeLayout>
 
     <LinearLayout

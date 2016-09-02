@@ -23,6 +23,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.steven.android.vocabkeepernew.R;
+import com.steven.android.vocabkeepernew.showuservocab.sqlite.GetHistoryInterface;
 import com.steven.android.vocabkeepernew.utility.RecyclerViewClickListener;
 import com.steven.android.vocabkeepernew.show.SearchAndShowActivity;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.HistoryVocab;
@@ -133,11 +134,20 @@ public class SheetHistorySavedActivity extends AppCompatActivity implements Recy
         recyclerView.setHasFixedSize(true);
         helper = UserVocabHelper.getInstance(this);
 
-        ArrayList<HistoryVocab> historyVocabs = helper.getHistory50();
-        adapter = new SheetHistoryAdapter(historyVocabs, this, getApplicationContext());
-        recyclerView.setNestedScrollingEnabled(false);
+//        ArrayList<HistoryVocab> historyVocabs = helper.getHistory50();
+
+        final RecyclerViewClickListener fclick = this;
+        helper.getHistory50(new GetHistoryInterface() {
+            @Override
+            public void setHistoryData(ArrayList<HistoryVocab> historyVocabList) {
+                adapter = new SheetHistoryAdapter(historyVocabList, fclick, getApplicationContext());
+                recyclerView.setNestedScrollingEnabled(false);
 //        recyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext()));
-        recyclerView.setAdapter(adapter);
+                recyclerView.setAdapter(adapter);
+            }
+        },
+                UserVocabHelper.GET_ALL);
+
 
         nested = (NestedScrollView) findViewById(R.id.bottom_sheet);
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {

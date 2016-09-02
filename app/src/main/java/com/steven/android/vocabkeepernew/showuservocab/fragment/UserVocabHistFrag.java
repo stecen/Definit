@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.steven.android.vocabkeepernew.R;
+import com.steven.android.vocabkeepernew.showuservocab.sqlite.GetHistoryInterface;
 import com.steven.android.vocabkeepernew.utility.RecyclerViewClickListener;
 import com.steven.android.vocabkeepernew.show.SearchAndShowActivity;
 import com.steven.android.vocabkeepernew.showuservocab.UserVocabActivity;
@@ -56,11 +57,21 @@ public class UserVocabHistFrag extends Fragment implements RecyclerViewClickList
         recyclerView.setHasFixedSize(true);
         helper = UserVocabHelper.getInstance(appContext);
 
-        ArrayList<HistoryVocab> historyVocabs = helper.getHistory50();
-        adapter = new SheetHistoryAdapter(historyVocabs, this, appContext);
-//        recyclerView.setNestedScrollingEnabled(false);
-//        recyclerView.addItemDecoration(new DividerItemDecoration(appContext));
-        recyclerView.setAdapter(adapter);
+//        ArrayList<HistoryVocab> historyVocabs = helper.getHistory50();
+//        adapter = new SheetHistoryAdapter(historyVocabs, this, appContext);
+////        recyclerView.setNestedScrollingEnabled(false);
+////        recyclerView.addItemDecoration(new DividerItemDecoration(appContext));
+//        recyclerView.setAdapter(adapter);
+
+        final RecyclerViewClickListener fClick = this;
+        helper.getHistory50(new GetHistoryInterface() {
+            @Override
+            public void setHistoryData (ArrayList<HistoryVocab> historyVocabList) {
+                adapter = new SheetHistoryAdapter(historyVocabList, fClick, appContext);
+                recyclerView.setAdapter(adapter);
+            }
+        }, UserVocabHelper.GET_ALL);
+
 
 
         final UserVocabActivity fActivity = (UserVocabActivity) getActivity();
@@ -112,10 +123,18 @@ public class UserVocabHistFrag extends Fragment implements RecyclerViewClickList
     public void refreshRecycler () {
         // todo variable to keep track if there are changes so this activity doesnt have to keep reloading the entire sqlite
         helper = UserVocabHelper.getInstance(appContext);
-        ArrayList<HistoryVocab> historyVocabs = helper.getHistory50();
-        Log.e("historyVocab", "" + historyVocabs.size());
-        Log.e("hist adapter count",""+ adapter.getItemCount());
-        adapter.replaceData(historyVocabs);
+//        ArrayList<HistoryVocab> historyVocabs = helper.getHistory50();
+//        Log.e("historyVocab", "" + historyVocabs.size());
+//        Log.e("hist adapter count",""+ adapter.getItemCount());
+//        adapter.replaceData(historyVocabs);
+        helper.getHistory50(new GetHistoryInterface() {
+            @Override
+            public void setHistoryData(ArrayList<HistoryVocab> historyVocabList) {
+                Log.e("historyVocab", "" + historyVocabList.size());
+                Log.e("hist adapter count",""+ adapter.getItemCount());
+                adapter.replaceData(historyVocabList);
+            }
+        }, UserVocabHelper.GET_ALL);
     }
 
 
