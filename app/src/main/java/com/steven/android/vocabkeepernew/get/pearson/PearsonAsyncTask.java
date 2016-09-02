@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.steven.android.vocabkeepernew.settings.PreferencesActivity;
@@ -362,7 +363,10 @@ public class PearsonAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
 
             pearsonAnswer.definitionExamplesList.add(definitionExamples); //same
 
-            Log.d("lol", e.toString());
+            Toast.makeText(ctx, "Oops! The connection failed somehow :(", Toast.LENGTH_SHORT).show();
+
+//            Log.d("lol", e.toString() + " WOW " + e.getStackTrace().toString());
+
         } finally {
             if (reader != null) {
                 try {

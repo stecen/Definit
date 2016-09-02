@@ -4,12 +4,16 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.HistoryVocab;
+import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocabHelper;
 import com.steven.android.vocabkeepernew.utility.DateUtility;
 import com.steven.android.vocabkeepernew.R;
 import com.steven.android.vocabkeepernew.utility.RecyclerViewClickListener;
@@ -19,7 +23,7 @@ import java.util.ArrayList;
 /**
  * Created by Steven on 8/13/2016.
  */
-public class SheetHistoryAdapter extends RecyclerView.Adapter<SheetHistoryAdapter.ViewHolder> {
+public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
     public ArrayList<HistoryVocab> sortedDataSet;
     private RecyclerViewClickListener itemListener;
     private boolean  mySelected[] = new boolean[500]; //todo: increase
@@ -27,7 +31,7 @@ public class SheetHistoryAdapter extends RecyclerView.Adapter<SheetHistoryAdapte
     private Context context;
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public SheetHistoryAdapter(ArrayList<HistoryVocab> myDataset, RecyclerViewClickListener listener, Context context) {
+    public HistoryAdapter(ArrayList<HistoryVocab> myDataset, RecyclerViewClickListener listener, Context context) {
         sortedDataSet = myDataset;
         itemListener = listener;
         this.context = context;
@@ -42,6 +46,7 @@ public class SheetHistoryAdapter extends RecyclerView.Adapter<SheetHistoryAdapte
         View fillerView;
         RelativeLayout colorView;
         RelativeLayout headerRelative;
+        LinearLayout mainLinear;
 
         public ViewHolder(View v) {
             super(v);
@@ -49,8 +54,47 @@ public class SheetHistoryAdapter extends RecyclerView.Adapter<SheetHistoryAdapte
             dateHeaderText = (TextView) v.findViewById(R.id.item_uservocab_main_dateheader_text);
             headerRelative = (RelativeLayout) v.findViewById(R.id.item_user_vocab_recycler_dateheader);
             timeText = (TextView) v.findViewById(R.id.sheet_time_text);
+            mainLinear = (LinearLayout) v.findViewById(R.id.main_linear_history);
 
-            v.setOnClickListener(this);
+            final LinearLayout frel = mainLinear;
+            mainLinear.setOnClickListener(this);
+            mainLinear.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                        final int position = getLayoutPosition();
+                        Log.e("mainRelative", "onLongClick for popup: " + sortedDataSet.get(position).word);
+                        PopupMenu popupMenu = new PopupMenu(context, frel); // mainRelative
+                        popupMenu.getMenuInflater().inflate(R.menu.menu_history_popup, popupMenu.getMenu());
+
+                        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                            @Override
+                            public boolean onMenuItemClick(MenuItem item) {
+                                Log.e("popup", "you clicked " + item.getTitle() + " " + item.getItemId());
+                                switch (item.getItemId()) {
+                                    case R.id.popup_menu_delete:
+                                        Log.e("popup", "delete");
+
+
+                                        UserVocabHelper helper = UserVocabHelper.getInstance(context);
+                                        helper.deleteHistory(sortedDataSet.get(position));
+
+                                        sortedDataSet.remove(position);
+                                        notifyItemRemoved(position);
+//                                    notifyDataSetChanged();
+                                        break;
+                                    default:
+                                        break;
+                                }
+                                return false;
+                            }
+                        });
+
+                        popupMenu.show();
+
+                        return false;
+                    }
+
+            });
         }
 
         @Override
@@ -67,8 +111,8 @@ public class SheetHistoryAdapter extends RecyclerView.Adapter<SheetHistoryAdapte
 //    }
 
     @Override
-    public SheetHistoryAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                          int viewType) {
+    public HistoryAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+                                                        int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_sheet_history, parent, false);
         // set the view's size, margins, paddings and layout parameters

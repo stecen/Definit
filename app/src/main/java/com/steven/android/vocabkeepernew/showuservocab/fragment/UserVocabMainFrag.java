@@ -30,7 +30,7 @@ import java.util.ArrayList;
 /**
  * Created by Steven on 8/30/2016.
  */
-public class UserVocabMainFrag extends Fragment implements RecyclerViewClickListener, FragmentRefresher, FragmentReselected, View.OnLongClickListener {
+public class UserVocabMainFrag extends Fragment implements RecyclerViewClickListener, FragmentRefresher, FragmentReselected/*, View.OnLongClickListener*/ {
     RecyclerView recyclerView;
     DividerItemDecoration dividerItemDecoration;
     UserVocabHelper helper;
@@ -77,7 +77,7 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
 ////        Log.e("adapter count",""+ adapter.getItemCount());
         helper = UserVocabHelper.getInstance(appContext);
         final RecyclerViewClickListener listener = this;
-        final View.OnLongClickListener flong = this;
+//        final View.OnLongClickListener flong = this;
         helper.getAllUserVocab(new GetAllWordsAsyncInterface() {
             @Override
             public void setWordsData(ArrayList<UserVocab> userVocabList) {
@@ -115,34 +115,36 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
         });
     }
 
-    @Override
-    public boolean onLongClick(View view) {
-        Log.e("mainRelative", "onLongClick for popup");
-        PopupMenu popupMenu = new PopupMenu(appContext, recyclerView); // mainRelative
-        popupMenu.getMenuInflater().inflate(R.menu.menu_uservocab_popup, popupMenu.getMenu());
-
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                Log.e("popup", "you clicked " + item.getTitle() + " " + item.getItemId());
-                switch (item.getItemId()) {
-                    case R.id.popup_menu_delete:
-                        Log.e("popup", "delete");
-                        break;
-                    case R.id.popup_menu_favorite:
-                        Log.e("popup", "favorite");
-                        break;
-                    default:
-                        break;
-                    }
-                return false;
-            }
-        });
-
-        popupMenu.show();
-
-        return false;
-    }
+    //region onlonclick
+//    @Override
+//    public boolean onLongClick(View view) {
+//        Log.e("mainRelative", "onLongClick for popup");
+//        PopupMenu popupMenu = new PopupMenu(appContext, recyclerView); // mainRelative
+//        popupMenu.getMenuInflater().inflate(R.menu.menu_uservocab_popup, popupMenu.getMenu());
+//
+//        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+//            @Override
+//            public boolean onMenuItemClick(MenuItem item) {
+//                Log.e("popup", "you clicked " + item.getTitle() + " " + item.getItemId());
+//                switch (item.getItemId()) {
+//                    case R.id.popup_menu_delete:
+//                        Log.e("popup", "delete");
+//                        break;
+//                    case R.id.popup_menu_favorite:
+//                        Log.e("popup", "favorite");
+//                        break;
+//                    default:
+//                        break;
+//                    }
+//                return false;
+//            }
+//        });
+//
+//        popupMenu.show();
+//
+//        return false;
+//    }
+    // endregion
 
     @Override
     public void reselect() {

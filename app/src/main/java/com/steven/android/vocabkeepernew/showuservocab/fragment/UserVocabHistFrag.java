@@ -12,11 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.steven.android.vocabkeepernew.R;
+import com.steven.android.vocabkeepernew.showuservocab.sheet.HistoryAdapter;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.GetHistoryInterface;
 import com.steven.android.vocabkeepernew.utility.RecyclerViewClickListener;
 import com.steven.android.vocabkeepernew.show.SearchAndShowActivity;
 import com.steven.android.vocabkeepernew.showuservocab.UserVocabActivity;
-import com.steven.android.vocabkeepernew.showuservocab.sheet.SheetHistoryAdapter;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.HistoryVocab;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocabHelper;
 
@@ -27,9 +27,9 @@ import java.util.ArrayList;
  */
 public class UserVocabHistFrag extends Fragment implements RecyclerViewClickListener, FragmentRefresher, FragmentReselected {
     RecyclerView recyclerView;
-    Context appContext;
+    Context appContext, activityContext;
     UserVocabHelper helper;
-    SheetHistoryAdapter adapter;
+    HistoryAdapter adapter;
     LinearLayoutManager linearLayoutManager;
 
     @Override
@@ -55,10 +55,11 @@ public class UserVocabHistFrag extends Fragment implements RecyclerViewClickList
         linearLayoutManager.setAutoMeasureEnabled(true);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setHasFixedSize(true);
+        activityContext = getActivity();
         helper = UserVocabHelper.getInstance(appContext);
 
 //        ArrayList<HistoryVocab> historyVocabs = helper.getHistory50();
-//        adapter = new SheetHistoryAdapter(historyVocabs, this, appContext);
+//        adapter = new HistoryAdapter(historyVocabs, this, appContext);
 ////        recyclerView.setNestedScrollingEnabled(false);
 ////        recyclerView.addItemDecoration(new DividerItemDecoration(appContext));
 //        recyclerView.setAdapter(adapter);
@@ -67,7 +68,7 @@ public class UserVocabHistFrag extends Fragment implements RecyclerViewClickList
         helper.getHistory50(new GetHistoryInterface() {
             @Override
             public void setHistoryData (ArrayList<HistoryVocab> historyVocabList) {
-                adapter = new SheetHistoryAdapter(historyVocabList, fClick, appContext);
+                adapter = new HistoryAdapter(historyVocabList, fClick, (activityContext != null) ? activityContext : appContext);
                 recyclerView.setAdapter(adapter);
             }
         }, UserVocabHelper.GET_ALL);

@@ -45,7 +45,7 @@ public class SheetHistorySavedActivity extends AppCompatActivity implements Recy
 
     RecyclerView recyclerView;
     UserVocabHelper helper;
-    SheetHistoryAdapter adapter;
+    HistoryAdapter adapter;
     NestedScrollView nested;
 
     boolean canFinish = false;//before opening the sheet, don't stop when clicked coord
@@ -140,7 +140,7 @@ public class SheetHistorySavedActivity extends AppCompatActivity implements Recy
         helper.getHistory50(new GetHistoryInterface() {
             @Override
             public void setHistoryData(ArrayList<HistoryVocab> historyVocabList) {
-                adapter = new SheetHistoryAdapter(historyVocabList, fclick, getApplicationContext());
+                adapter = new HistoryAdapter(historyVocabList, fclick, getApplicationContext());
                 recyclerView.setNestedScrollingEnabled(false);
 //        recyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext()));
                 recyclerView.setAdapter(adapter);

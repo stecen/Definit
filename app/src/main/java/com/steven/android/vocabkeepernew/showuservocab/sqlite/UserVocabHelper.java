@@ -151,6 +151,26 @@ public class UserVocabHelper extends SQLiteOpenHelper {
 //        return historyVocabs;
     }
 
+    public void deleteHistory(HistoryVocab historyVocab) {
+        // Create and/or open the database for writing
+        SQLiteDatabase db = getWritableDatabase();
+
+        Log.e("deleteHistory", "deletingHistory " + historyVocab.word);
+
+        db.beginTransaction();
+        try {
+            String where= KEY_DATE + '=' + historyVocab.date + " AND " + KEY_WORD + " = \"" + historyVocab.word+"\"";
+            // Notice how we haven't specified the primary key. SQLite auto increments the primary key column.
+            Log.e("deleteWord", where);
+            db.delete(TABLE_HISTORY, where, null);
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.d("deleteWord", "\n\n\n\n\n\n\n\n\n\n\n\nEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEError while trying to add post to database + " + e.toString() + "\n\n");
+        } finally {
+            db.endTransaction();
+        }
+    }
+
     private class GetHistoryAsyncTask extends AsyncTask<Void, Void, ArrayList<HistoryVocab>> { // class to allow the get all query to happen on a seperate thread
         GetHistoryInterface asyncInterface;
         SQLiteDatabase db;

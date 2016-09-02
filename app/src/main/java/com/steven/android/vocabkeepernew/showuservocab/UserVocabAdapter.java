@@ -125,6 +125,7 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
 
                                     sortedDataSet.remove(position);
                                     notifyItemRemoved(position);
+//                                    notifyDataSetChanged();
                                     break;
                                 case R.id.popup_menu_favorite:
                                     Log.e("popup", "favorite");

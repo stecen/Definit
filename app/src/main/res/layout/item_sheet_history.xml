@@ -4,8 +4,7 @@
     android:alpha="1"
 
 
-    android:background="?android:attr/selectableItemBackground"
-    android:foreground="?android:attr/selectableItemBackground"
+
     >
 
     <RelativeLayout android:id="@+id/item_user_vocab_recycler_dateheader"
@@ -45,12 +44,16 @@
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/main_linear_history"
         android:layout_below="@id/item_user_vocab_recycler_dateheader"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:alpha="1"
-        android:layout_margin="16dp">
+        android:padding="16dp"
+
+        android:background="?android:attr/selectableItemBackground"
+        android:foreground="?android:attr/selectableItemBackground">
         <TextView
             android:id="@+id/sheet_word_text"
             android:layout_weight="9"

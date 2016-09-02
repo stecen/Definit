@@ -105,7 +105,13 @@ public class DateUtility {
             minuteStr = "0"+minuteStr;
         }
 
-        time = cal.get(Calendar.HOUR) + ":" + minuteStr;
+        int hour = cal.get(Calendar.HOUR);
+        if (hour == 0) {
+            hour = 12;
+        }
+        String hourStr = "" + hour;
+
+        time = hourStr + ":" + minuteStr;
 
         if(cal.get(Calendar.AM_PM)==0)
             time=time+" am";
