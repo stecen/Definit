@@ -5,9 +5,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+//import android.support.v7.widget.PopupMenu;
+import android.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -27,7 +30,7 @@ import java.util.ArrayList;
 /**
  * Created by Steven on 8/30/2016.
  */
-public class UserVocabMainFrag extends Fragment implements RecyclerViewClickListener, FragmentRefresher, FragmentReselected {
+public class UserVocabMainFrag extends Fragment implements RecyclerViewClickListener, FragmentRefresher, FragmentReselected, View.OnLongClickListener {
     RecyclerView recyclerView;
     DividerItemDecoration dividerItemDecoration;
     UserVocabHelper helper;
@@ -35,6 +38,7 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
     LinearLayoutManager linearLayoutManager;
 
     Context appContext;
+    Context activityContext;
 
 
     @Override
@@ -60,6 +64,8 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
         linearLayoutManager = new LinearLayoutManager(appContext);
         recyclerView.setLayoutManager(linearLayoutManager);
 
+        activityContext = getActivity();
+
 //        dividerItemDecoration = new DividerItemDecoration(appContext);
 
 //        helper = UserVocabHelper.getInstance(appContext);
@@ -71,11 +77,12 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
 ////        Log.e("adapter count",""+ adapter.getItemCount());
         helper = UserVocabHelper.getInstance(appContext);
         final RecyclerViewClickListener listener = this;
+        final View.OnLongClickListener flong = this;
         helper.getAllUserVocab(new GetAllWordsAsyncInterface() {
             @Override
             public void setWordsData(ArrayList<UserVocab> userVocabList) {
                 Log.e("userVocab", "" + userVocabList.size());
-                adapter = new UserVocabAdapter(userVocabList, listener, appContext, false);
+                adapter = new UserVocabAdapter(userVocabList, listener, (activityContext != null) ? activityContext : appContext, false/*, flong*/);
                 recyclerView.setAdapter(/*new SlideInLeftAnimationAdapter(*/adapter/*)*/);
             }
         },
@@ -106,6 +113,35 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
 
             }
         });
+    }
+
+    @Override
+    public boolean onLongClick(View view) {
+        Log.e("mainRelative", "onLongClick for popup");
+        PopupMenu popupMenu = new PopupMenu(appContext, recyclerView); // mainRelative
+        popupMenu.getMenuInflater().inflate(R.menu.menu_uservocab_popup, popupMenu.getMenu());
+
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Log.e("popup", "you clicked " + item.getTitle() + " " + item.getItemId());
+                switch (item.getItemId()) {
+                    case R.id.popup_menu_delete:
+                        Log.e("popup", "delete");
+                        break;
+                    case R.id.popup_menu_favorite:
+                        Log.e("popup", "favorite");
+                        break;
+                    default:
+                        break;
+                    }
+                return false;
+            }
+        });
+
+        popupMenu.show();
+
+        return false;
     }
 
     @Override

@@ -68,6 +68,10 @@ public class DateUtility {
             int dayInt = Integer.parseInt(splitted[1]);
             Log.e("splitted", "month: " + monthInt + ", of " + month[monthInt]);
 
+            if (dayInt < 10) {
+                splitted[1] = Integer.toString(dayInt);
+            }
+
             String superscript = "";
             switch (dayInt % 10) { // first, second third, ..
                 case 1:

@@ -39,48 +39,48 @@ public class UserDetailsActivity extends AppCompatActivity {
             Log.e("details", "detailsreceived: " + jsonIntent.getStringExtra(KEY_JSON));
         }
 
-        final View view = findViewById(R.id.view);
-
-        ViewTreeObserver vto = view.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-
-            @Override
-            public void onGlobalLayout() {
-//                LayerDrawable ld = (LayerDrawable)tv.getBackground();
-//                ld.setLayerInset(1, 0, tv.getHeight() / 2, 0, 0);
-//                ViewTreeObserver obs = tv.getViewTreeObserver();
-
-                int width = view.getMeasuredWidth();
-                int height = view.getHeight();
-                Log.e("viewc", String.format("(%d, %d)", width, height));
-                int widthdp = Math.round(ViewUtility.convertPixelsToDp(width, getApplicationContext()));
-                int heightdp = Math.round(ViewUtility.convertPixelsToDp(height, getApplicationContext()));
-                Log.e("viewc", String.format("dp (%d, %d)", widthdp, heightdp));
-
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-//                    obs.removeOnGlobalLayoutListener(this);
-//                } else {
-//                    obs.removeGlobalOnLayoutListener(this);
-//                }
-            }
-
-        });
-
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(Math.round(ViewUtility.convertDpToPixel(100, getApplicationContext())),
-                        Math.round(ViewUtility.convertDpToPixel(100, getApplicationContext())));
-                view.setLayoutParams(layoutParams);
-
-                int width = view.getMeasuredWidth();
-                int height = view.getHeight();
-                Log.e("viewc", String.format("(%d, %d)", width, height));
-                int widthdp = Math.round(ViewUtility.convertPixelsToDp(width, getApplicationContext()));
-                int heightdp = Math.round(ViewUtility.convertPixelsToDp(height, getApplicationContext()));
-                Log.e("viewc", String.format("dp (%d, %d)", widthdp, heightdp));
-            }
-        });
+//        final View view = findViewById(R.id.view);
+//
+//        ViewTreeObserver vto = view.getViewTreeObserver();
+//        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+//
+//            @Override
+//            public void onGlobalLayout() {
+////                LayerDrawable ld = (LayerDrawable)tv.getBackground();
+////                ld.setLayerInset(1, 0, tv.getHeight() / 2, 0, 0);
+////                ViewTreeObserver obs = tv.getViewTreeObserver();
+//
+//                int width = view.getMeasuredWidth();
+//                int height = view.getHeight();
+//                Log.e("viewc", String.format("(%d, %d)", width, height));
+//                int widthdp = Math.round(ViewUtility.convertPixelsToDp(width, getApplicationContext()));
+//                int heightdp = Math.round(ViewUtility.convertPixelsToDp(height, getApplicationContext()));
+//                Log.e("viewc", String.format("dp (%d, %d)", widthdp, heightdp));
+//
+////                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+////                    obs.removeOnGlobalLayoutListener(this);
+////                } else {
+////                    obs.removeGlobalOnLayoutListener(this);
+////                }
+//            }
+//
+//        });
+//
+//        view.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(Math.round(ViewUtility.convertDpToPixel(100, getApplicationContext())),
+//                        Math.round(ViewUtility.convertDpToPixel(100, getApplicationContext())));
+//                view.setLayoutParams(layoutParams);
+//
+//                int width = view.getMeasuredWidth();
+//                int height = view.getHeight();
+//                Log.e("viewc", String.format("(%d, %d)", width, height));
+//                int widthdp = Math.round(ViewUtility.convertPixelsToDp(width, getApplicationContext()));
+//                int heightdp = Math.round(ViewUtility.convertPixelsToDp(height, getApplicationContext()));
+//                Log.e("viewc", String.format("dp (%d, %d)", widthdp, heightdp));
+//            }
+//        });
 
 
 

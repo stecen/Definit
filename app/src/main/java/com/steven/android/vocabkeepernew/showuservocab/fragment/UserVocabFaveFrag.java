@@ -34,7 +34,7 @@ public class UserVocabFaveFrag extends Fragment implements RecyclerViewClickList
     UserVocabAdapter adapter;
     LinearLayoutManager linearLayoutManager;
 
-    Context appContext;
+    Context appContext, activityContext;
 
 
     @Override
@@ -62,6 +62,8 @@ public class UserVocabFaveFrag extends Fragment implements RecyclerViewClickList
         linearLayoutManager = new LinearLayoutManager(appContext);
         recyclerView.setLayoutManager(linearLayoutManager);
 
+        activityContext = getActivity();
+
 //        dividerItemDecoration = new DividerItemDecoration(appContext);
 
         helper = UserVocabHelper.getInstance(appContext);
@@ -77,7 +79,7 @@ public class UserVocabFaveFrag extends Fragment implements RecyclerViewClickList
             @Override
             public void setWordsData(ArrayList<UserVocab> userVocabList) {
                 Log.e("faveVocab", "" + userVocabList.size());
-                adapter = new UserVocabAdapter(userVocabList, listener, appContext, true);
+                adapter = new UserVocabAdapter(userVocabList, listener, (activityContext != null) ? activityContext : appContext, true);
 //        recyclerView.addItemDecoration(dividerItemDecoration);
                 recyclerView.setAdapter(/*new SlideInLeftAnimationAdapter(*/adapter/*)*/);
 //        Log.e("adapter count",""+ adapter.getItemCount());

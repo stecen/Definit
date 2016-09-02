@@ -536,6 +536,26 @@ public class UserVocabHelper extends SQLiteOpenHelper {
 //        }
     }
 
+    public void deleteWord(UserVocab userVocab) {
+        // Create and/or open the database for writing
+        SQLiteDatabase db = getWritableDatabase();
+
+        Log.e("deleteWord", "deletingword " + userVocab.word);
+
+        db.beginTransaction();
+        try {
+            String where= KEY_DATE + '=' + userVocab.date + " AND " + KEY_WORD + " = \"" + userVocab.word+"\"";
+            // Notice how we haven't specified the primary key. SQLite auto increments the primary key column.
+            Log.e("deleteWord", where);
+            db.delete(TABLE_WORDS, where, null);
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.d("deleteWord", "\n\n\n\n\n\n\n\n\n\n\n\nEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEError while trying to add post to database + " + e.toString() + "\n\n");
+        } finally {
+            db.endTransaction();
+        }
+    }
+
     public void toggleFavorite(UserVocab userVocab) {
         // Create and/or open the database for writing
         SQLiteDatabase db = getWritableDatabase();

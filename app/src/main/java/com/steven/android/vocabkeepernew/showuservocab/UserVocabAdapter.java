@@ -3,9 +3,11 @@ package com.steven.android.vocabkeepernew.showuservocab;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
@@ -38,6 +40,8 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
 
     boolean isFaveList = false;
 
+    View.OnLongClickListener onLongClickListener = null;
+
     // Provide a suitable constructor (depends on the kind of dataset)
     public UserVocabAdapter(ArrayList<UserVocab> myDataset, RecyclerViewClickListener listener, Context context, boolean isFaveList) {
         sortedDataSet = myDataset;
@@ -46,6 +50,20 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
         this.isFaveList = isFaveList; // depends on the source of the caller. If the caller is looking to display a favorites list, display a yellow background
 
         Log.e("constructor", sortedDataSet.size() + "  vs " + myDataset.size());
+
+    }
+
+    public UserVocabAdapter(ArrayList<UserVocab> myDataset, RecyclerViewClickListener listener, Context context, boolean isFaveList, View.OnLongClickListener onLongClickListener) {
+
+
+        sortedDataSet = myDataset;
+        itemListener = listener;
+        this.context = context;
+        this.isFaveList = isFaveList; // depends on the source of the caller. If the caller is looking to display a favorites list, display a yellow background
+
+        Log.e("constructor", sortedDataSet.size() + "  vs " + myDataset.size());
+
+        this.onLongClickListener = onLongClickListener;
 
     }
 
@@ -79,6 +97,50 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
 //            fillerView = v.findViewById(R.id.filler);
 //                relativeLayout = (RelativeLayout) v;
             mainRelative.setOnClickListener(this);
+//            if (onLongClickListener != null) {
+
+//            }
+
+            //delete words through a popup menu
+            final RelativeLayout frel = mainRelative;
+            mainRelative.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    final int position = getLayoutPosition();
+                    Log.e("mainRelative", "onLongClick for popup: " + sortedDataSet.get(position).word);
+                    PopupMenu popupMenu = new PopupMenu(context, frel); // mainRelative
+                    popupMenu.getMenuInflater().inflate(R.menu.menu_uservocab_popup, popupMenu.getMenu());
+
+                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            Log.e("popup", "you clicked " + item.getTitle() + " " + item.getItemId());
+                            switch (item.getItemId()) {
+                                case R.id.popup_menu_delete:
+                                    Log.e("popup", "delete");
+
+
+                                    UserVocabHelper helper = UserVocabHelper.getInstance(context);
+                                    helper.deleteWord(sortedDataSet.get(position));
+
+                                    sortedDataSet.remove(position);
+                                    notifyItemRemoved(position);
+                                    break;
+                                case R.id.popup_menu_favorite:
+                                    Log.e("popup", "favorite");
+                                    break;
+                                default:
+                                    break;
+                            }
+                            return false;
+                        }
+                    });
+
+                    popupMenu.show();
+
+                    return false;
+                }
+            });
 
 //            loShaView = v.findViewById(R.id.lower_shadow);
 //            upShaView = v.findViewById(R.id.upper_shadow);
