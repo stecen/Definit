@@ -31,14 +31,16 @@ import java.util.ArrayList;
  * Created by Steven on 8/30/2016.
  */
 public class UserVocabMainFrag extends Fragment implements RecyclerViewClickListener, FragmentRefresher, FragmentReselected/*, View.OnLongClickListener*/ {
-    RecyclerView recyclerView;
+    public RecyclerView recyclerView;
     DividerItemDecoration dividerItemDecoration;
     UserVocabHelper helper;
-    UserVocabAdapter adapter;
+    public UserVocabAdapter adapter;
     LinearLayoutManager linearLayoutManager;
 
     Context appContext;
     Context activityContext;
+
+    public static ArrayList<UserVocab> dataSet = null;
 
 
     @Override
@@ -65,6 +67,11 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
         recyclerView.setLayoutManager(linearLayoutManager);
 
         activityContext = getActivity();
+
+//        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.user_vocab_recycler, DetailsFrag.newInstance(), "details").commit();
+
+
+
 
 //        dividerItemDecoration = new DividerItemDecoration(appContext);
 
@@ -192,7 +199,16 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
         Log.e("userVocab", "clicked " + position +". " + userVocabString);
 
         Intent detailIntent = new Intent(appContext, UserDetailsActivity.class);
-        detailIntent.putExtra(UserDetailsActivity.KEY_JSON, userVocabString);
+        dataSet = adapter.sortedDataSet; //lol SOH CHEAP
+
+
+//        detailIntent.putExtra(UserDetailsActivity.KEY_JSON, userVocabString);
+        detailIntent.putExtra(UserDetailsActivity.KEY_POS, position);
+
         startActivity(detailIntent);
+        if (getActivity() != null) {
+//            getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            getActivity().overridePendingTransition(0,0);
+        }
     }
 }

@@ -51,7 +51,7 @@ public class UserVocabHistFrag extends Fragment implements RecyclerViewClickList
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         recyclerView = (RecyclerView) getView().findViewById(R.id.inner_recycler);
-        linearLayoutManager = new LinearLayoutManager(appContext);
+        linearLayoutManager = new LinearLayoutManager(appContext, LinearLayoutManager.VERTICAL, false);
         linearLayoutManager.setAutoMeasureEnabled(true);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setHasFixedSize(true);

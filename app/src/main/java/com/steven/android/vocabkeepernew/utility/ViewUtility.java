@@ -57,11 +57,23 @@ public class ViewUtility {
     }
 
     public static void zoomIntoView(View view) {
-        ScaleAnimation anim = new ScaleAnimation(0,1,0,1);
+        ScaleAnimation anim = new ScaleAnimation(0,1,0,1/*,    50, 50*/);
+//        new ScaleAnimation()
         anim.setFillBefore(true);
         anim.setFillAfter(true);
         anim.setFillEnabled(true);
-        anim.setDuration(500);
+        anim.setDuration(300);
+        anim.setInterpolator(new OvershootInterpolator());
+        view.startAnimation(anim);
+    }
+
+    public static void zoomOut(View view) {
+        ScaleAnimation anim = new ScaleAnimation(1,0,1,0/*,    50, 50*/);
+//        new ScaleAnimation()
+        anim.setFillBefore(true);
+        anim.setFillAfter(true);
+        anim.setFillEnabled(true);
+        anim.setDuration(100);
         anim.setInterpolator(new OvershootInterpolator());
         view.startAnimation(anim);
     }
@@ -133,6 +145,39 @@ public class ViewUtility {
 
 
             anim.setDuration(CIRCLE_ANIM_DURATION + 500);
+
+
+            anim.start();
+        } else {
+            //    // make the view visible and start the animation
+            myView.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public static void circleRevealExtraFast(View view) {
+        // previously invisible view
+        final View myView = view;
+
+//        myView.setVisibility(View.VISIBLE);
+
+        Log.e("fab", "showing");
+
+        // create the animator for this view (the start radius is zero)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+            myView.setVisibility(View.VISIBLE);
+
+            // get the center for the clipping circle
+            int cx = myView.getMeasuredWidth() / 2;
+            int cy = myView.getMeasuredHeight() / 2;
+
+            // get the final radius for the clipping circle
+            int finalRadius = Math.max(myView.getWidth(), myView.getHeight()) / 2;
+            Animator anim =
+                    ViewAnimationUtils.createCircularReveal(myView, cx, cy / 2, 0, finalRadius + 500);
+
+
+            anim.setDuration(CIRCLE_ANIM_DURATION + 200);
 
 
             anim.start();

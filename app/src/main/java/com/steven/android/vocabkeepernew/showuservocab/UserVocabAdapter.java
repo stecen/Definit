@@ -129,6 +129,24 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
                                     break;
                                 case R.id.popup_menu_favorite:
                                     Log.e("popup", "favorite");
+                                    helper = UserVocabHelper.getInstance(context.getApplicationContext());
+
+                                    if (sortedDataSet.get(position).fave) {
+                                        // toggle to false, and send to database. regardless of whether the sqlite succeeds, update the ui. responsive :)
+                                        Drawable notFaveDrawable = context.getResources().getDrawable(NOT_FAVE_DRAWABLE);
+                                        ((ImageView)faveImage).setImageDrawable(notFaveDrawable);
+
+
+                                        helper.toggleFavorite(sortedDataSet.get(position));
+                                        sortedDataSet.get(position).fave = false; // todo: once the sql becomes async, this can't be here
+                                    } else {
+                                        Drawable faveDrawable = context.getResources().getDrawable(IS_FAVE_DRAWABLE);
+                                        ((ImageView)faveImage).setImageDrawable(faveDrawable);
+
+//                                        UserVocabHelper helper = UserVocabHelper.getInstance(context.getApplicationContext());
+                                        helper.toggleFavorite(sortedDataSet.get(position));
+                                        sortedDataSet.get(position).fave = true;
+                                    }
                                     break;
                                 default:
                                     break;

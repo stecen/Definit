@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+
+
+
+GOES IN THE RECYCLER VIEW IN THE CARD RECYCLERVIEW.
+
+
+SHOWS JUST THE TEXT AND DEFINITION
+
+
+
+
+
+-->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    android:clickable="false">
+
+    <TextView
+        android:id="@+id/card_definition_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:clickable="false"
+
+        android:textColor="#000"
+
+        android:alpha=".87"
+
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="8dp"/>
+
+    <TextView
+        android:id="@+id/card_example_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:clickable="false"
+
+        android:textColor="#000"
+
+        android:alpha=".54"
+
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="15dp"/>
+
+</LinearLayout>

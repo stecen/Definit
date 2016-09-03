@@ -1,15 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    android:id="@+id/details_linear"
+<RelativeLayout android:id="@+id/details_linear"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
 
-    <View
-        android:id="@+id/view"
-        android:background="@android:color/holo_blue_dark"
-        android:layout_width="200dp"
-        android:layout_height="200dp"/>
+    android:background="#55000000"
+    android:padding="0dp"
+    android:layout_margin="0dp">
+
+
+
+
+
+    <!--<View-->
+        <!--android:background="@android:color/transparent"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_weight="8" />-->
+
+
+
+    <!--<View-->
+        <!--android:id="@+id/details_bg_view"-->
+        <!--android:background="@android:color/holo_blue_dark"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"/>-->
+    
+    <!--<LinearLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:background="#aaa">-->
+
+            <!--<TextView-->
+                <!--android:text="HIIIIIIIIIIIIIIIIIIIIIIII"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent" />-->
+
+        <com.steven.android.vocabkeepernew.utility.SnappyRecyclerView
+            android:id="@+id/user_details_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="100dp"
+            android:layout_alignParentBottom="true"
+
+            android:visibility="invisible"
+
+            android:padding="0dp"/>
+    <!--android:layout_weight="12"-->
+    <!--android:layout_margin="0dp"-->
+
+    <!--</LinearLayout>-->
 
     <!--<ImageView xmlns:android="http://schemas.android.com/apk/res/android"-->
         <!--android:layout_width="wrap_content" android:layout_height="wrap_content"-->
@@ -17,4 +59,6 @@
 
     <!--</ImageView>-->
 
-</LinearLayout>
+
+
+</RelativeLayout>

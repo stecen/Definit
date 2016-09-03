@@ -32,6 +32,8 @@ import com.steven.android.vocabkeepernew.R;
 import com.steven.android.vocabkeepernew.get.sqlite.DictionaryDatabaseHelper;
 import com.steven.android.vocabkeepernew.input.ClipboardWatcherService;
 import com.steven.android.vocabkeepernew.settings.PreferencesActivity;
+import com.steven.android.vocabkeepernew.showuservocab.fragment.DetailsFrag;
+import com.steven.android.vocabkeepernew.showuservocab.fragment.UserVocabMainFrag;
 import com.steven.android.vocabkeepernew.utility.RecyclerViewClickListener;
 import com.steven.android.vocabkeepernew.showuservocab.fragment.FragmentRefresher;
 import com.steven.android.vocabkeepernew.showuservocab.fragment.FragmentReselected;
@@ -47,7 +49,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 
-public class UserVocabActivity extends AppCompatActivity implements RecyclerViewClickListener, TabLayout.OnTabSelectedListener {
+public class UserVocabActivity extends AppCompatActivity implements /*RecyclerViewClickListener,*/ TabLayout.OnTabSelectedListener {
     TextView serviceText;
 //    ListView wordList;
     Button startButton, stopButton;
@@ -121,7 +123,7 @@ public class UserVocabActivity extends AppCompatActivity implements RecyclerView
 
 
         viewPager = (ViewPager) findViewById(R.id.pager);
-        Pager adapter = new Pager(getSupportFragmentManager(), tabLayout.getTabCount());
+        final Pager adapter = new Pager(getSupportFragmentManager(), tabLayout.getTabCount());
         final Pager finalAdapter = adapter;
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
@@ -260,6 +262,18 @@ public class UserVocabActivity extends AppCompatActivity implements RecyclerView
 //        ViewUtility.zoomIntoView(fab);
 
 //        animationText = (TextView) findViewById(R.id.animation_text);
+
+        fab.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+
+//                UserVocabMainFrag fragment = (UserVocabMainFrag) finalAdapter.instantiateItem(viewPager, 0);
+//                Log.e("fab", "pressed " + fragment.adapter.getItemCount());
+//
+//                getSupportFragmentManager().beginTransaction().add(R.id.fragments_go_here, DetailsFrag.newInstance(), "details").commit();
+            }
+        });
     }
 
     @Override
@@ -286,45 +300,21 @@ public class UserVocabActivity extends AppCompatActivity implements RecyclerView
 //        adapter.replaceData(userVocabList);
 //        adapter.notifyDataSetChanged();
 //    }
-
-    public void recyclerViewListClicked(View v, int position) {
-        String userVocabString = (new Gson()).toJson(adapter.sortedDataSet.get(position));
-        Log.e("userVocab", "clicked " + position +". " + userVocabString);
-
-        Intent detailIntent = new Intent(this, UserDetailsActivity.class);
-        detailIntent.putExtra(UserDetailsActivity.KEY_JSON, userVocabString);
-        startActivity(detailIntent);
-    }
+//
+//    public void recyclerViewListClicked(View v, int position) {
+//        String userVocabString = (new Gson()).toJson(adapter.sortedDataSet.get(position));
+//        Log.e("userVocab", "clicked " + position +". " + userVocabString);
+//
+//        Intent detailIntent = new Intent(this, UserDetailsActivity.class);
+//        detailIntent.putExtra(UserDetailsActivity.KEY_JSON, userVocabString);
+//        startActivity(detailIntent);
+////        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+////        overridePendingTransition(0,0);
+//    }
 
     @Override
     protected void onResume() {
-
-
-
-
-
-
-
-
-
-
-//        refreshRecycler(); // todo: REFRESH RECYCLER!!!!!!!!!!!!!!!!!!!
-
-
-
-
-
-
-
-
         super.onResume();
-
-
-
-
-
-
-
 
 
 //        StringBuilder sb = new StringBuilder();
@@ -356,12 +346,6 @@ public class UserVocabActivity extends AppCompatActivity implements RecyclerView
         editor.putInt(PREF_KEY_WINDOW_ASKED, PREF_YES);
 
         editor.apply();
-    }
-
-    public void addWordFromFAB(View view) {
-
-
-
     }
 
     @Override

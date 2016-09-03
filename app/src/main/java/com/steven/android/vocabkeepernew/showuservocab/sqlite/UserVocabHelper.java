@@ -350,10 +350,10 @@ public class UserVocabHelper extends SQLiteOpenHelper {
                         UserVocab userVocab = new UserVocab();
                         userVocab.word = cursor.getString(cursor.getColumnIndex(KEY_WORD));
                         String json = cursor.getString(cursor.getColumnIndex(KEY_JSON));
-                        Log.e("getAllUserVocab", json);
+//                        Log.e("getAllUserVocab", json);
 //                        userVocab.listOfDefEx = (new Gson()).fromJson(json, new TypeToken<ArrayList<PearsonAnswer.DefinitionExamples>>(){}.getType());
                         userVocab.listOfDefEx = CustomUVStringAdapter.fromString(json);
-                        Log.e("getAllUserVocab", ""+ userVocab.listOfDefEx.size());
+//                        Log.e("getAllUserVocab", ""+ userVocab.listOfDefEx.size());
                         userVocab.date = cursor.getLong(cursor.getColumnIndex(KEY_DATE));
 
                         int faveInt = cursor.getInt(cursor.getColumnIndex(KEY_FAVE));
@@ -517,7 +517,7 @@ public class UserVocabHelper extends SQLiteOpenHelper {
 //        Log.e("addWordUV", (new Gson()).toJson(userVocab));
 
 
-//        for (int i = 0; i < 100; i++) {
+//        for (int i = 0; i < 1000; i++) {
 
             // It's a good idea to wrap our insert in a transaction. This helps with performance and ensures
             // consistency of the database.

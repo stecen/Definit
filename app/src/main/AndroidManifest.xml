@@ -32,7 +32,8 @@
         </activity>
 
         <activity android:name=".showuservocab.UserDetailsActivity"
-            android:theme="@style/VocabAppTheme"
+            android:theme="@style/TransAct"
+            android:screenOrientation="portrait"
             />
 
         <!--HELP:    http://stackoverflow.com/questions/32824079/launchmode-singletask-does-not-create-a-new-task-->

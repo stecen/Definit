@@ -8,6 +8,22 @@
     tools:context=".showuservocab.UserVocabActivity">
     <!--android:fitsSystemWindows="true"-->
 
+
+    <RelativeLayout
+        android:id="@+id/fragments_go_here"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="0dp"
+        android:layout_margin="0dp">
+
+        <!--<fragment-->
+            <!--android:id="@+id/details_fragment"-->
+            <!--class="com.steven.android.vocabkeepernew.showuservocab.fragment.DetailsFrag"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"/>-->
+
+    </RelativeLayout>
+
     <android.support.design.widget.AppBarLayout
         android:id="@+id/word_list_appbar"
         android:layout_width="match_parent"
@@ -92,7 +108,8 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         android:src="@drawable/ic_add_white_24dp"
-        android:onClick="addWordFromFAB"/>
+        />
+    <!--android:onClick="addWordFromFAB-->
 
     <!--<TextView-->
     <!--android:id="@+id/animation_text"-->
