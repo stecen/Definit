@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.steven.android.vocabkeepernew.R;
+import com.steven.android.vocabkeepernew.showuservocab.fragment.UserVocabFaveFrag;
 import com.steven.android.vocabkeepernew.showuservocab.fragment.UserVocabMainFrag;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocab;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocabHelper;
@@ -22,7 +24,7 @@ import com.steven.android.vocabkeepernew.utility.ViewUtility;
 /**
  * Created by Steven on 8/15/2016.
  */
-public class UserDetailsActivity extends Activity implements RecyclerViewClickListener {
+public class UserDetailsActivity extends AppCompatActivity implements RecyclerViewClickListener {
     LinearLayout linearLayout;
     UserVocabHelper helper;
     CardsAdapter adapter;
@@ -32,9 +34,15 @@ public class UserDetailsActivity extends Activity implements RecyclerViewClickLi
     RelativeLayout relativeLayout;
     LinearLayoutManager manager;
 
+
+    public static boolean isActive = false;
+
     public static final String KEY_WORD = "keyForWord";
     public static final String KEY_JSON = "keyJson";
     public static final String KEY_POS = "keyPos";
+    public static final String KEY_FAVE = "keyFave";
+
+    boolean isFave; // is favorite ; display only favorites and use the favefrag static data
 
     UserVocab userVocab;
 
@@ -57,20 +65,49 @@ public class UserDetailsActivity extends Activity implements RecyclerViewClickLi
         manager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
 
         recyclerView.setLayoutManager(manager);
-//        recyclerView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
+        Intent intent = getIntent();
+        if (intent != null) {
+            final int position = intent.getIntExtra(KEY_POS, 0);
+            Log.e("details", "position " + position);
+            manager.scrollToPosition(position);
+
+            isFave = intent.getBooleanExtra(KEY_FAVE, false);
+            Log.e("details", "fave? " + isFave);
+
+
+            // show the user that you can scroll lol. for the first time
+//            final Handler handler  = new Handler();
+//            handler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    try {
+//                        recyclerView.smoothScrollToPosition(position + 1);
+//                    }catch (Exception e) {
+//                        Log.e("scroll", "outof bounds....");
+//                    }
+//                }
+//            }, 300);
+//            handler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    recyclerView.smoothScrollToPosition(position);
+//                }
+//            }, 500);
+        }
+
+
 
         helper = UserVocabHelper.getInstance(this);
         final RecyclerViewClickListener listener = this;
         final Context ctx = this;
 
-//        adapter = new UserVocabAdapter(UserVocabMainFrag.dataSet,
-//                this, this, false);
-        adapter = new CardsAdapter(UserVocabMainFrag.dataSet, this.getApplicationContext());
-        recyclerView.setAdapter(/*new SlideInLeftAnimationAdapter(*/adapter/*)*/);
-//        SnapHelper snapHelper = new LinearSnapHelper();
-//        snapHelper.attachToRecyclerView(recyclerView);
-//        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-//        snappyRecyclerView.setLayoutManager(layoutManager);
+        if (!isFave) {
+            adapter = new CardsAdapter(UserVocabMainFrag.dataSet, this.getApplicationContext(), this);
+        } else {
+            adapter = new CardsAdapter(UserVocabFaveFrag.dataSet, this.getApplicationContext(), this, true);
+        }
+        recyclerView.setAdapter(adapter);
 
         relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,19 +115,14 @@ public class UserDetailsActivity extends Activity implements RecyclerViewClickLi
                 bye();
             }
         });
-        recyclerView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                bye();
-            }
-        });
+//        recyclerView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                bye();
+//            }
+//        });
 
-        Intent intent = getIntent();
-        if (intent != null) {
-            int position = intent.getIntExtra(KEY_POS, 0);
-            Log.e("details", "position " + position);
-            manager.scrollToPosition(position);
-        }
+
     }
 
     public void bye() {
@@ -100,6 +132,7 @@ public class UserDetailsActivity extends Activity implements RecyclerViewClickLi
             @Override
             public void run() {
                 finish();
+                overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
             }
         }, 50);
     }
@@ -107,6 +140,12 @@ public class UserDetailsActivity extends Activity implements RecyclerViewClickLi
     @Override
     public void onBackPressed() {
         bye();
+    }
+
+    @Override
+    public void onPause() {
+        isActive = false;
+        super.onPause();
     }
 
     @Override

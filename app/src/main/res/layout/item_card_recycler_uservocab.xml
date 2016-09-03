@@ -28,9 +28,11 @@ SHOWS JUST THE TEXT AND DEFINITION
 
         android:clickable="false"
 
-        android:textColor="#000"
+        android:textColor="#808080"
 
         android:alpha=".87"
+
+        android:textSize="16sp"
 
         android:layout_marginTop="16dp"
         android:layout_marginLeft="16dp"
@@ -44,7 +46,9 @@ SHOWS JUST THE TEXT AND DEFINITION
 
         android:clickable="false"
 
-        android:textColor="#000"
+        android:textColor="#808090"
+
+        android:textSize="16sp"
 
         android:alpha=".54"
 

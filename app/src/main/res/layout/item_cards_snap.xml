@@ -7,7 +7,7 @@
     android:layout_marginLeft="8dp"
     android:layout_marginRight="8dp"
 
-    android:clickable="false">
+    android:clickable="true">
 
 
 
@@ -17,31 +17,72 @@
         android:id="@+id/card_view"
         android:layout_gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="350dp"
         card_view:cardCornerRadius="4dp"
         card_view:cardBackgroundColor="#fff"
 
-        android:clickable="false">
+        android:clickable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
 
         <RelativeLayout
+            android:id="@+id/card_relative"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clickable="false">
+            android:layout_height="wrap_content"
+            >
 
-        <TextView
-            android:id="@+id/word_text"
-            android:clickable="false"
-            android:text="hi"
-            android:textColor="#000"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            <View
+                android:id="@+id/toolbar_view"
+                android:layout_width="match_parent"
+                android:background="#4CAF50"
+                android:layout_height="52dp"/>
+
+            <TextView
+                android:id="@+id/word_text"
+
+                android:layout_marginTop="12dp"
+                android:layout_marginLeft="12dp"
+                android:textSize="22sp"
+                android:ellipsize="end"
+
+                android:text="hi"
+                android:background="#00ffffff"
+                android:textColor="#fff"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+            
+            <ImageView
+                android:id="@+id/card_fave_image"
+                android:layout_alignParentEnd="true"
+                android:padding="12dp"
+                android:src="@drawable/ic_star_border_white_24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:alpha=".2"
+
+                android:background="?attr/selectableItemBackgroundBorderless"/>
             
             
             <android.support.v7.widget.RecyclerView
-                android:clickable="false"
+
+                android:layout_marginTop="12dp"
+                android:layout_below="@id/word_text"
+
                 android:id="@+id/definition_example_recycler"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/card_date_text"
+                android:alpha=".2"
+                android:textAlignment="viewEnd"
+                android:textColor="#000"
+                android:layout_below="@id/definition_example_recycler"
+                android:gravity="end"
+                android:layout_marginRight="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </RelativeLayout>

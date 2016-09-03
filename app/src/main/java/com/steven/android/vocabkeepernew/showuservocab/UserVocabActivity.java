@@ -378,7 +378,7 @@ public class UserVocabActivity extends AppCompatActivity implements /*RecyclerVi
             startActivity(intent);
 
             return true;
-        } else if (id == R.id.drop_table) {
+        }/* else if (id == R.id.drop_table) {
 //            try {
 //
 //                UserVocabHelper helper = UserVocabHelper.getInstance(getApplicationContext());
@@ -399,7 +399,7 @@ public class UserVocabActivity extends AppCompatActivity implements /*RecyclerVi
 //                Log.d("lol", e.toString());
 //            }
 //            return true;
-        }
+        }*/
 
         return super.onOptionsItemSelected(item);
     }

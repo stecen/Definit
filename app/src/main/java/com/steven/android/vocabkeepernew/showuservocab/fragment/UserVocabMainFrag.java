@@ -195,11 +195,17 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
     }
 
     public void recyclerViewListClicked(View v, int position) {
+        if (UserDetailsActivity.isActive) {
+            return;
+        }
+
         String userVocabString = (new Gson()).toJson(adapter.sortedDataSet.get(position));
         Log.e("userVocab", "clicked " + position +". " + userVocabString);
 
         Intent detailIntent = new Intent(appContext, UserDetailsActivity.class);
         dataSet = adapter.sortedDataSet; //lol SOH CHEAP
+
+        UserDetailsActivity.isActive = true;
 
 
 //        detailIntent.putExtra(UserDetailsActivity.KEY_JSON, userVocabString);

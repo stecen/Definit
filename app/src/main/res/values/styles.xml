@@ -108,17 +108,22 @@
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
 
-    <style name="TransAct">
+    <style name="TransAct" parent="Theme.AppCompat">
         <!--<item name="colorPrimary">@color/main_blue</item>-->
         <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorPrimaryDark">@color/weird</item>
         <item name="colorAccent">@color/accent</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
 
         <!--<item name="android:colorPrimaryDark">#42A5F5</item>-->
         <!--<item name="android:colorAccent">#FF4081</item>-->
         <!--<item name="android/colorPrimary">@color/primary</item>-->
-        <item name="android:colorPrimaryDark">@color/primary_dark</item>
+        <item name="android:colorPrimaryDark">@color/weird</item>
         <item name="android:colorAccent">@color/accent</item>
+
+        <!--<item name="android:transition">@null</item>-->
+        <!--<item name="android:statusBarColor">#388E3C</item>-->
 
         <item name="android:windowBackground">@android:color/transparent</item>
         <!--<item name="android:colorBackgroundCacheHint">@null</item>-->
@@ -128,6 +133,7 @@
         <!--<item name="android:windowContentOverlay">@null</item>-->
         <!--<item name="android:windowFullscreen">true</item>-->
     </style>
+
 
 
 

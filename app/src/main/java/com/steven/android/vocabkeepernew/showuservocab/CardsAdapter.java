@@ -2,21 +2,29 @@ package com.steven.android.vocabkeepernew.showuservocab;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.steven.android.vocabkeepernew.R;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocab;
+import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocabHelper;
+import com.steven.android.vocabkeepernew.utility.DateUtility;
 import com.steven.android.vocabkeepernew.utility.PearsonAnswer;
 import com.steven.android.vocabkeepernew.utility.RecyclerViewClickListener;
 
@@ -29,28 +37,45 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
     public ArrayList<UserVocab> sortedDataSet;
     private RecyclerViewClickListener itemListener;
     private Context context;
+    UserDetailsActivity userDetailsActivity;
+
+    boolean isFave = false;
 
     CardDefExAdapter cardDefExAdapter;
 
-    public static int IS_FAVE_DRAWABLE = R.drawable.ic_star_black_24dp;
-    public static int NOT_FAVE_DRAWABLE = R.drawable.ic_star_border_black_24dp;
+    public static int IS_FAVE_DRAWABLE = R.drawable.ic_star_white_24dp;
+    public static int NOT_FAVE_DRAWABLE = R.drawable.ic_star_border_white_24dp;
 
 
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public CardsAdapter(ArrayList<UserVocab> myDataset, Context context) {
+    public CardsAdapter(ArrayList<UserVocab> myDataset, Context context, UserDetailsActivity userDetailsActivity) {
         sortedDataSet = myDataset;
         this.context = context;
+        this.userDetailsActivity = userDetailsActivity;
 
         Log.e("constructor", sortedDataSet.size() + "  vs " + myDataset.size());
 
     }
+    public CardsAdapter(ArrayList<UserVocab> myDataset, Context context, UserDetailsActivity userDetailsActivity, boolean isFave) {
+        sortedDataSet = myDataset;
+        this.context = context;
+        this.userDetailsActivity = userDetailsActivity;
+
+        Log.e("constructor", sortedDataSet.size() + "  vs " + myDataset.size());
+
+        this.isFave = isFave;
+
+    }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView wordText, def1Text/*, def2Text, def3Text*/;
+        TextView wordText, def1Text/*, def2Text, def3Text*/, toolbarText;
         ImageView faveImage;
         CardView cardView;
         RecyclerView recyclerView;
+        View toolbarView;
+        TextView dateText;
 
         RelativeLayout headerRelative, mainRelative; // main , clickable content. exists because if there is a date header, you don't want ripplies showing through that because it's not supposed to be a part of the item
         TextView dateHeaderText;
@@ -58,6 +83,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
         //        TextView exampleText;
 //        View fillerView, upShaView, loShaView;
         TextView faveColorView;
+        RelativeLayout cardRelative;
 //        RelativeLayout colorView;
 //            RelativeLayout relativeLayout;
 
@@ -66,6 +92,31 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
             wordText = (TextView) v.findViewById(R.id.word_text);
             cardView  = (CardView) v.findViewById(R.id.card_view);
             recyclerView = (RecyclerView) v.findViewById(R.id.definition_example_recycler);
+            cardRelative = (RelativeLayout) v.findViewById(R.id.card_relative);
+            faveImage = (ImageView) v.findViewById(R.id.card_fave_image);
+            toolbarView = (View) v.findViewById(R.id.toolbar_view);
+            dateText = (TextView) v.findViewById(R.id.card_date_text);
+
+            cardRelative.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.e("card", "clicked relative");
+                }
+            });
+            cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.e("card", "clicked");
+                }
+            });
+            recyclerView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.e("card", "clicked");
+                }
+            });
+
+
 
 //            def1Text = (TextView) v.findViewById(R.id.def1_text);
 //            mainRelative = (RelativeLayout) v.findViewById(R.id.item_uservocab_main_relative);
@@ -79,6 +130,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
         }
 
     }
+
 
     // Create new views (invoked by the layout manager)
     @Override
@@ -96,12 +148,58 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
     public void onBindViewHolder(ViewHolder holder, int position) {
         final int pos = position;
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            holder.toolbarView.setElevation(8);
+            holder.faveImage.setElevation(9);
+            holder.wordText.setElevation(8);
+        }
+
         holder.wordText.setText(sortedDataSet.get(pos).word);
 
         holder.recyclerView.setLayoutManager(new LinearLayoutManager(context));
         cardDefExAdapter = new CardDefExAdapter(sortedDataSet.get(pos).listOfDefEx);
         holder.recyclerView.setAdapter(cardDefExAdapter);
 
+        // toggle fave image
+        if (sortedDataSet.get(position).fave) {
+            Drawable faveDrawable = context.getResources().getDrawable(IS_FAVE_DRAWABLE);
+            holder.faveImage.setImageDrawable(faveDrawable);
+        } else {
+            Drawable notFaveDrawable = context.getResources().getDrawable(NOT_FAVE_DRAWABLE);
+            holder.faveImage.setImageDrawable(notFaveDrawable);
+        }
+
+        holder.dateText.setText(DateUtility.getFullDate(sortedDataSet.get(pos).date, "MM/dd") + ", " + DateUtility.getTime(sortedDataSet.get(pos).date));
+
+        final UserVocab userVocab = sortedDataSet.get(pos);
+        final ViewHolder fholder = holder;
+        holder.faveImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (userVocab.fave) {
+                    // toggle to false, and send to database. regardless of whether the sqlite succeeds, update the ui. responsive :)
+                    Drawable notFaveDrawable = context.getResources().getDrawable(NOT_FAVE_DRAWABLE);
+                    ((ImageView)fholder.faveImage).setImageDrawable(notFaveDrawable);
+
+                    UserVocabHelper helper = UserVocabHelper.getInstance(context.getApplicationContext());
+                    helper.toggleFavorite(userVocab);
+                    sortedDataSet.get(pos).fave = false; // todo: once the sql becomes async, this can't be here
+                } else {
+                    Drawable faveDrawable = context.getResources().getDrawable(IS_FAVE_DRAWABLE);
+                    ((ImageView)fholder.faveImage).setImageDrawable(faveDrawable);
+
+                    UserVocabHelper helper = UserVocabHelper.getInstance(context.getApplicationContext());
+                    helper.toggleFavorite(userVocab);
+                    sortedDataSet.get(pos).fave = true;
+                }
+            }
+        });
+
+        if (isFave) { // set color to yellow
+            holder.cardView.setCardBackgroundColor(Color.parseColor("#ffffca"));
+        }
+
+//         region adjust width of  card
 //        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 //        Display display = wm.getDefaultDisplay();
 //        Point size = new Point();
@@ -109,7 +207,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
 //        final int width = size.x;
 //        final int height = size.y;
 //        Log.e("cards", width + " " + height);
-//
+
 //        final WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 //        final CardView fview = holder.cardView;
 //        final ViewTreeObserver vto = fview.getViewTreeObserver();
@@ -123,7 +221,8 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
 ////                ViewUtility.circleRevealExtra(coordinatorLayout); // lmfao
 ////                    ViewUtility.zoomIntoView(coordinatorLayout);
 //
-//                fview.setLayoutParams(new RelativeLayout.LayoutParams(Math.round((float) width * .66f), height));
+////                fview.setLayoutParams(new RelativeLayout.LayoutParams(Math.round((float) width * .66f), height));
+////                fview.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 //
 //
 //
@@ -135,10 +234,8 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
 //            }
 //
 //        });
-
+            //endregion
     }
-
-
 
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -146,6 +243,19 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
     public int getItemCount() {
         return sortedDataSet.size();
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public class CardDefExAdapter extends RecyclerView.Adapter<CardDefExAdapter.ViewHolder> {
         public ArrayList<PearsonAnswer.DefinitionExamples> defExDataSet;
@@ -193,17 +303,23 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
         // Replace the contents of a view (invoked by the layout manager)
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-            final int pos = position;
+                        final int pos = position;
 
-            holder.definitionText.setText(defExDataSet.get(pos).definition);
+            holder.definitionText.setText(/*Html.fromHtml(*/ Integer.toString(pos+1) + ". " + defExDataSet.get(pos).definition/*)*/);
             Log.e("cardadapter", "setting definition text");
 
-            if (defExDataSet.get(pos).examples.isEmpty()) {
+            if (defExDataSet.get(pos).examples.isEmpty() || defExDataSet.get(pos).examples.get(0).trim().equals(PearsonAnswer.DEFAULT_NO_EXAMPLE)) {
                 holder.exampleText.setVisibility(View.GONE);
             } else {
-                holder.exampleText.setText(defExDataSet.get(pos).examples.get(0).trim());
+                String example = '"' + defExDataSet.get(pos).examples.get(0).trim() + '"';
+                holder.exampleText.setText(example);
             }
+
+
+
         }
+
+
 
         // Return the size of your dataset (invoked by the layout manager)
         @Override

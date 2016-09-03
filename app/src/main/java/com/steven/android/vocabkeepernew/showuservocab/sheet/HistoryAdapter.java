@@ -152,7 +152,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             holder.dateHeaderText.setText(date);
         }
 
-        holder.timeText.setText(DateUtility.getTime(historyVocab.date + ""));
+        holder.timeText.setText(DateUtility.getTime(historyVocab.date));
 
 //        String date = DateUtility.getHumanifiedDate(historyVocab.date, "MM/dd");
 //        String prevDate = " ";

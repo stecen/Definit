@@ -93,11 +93,11 @@ public class DateUtility {
         }
     }
 
-    public static String getTime(String milliseconds) {
+    public static String getTime(long milliseconds) {
 
         String time = "";
         Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(Long.parseLong(milliseconds));
+        cal.setTimeInMillis(milliseconds);
 
         int minute = cal.get(Calendar.MINUTE);
         String minuteStr = ""+minute;

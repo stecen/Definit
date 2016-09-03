@@ -36,6 +36,8 @@ public class UserVocabFaveFrag extends Fragment implements RecyclerViewClickList
 
     Context appContext, activityContext;
 
+    public static ArrayList<UserVocab> dataSet = null;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,9 +82,7 @@ public class UserVocabFaveFrag extends Fragment implements RecyclerViewClickList
             public void setWordsData(ArrayList<UserVocab> userVocabList) {
                 Log.e("faveVocab", "" + userVocabList.size());
                 adapter = new UserVocabAdapter(userVocabList, listener, (activityContext != null) ? activityContext : appContext, true);
-//        recyclerView.addItemDecoration(dividerItemDecoration);
-                recyclerView.setAdapter(/*new SlideInLeftAnimationAdapter(*/adapter/*)*/);
-//        Log.e("adapter count",""+ adapter.getItemCount());
+                recyclerView.setAdapter(adapter);
             }
         },
                 100);
@@ -162,11 +162,26 @@ public class UserVocabFaveFrag extends Fragment implements RecyclerViewClickList
     }
 
     public void recyclerViewListClicked(View v, int position) {
+
         String userVocabString = (new Gson()).toJson(adapter.sortedDataSet.get(position));
         Log.e("userVocab", "clicked " + position +". " + userVocabString);
 
         Intent detailIntent = new Intent(appContext, UserDetailsActivity.class);
-        detailIntent.putExtra(UserDetailsActivity.KEY_JSON, userVocabString);
+        dataSet = adapter.sortedDataSet; //lol SOH CHEAP
+
+
+//        detailIntent.putExtra(UserDetailsActivity.KEY_JSON, userVocabString);
+        detailIntent.putExtra(UserDetailsActivity.KEY_POS, position);
+        detailIntent.putExtra(UserDetailsActivity.KEY_FAVE, true);
+
         startActivity(detailIntent);
+        if (getActivity() != null) {
+//            getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+            getActivity().overridePendingTransition(0,0);
+        }
+
+//        Intent detailIntent = new Intent(appContext, UserDetailsActivity.class);
+//        detailIntent.putExtra(UserDetailsActivity.KEY_JSON, userVocabString);
+//        startActivity(detailIntent);
     }
 }

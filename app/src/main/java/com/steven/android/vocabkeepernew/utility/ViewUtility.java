@@ -62,7 +62,7 @@ public class ViewUtility {
         anim.setFillBefore(true);
         anim.setFillAfter(true);
         anim.setFillEnabled(true);
-        anim.setDuration(300);
+        anim.setDuration(275);
         anim.setInterpolator(new OvershootInterpolator());
         view.startAnimation(anim);
     }
