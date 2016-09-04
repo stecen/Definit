@@ -1,13 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView android:text="sup"
-        android:layout_margin="16dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <LinearLayout
+        android:id="@+id/account_linear"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+
+        android:background="?android:attr/selectableItemBackground"
+        android:foreground="?android:attr/selectableItemBackground"
+
+        android:clickable="true"
+
+        android:paddingTop="24dp"
+        android:paddingBottom="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
 
 
-</RelativeLayout>
+        <ImageView
+            android:src="@drawable/ic_account_circle_black_24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:alpha=".54"
+
+            />
+
+        <TextView android:text="Account sync (in development)"
+
+            android:textSize="16sp"
+
+            android:layout_marginLeft="12dp"
+
+
+            android:textColor="#808080"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/settings_linear"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="?android:attr/selectableItemBackground"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:padding="16dp">
+
+        <ImageView
+            android:src="@drawable/ic_settings_black_24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:alpha=".54"
+
+            />
+
+        <TextView android:text="Settings"
+
+            android:textSize="16sp"
+
+            android:layout_marginLeft="12dp"
+
+
+            android:textColor="#808080"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/import_export_linear"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="?android:attr/selectableItemBackground"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:padding="16dp">
+
+        <ImageView
+            android:src="@drawable/ic_import_export_black_24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:alpha=".54"
+
+            />
+
+        <TextView android:text="Import / export"
+
+            android:textSize="16sp"
+
+            android:layout_marginLeft="12dp"
+
+
+            android:textColor="#808080"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/import_feedback_linear"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="?android:attr/selectableItemBackground"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:padding="16dp">
+
+        <ImageView
+            android:src="@drawable/ic_feedback_black_24dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:alpha=".54"
+
+            />
+
+        <TextView android:text="Feedback"
+
+            android:textSize="16sp"
+
+            android:layout_marginLeft="12dp"
+
+
+            android:textColor="#808080"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
+
+
+
+
+
+
+</LinearLayout>

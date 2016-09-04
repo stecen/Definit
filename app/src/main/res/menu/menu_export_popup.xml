@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/popup_menu_export_native"
+        android:title="Export for another device"/>
+    <item
+        android:id="@+id/popup_menu_import_native"
+        android:title="Import from another device"/>
+
+    <item
+        android:id="@+id/popup_menu_quizlet"
+        android:title="Export for Quizlet"/>
+</menu>

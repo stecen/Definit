@@ -402,7 +402,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 
             String query = intent.getStringExtra(SearchManager.QUERY);
 
-            if (!lastWord.equals(query)) { // if not defining the same word
+            if (true/*!lastWord.equals(query)*/) { // if not defining the same word
 
                 progressBar.setVisibility(View.VISIBLE); // clear the progress bar
 

@@ -27,6 +27,7 @@ import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocabHelper;
 import com.steven.android.vocabkeepernew.utility.DateUtility;
 import com.steven.android.vocabkeepernew.utility.PearsonAnswer;
 import com.steven.android.vocabkeepernew.utility.RecyclerViewClickListener;
+import com.steven.android.vocabkeepernew.utility.ViewUtility;
 
 import java.util.ArrayList;
 
@@ -43,8 +44,8 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
 
     CardDefExAdapter cardDefExAdapter;
 
-    public static int IS_FAVE_DRAWABLE = R.drawable.ic_star_white_24dp;
-    public static int NOT_FAVE_DRAWABLE = R.drawable.ic_star_border_white_24dp;
+    public static int IS_FAVE_DRAWABLE = R.drawable.ic_star_black_24dp;
+    public static int NOT_FAVE_DRAWABLE = R.drawable.ic_star_border_black_24dp;
 
 
 
@@ -180,6 +181,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
                     // toggle to false, and send to database. regardless of whether the sqlite succeeds, update the ui. responsive :)
                     Drawable notFaveDrawable = context.getResources().getDrawable(NOT_FAVE_DRAWABLE);
                     ((ImageView)fholder.faveImage).setImageDrawable(notFaveDrawable);
+                    ViewUtility.bOiiiNNnNNnnNGGGgggg(fholder.faveImage);
 
                     UserVocabHelper helper = UserVocabHelper.getInstance(context.getApplicationContext());
                     helper.toggleFavorite(userVocab);
@@ -187,6 +189,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
                 } else {
                     Drawable faveDrawable = context.getResources().getDrawable(IS_FAVE_DRAWABLE);
                     ((ImageView)fholder.faveImage).setImageDrawable(faveDrawable);
+                    ViewUtility.bOiiiNNnNNnnNGGGgggg(fholder.faveImage);
 
                     UserVocabHelper helper = UserVocabHelper.getInstance(context.getApplicationContext());
                     helper.toggleFavorite(userVocab);

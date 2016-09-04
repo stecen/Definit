@@ -1,5 +1,6 @@
 package com.steven.android.vocabkeepernew.showuservocab.sheet;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
 import android.os.Build;
@@ -137,10 +138,11 @@ public class SheetHistorySavedActivity extends AppCompatActivity implements Recy
 //        ArrayList<HistoryVocab> historyVocabs = helper.getHistory50();
 
         final RecyclerViewClickListener fclick = this;
+        final Context activityCtx = this;
         helper.getHistory50(new GetHistoryInterface() {
             @Override
             public void setHistoryData(ArrayList<HistoryVocab> historyVocabList) {
-                adapter = new HistoryAdapter(historyVocabList, fclick, getApplicationContext());
+                adapter = new HistoryAdapter(historyVocabList, fclick, activityCtx);
                 recyclerView.setNestedScrollingEnabled(false);
 //        recyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext()));
                 recyclerView.setAdapter(adapter);

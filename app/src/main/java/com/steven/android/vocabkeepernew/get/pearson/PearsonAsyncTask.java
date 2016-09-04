@@ -56,6 +56,8 @@ public class PearsonAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
     Context ctx;
     String wordToDefine;
 
+    boolean didFail = false;
+
     public PearsonResponseInterface pearsonResponseInterface = null;
 
     public PearsonAsyncTask(Context context, String word, PearsonResponseInterface pri) {
@@ -88,6 +90,9 @@ public class PearsonAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
     @Override
     protected void onPostExecute(PearsonAnswer pearsonAnswer) {
         super.onPostExecute(pearsonAnswer);
+        if (didFail) {
+            Toast.makeText(ctx, "Oops! :(", Toast.LENGTH_SHORT).show();
+        }
         pearsonResponseInterface.afterPearsonDefine(pearsonAnswer);
     }
 
@@ -341,6 +346,8 @@ public class PearsonAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
                 definitionExamples.partOfSpeech = "---";
 
                 pearsonAnswer.definitionExamplesList.add(definitionExamples); //same
+
+                throw new Exception(); // is this supposed to work lol
             }
 
 
@@ -353,6 +360,8 @@ public class PearsonAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
 
             pearsonAnswer.definitionExamplesList.add(definitionExamples); //same
 
+            didFail = true;
+
             Log.d("pearson","sockettimeout");
         } catch (Exception e) {
             PearsonAnswer.DefinitionExamples definitionExamples = new PearsonAnswer.DefinitionExamples();
@@ -363,7 +372,10 @@ public class PearsonAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
 
             pearsonAnswer.definitionExamplesList.add(definitionExamples); //same
 
-            Toast.makeText(ctx, "Oops! The connection failed somehow :(", Toast.LENGTH_SHORT).show();
+//            runO
+
+            didFail = true;
+//            Toast.makeText(ctx, "Oops! The connection failed somehow :(", Toast.LENGTH_SHORT).show();
 
 //            Log.d("lol", e.toString() + " WOW " + e.getStackTrace().toString());
 

@@ -22,6 +22,7 @@ import com.steven.android.vocabkeepernew.utility.PearsonAnswer;
 import com.steven.android.vocabkeepernew.R;
 import com.steven.android.vocabkeepernew.utility.RecyclerViewClickListener;
 import com.steven.android.vocabkeepernew.showuservocab.sqlite.UserVocab;
+import com.steven.android.vocabkeepernew.utility.ViewUtility;
 
 import java.util.ArrayList;
 
@@ -135,6 +136,7 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
                                         // toggle to false, and send to database. regardless of whether the sqlite succeeds, update the ui. responsive :)
                                         Drawable notFaveDrawable = context.getResources().getDrawable(NOT_FAVE_DRAWABLE);
                                         ((ImageView)faveImage).setImageDrawable(notFaveDrawable);
+                                        ViewUtility.bOiiiNNnNNnnNGGGgggg(faveImage);
 
 
                                         helper.toggleFavorite(sortedDataSet.get(position));
@@ -142,6 +144,7 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
                                     } else {
                                         Drawable faveDrawable = context.getResources().getDrawable(IS_FAVE_DRAWABLE);
                                         ((ImageView)faveImage).setImageDrawable(faveDrawable);
+                                        ViewUtility.bOiiiNNnNNnnNGGGgggg(faveImage);
 
 //                                        UserVocabHelper helper = UserVocabHelper.getInstance(context.getApplicationContext());
                                         helper.toggleFavorite(sortedDataSet.get(position));
@@ -347,6 +350,7 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
                     // toggle to false, and send to database. regardless of whether the sqlite succeeds, update the ui. responsive :)
                     Drawable notFaveDrawable = context.getResources().getDrawable(NOT_FAVE_DRAWABLE);
                     ((ImageView)faveImage).setImageDrawable(notFaveDrawable);
+                    ViewUtility.bOiiiNNnNNnnNGGGgggg(faveImage);
 
                     UserVocabHelper helper = UserVocabHelper.getInstance(context.getApplicationContext());
                     helper.toggleFavorite(userVocab);
@@ -354,6 +358,7 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
                 } else {
                     Drawable faveDrawable = context.getResources().getDrawable(IS_FAVE_DRAWABLE);
                     ((ImageView)faveImage).setImageDrawable(faveDrawable);
+                    ViewUtility.bOiiiNNnNNnnNGGGgggg(faveImage);
 
                     UserVocabHelper helper = UserVocabHelper.getInstance(context.getApplicationContext());
                     helper.toggleFavorite(userVocab);

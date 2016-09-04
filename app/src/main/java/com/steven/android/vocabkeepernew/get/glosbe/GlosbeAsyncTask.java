@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.steven.android.vocabkeepernew.settings.PreferencesActivity;
@@ -53,6 +54,8 @@ public class GlosbeAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
     Context ctx;
     String wordToDefine;
 
+    boolean didFail = false;
+
     public final static String GLOSBE_ENG_QUERY = "https://glosbe.com/gapi/translate?from=eng&dest=eng&format=json&pretty=true&phrase=";
     public final static String GLOSBE_SPA_QUERY = "https://glosbe.com/gapi/translate?from=eng&dest=spa&format=json&pretty=true&phrase=";
     public final static String GLOSBE_CHI_QUERY = "https://glosbe.com/gapi/translate?from=eng&dest=zho&format=json&pretty=true&phrase=";
@@ -89,7 +92,7 @@ public class GlosbeAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
 
         pearsonAnswer.word = wordToDefine.trim();
         PearsonAnswer.DefinitionExamples definitionExamples = new PearsonAnswer.DefinitionExamples();
-        definitionExamples. partOfSpeech = "---";
+        definitionExamples.partOfSpeech = "---";
         definitionExamples.definition = defPackage.onlineDef.get(0); // only one element right now
         definitionExamples.examples.add(DEFAULT_NO_EXAMPLE);
         definitionExamples.wordForm = headWord; //lolz // nice design pattern steven, dtiching the glosbe object
@@ -105,6 +108,9 @@ public class GlosbeAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
     protected void onPostExecute(PearsonAnswer pearsonAnswer) {
         // adapt defpack to pearson answer here
         super.onPostExecute(pearsonAnswer);
+        if (didFail) {
+            Toast.makeText(ctx, "Oops! :(", Toast.LENGTH_SHORT).show();
+        }
 
         glosbeResponseInterface.afterGlosbeDefine(pearsonAnswer);
     }
@@ -264,11 +270,15 @@ public class GlosbeAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
                 }
 
                 Log.d("lol", "error stream: \n" + sb.toString());
+
+                throw new Exception();
             }
 
 
         } catch (Exception e) {
             Log.d("lol", e.toString());
+
+            didFail = true;
         } finally {
             if (reader != null) {
                 try {

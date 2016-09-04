@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
@@ -89,6 +90,7 @@ public class FloatingWindowService extends Service {
         //display the app icon
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         ImageView icon = (ImageView) layoutInflater.inflate(R.layout.popup_icon, null);
+
         icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -191,5 +193,12 @@ public class FloatingWindowService extends Service {
 //                return false;
 //            }
 //        });
+
+        try {
+            Drawable drawable = getPackageManager().getApplicationIcon("com.steven.android.vocabkeepernew");
+            icon.setImageDrawable(drawable);
+        } catch (Exception e) {
+            Log.e("floating", e.toString());
+        }
     }
 }

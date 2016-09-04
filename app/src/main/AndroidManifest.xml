@@ -35,6 +35,10 @@
             android:theme="@style/TransAct"
             android:screenOrientation="portrait"
             />
+        
+        <activity android:name=".export.QuizletExportActivity"
+            android:theme="@style/VocabAppTheme"
+            />
 
         <!--HELP:    http://stackoverflow.com/questions/32824079/launchmode-singletask-does-not-create-a-new-task-->
         <activity android:name=".useless.TypeWordPopupActivity"
@@ -47,6 +51,12 @@
             android:theme="@style/TypeDialogTheme"
             android:windowSoftInputMode="stateVisible"
               />
+
+        <activity android:name=".export.ImportActivity"
+            android:theme="@style/VocabAppTheme"/>
+        
+        <activity android:name=".login.LoginActivity"
+            android:theme="@style/VocabAppTheme"/>
 
         <!--android:noHistory="true"-->
         <!--android:excludeFromRecents="true"-->

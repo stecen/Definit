@@ -602,61 +602,112 @@ public class UserVocabHelper extends SQLiteOpenHelper {
     }
 
     //endregion
+    public void importNative(ArrayList<UserVocab> userVocabArrayList) {
+//        ArrayList<UserVocab> userVocabArrayList = (new Gson()).fromJson(json, new TypeToken<ArrayList<UserVocab>>(){}.getType());
+        SQLiteDatabase db = getWritableDatabase();
 
+        for (int i = 0 ; i < userVocabArrayList.size() ; i++) {
+//            db.beginTransaction();
+            try {
+                ContentValues values = new ContentValues();
+                values.put(KEY_WORD, userVocabArrayList.get(i).word.trim());
+                values.put(KEY_DATE, userVocabArrayList.get(i).date);
+
+                String whereClause = String.format(Locale.US, "%s = \"%s\" AND %s = %d", KEY_WORD, userVocabArrayList.get(i).word.trim(), KEY_DATE, userVocabArrayList.get(i).date);
+                Log.e("upsert", whereClause);
+
+                // First try to update the user in case the user already exists in the database
+                // This assumes userNames are unique
+                int rows = db.update(TABLE_WORDS, values, whereClause
+                        /*KEY_WORD + "= ?"*/, /*new String[]{word}*/ null);
+
+                Log.e("upsert", "rows = " + rows);
+
+                // Check if update succeeded
+                if (rows < 1) {
+
+                    addWord(userVocabArrayList.get(i));
+//                    // Get the primary key of the user we just updated
+//                    String usersSelectQuery = String.format("SELECT %s FROM %s WHERE %s = ?",
+//                            KEY_ID, TABLE_WORDS, KEY_WORD);
+//                    Cursor cursor = db.rawQuery(usersSelectQuery, new String[]{String.valueOf(word)});
+//                    try {
+//                        if (cursor.moveToFirst()) {
+//                            userId = cursor.getInt(0);
+//                            db.setTransactionSuccessful();
+//                        }
+//                    } finally {
+//                        if (cursor != null && !cursor.isClosed()) {
+//                            cursor.close();
+//                        }
+//                    }
+                } /*else {
+                    // user with this userName did not already exist, so insert new user. todo... what?
+                    userId = db.insertOrThrow(TABLE_WORDS, null, values);
+                    db.setTransactionSuccessful();
+                }*/
+            } catch (Exception e) {
+                Log.d("userVocab", "Error while trying to add or update user");
+            } /*finally {
+                db.endTransaction();
+            }*/
+        }
+    }
 
 // region check duplicate
 // Insert or update a user in the database
-//    // Since SQLite doesn't support "upsert" we need to fall back on an attempt to UPDATE (in case the
-//    // user already exists) optionally followed by an INSERT (in case the user does not already exist).
-//    // Unfortunately, there is a bug with the insertOnConflict method
-//    // (https://code.google.com/p/android/issues/detail?id=13045) so we need to fall back to the more
-//    // verbose option of querying for the user's primary key if we did an update.
-//    public long addOrUpdateWord(String word) {
-//        // The database connection is cached so it's not expensive to call getWriteableDatabase() multiple times.
-//        SQLiteDatabase db = getWritableDatabase();
-//        long userId = -1;
-//
-//        word = word.trim();
-//
-//        db.beginTransaction();
-//        try {
-//            ContentValues values = new ContentValues();
-//            values.put(KEY_WORD, word);
-//
-//            // First try to update the user in case the user already exists in the database
-//            // This assumes userNames are unique
-//            int rows = db.update(TABLE_WORDS, values, KEY_WORD + "= ?", new String[]{word});
-//
-//            Log.e("userVocab", "rows = " + rows);
-//
-//            // Check if update succeeded
-//            if (rows == 1) {
-//                // Get the primary key of the user we just updated
-//                String usersSelectQuery = String.format("SELECT %s FROM %s WHERE %s = ?",
-//                        KEY_ID, TABLE_WORDS, KEY_WORD);
-//                Cursor cursor = db.rawQuery(usersSelectQuery, new String[]{String.valueOf(word)});
-//                try {
-//                    if (cursor.moveToFirst()) {
-//                        userId = cursor.getInt(0);
-//                        db.setTransactionSuccessful();
-//                    }
-//                } finally {
-//                    if (cursor != null && !cursor.isClosed()) {
-//                        cursor.close();
-//                    }
-//                }
-//            } else {
-//                // user with this userName did not already exist, so insert new user. todo... what?
-//                userId = db.insertOrThrow(TABLE_WORDS, null, values);
-//                db.setTransactionSuccessful();
-//            }
-//        } catch (Exception e) {
-//            Log.d("userVocab", "Error while trying to add or update user");
-//        } finally {
-//            db.endTransaction();
-//        }
-//        return userId;
-//    }
+
+    // Since SQLite doesn't support "upsert" we need to fall back on an attempt to UPDATE (in case the
+    // user already exists) optionally followed by an INSERT (in case the user does not already exist).
+    // Unfortunately, there is a bug with the insertOnConflict method
+    // (https://code.google.com/p/android/issues/detail?id=13045) so we need to fall back to the more
+    // verbose option of querying for the user's primary key if we did an update.
+    public long addOrUpdateWord(String word) {
+        // The database connection is cached so it's not expensive to call getWriteableDatabase() multiple times.
+        SQLiteDatabase db = getWritableDatabase();
+        long userId = -1;
+
+        word = word.trim();
+
+        db.beginTransaction();
+        try {
+            ContentValues values = new ContentValues();
+            values.put(KEY_WORD, word);
+
+            // First try to update the user in case the user already exists in the database
+            // This assumes userNames are unique
+            int rows = db.update(TABLE_WORDS, values, KEY_WORD + "= ?", new String[]{word});
+
+            Log.e("userVocab", "rows = " + rows);
+
+            // Check if update succeeded
+            if (rows == 1) {
+                // Get the primary key of the user we just updated
+                String usersSelectQuery = String.format("SELECT %s FROM %s WHERE %s = ?",
+                        KEY_ID, TABLE_WORDS, KEY_WORD);
+                Cursor cursor = db.rawQuery(usersSelectQuery, new String[]{String.valueOf(word)});
+                try {
+                    if (cursor.moveToFirst()) {
+                        userId = cursor.getInt(0);
+                        db.setTransactionSuccessful();
+                    }
+                } finally {
+                    if (cursor != null && !cursor.isClosed()) {
+                        cursor.close();
+                    }
+                }
+            } else {
+                // user with this userName did not already exist, so insert new user. todo... what?
+                userId = db.insertOrThrow(TABLE_WORDS, null, values);
+                db.setTransactionSuccessful();
+            }
+        } catch (Exception e) {
+            Log.d("userVocab", "Error while trying to add or update user");
+        } finally {
+            db.endTransaction();
+        }
+        return userId;
+    }
     //endregion
 
     public void deleteAllUserVocab() {

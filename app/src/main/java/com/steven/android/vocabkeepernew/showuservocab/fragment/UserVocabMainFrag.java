@@ -101,6 +101,7 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
                                        Log.e("userVocab", "" + userVocabList.size());
                                        adapter.replaceData(userVocabList);
                                        Log.e("adapter count",""+ adapter.getItemCount());
+                                       dataSet = adapter.sortedDataSet;
                                    }
                                },
                 UserVocabHelper.GET_ALL); // then get ALL of them!
@@ -189,6 +190,7 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
                 Log.e("userVocab", "" + userVocabList.size());
                 adapter.replaceData(userVocabList);
                 Log.e("adapter count",""+ adapter.getItemCount());
+                dataSet = adapter.sortedDataSet; // probably not needed due to java references
             }
         },
         UserVocabHelper.GET_ALL);

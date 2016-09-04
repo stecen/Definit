@@ -32,6 +32,7 @@ import com.steven.android.vocabkeepernew.R;
 import com.steven.android.vocabkeepernew.get.sqlite.DictionaryDatabaseHelper;
 import com.steven.android.vocabkeepernew.input.ClipboardWatcherService;
 import com.steven.android.vocabkeepernew.settings.PreferencesActivity;
+import com.steven.android.vocabkeepernew.show.SearchAndShowActivity;
 import com.steven.android.vocabkeepernew.showuservocab.fragment.DetailsFrag;
 import com.steven.android.vocabkeepernew.showuservocab.fragment.UserVocabMainFrag;
 import com.steven.android.vocabkeepernew.utility.RecyclerViewClickListener;
@@ -263,10 +264,15 @@ public class UserVocabActivity extends AppCompatActivity implements /*RecyclerVi
 
 //        animationText = (TextView) findViewById(R.id.animation_text);
 
+        final Context ctx = this;
         fab.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View view) {
+                Intent defineIntent = new Intent(ctx, SearchAndShowActivity.class);
+//                defineIntent.putExtra(SearchAndShowActivity.SENT_WORD, query);
+                defineIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(defineIntent);
 
 //                UserVocabMainFrag fragment = (UserVocabMainFrag) finalAdapter.instantiateItem(viewPager, 0);
 //                Log.e("fab", "pressed " + fragment.adapter.getItemCount());
@@ -313,9 +319,15 @@ public class UserVocabActivity extends AppCompatActivity implements /*RecyclerVi
 //    }
 
     @Override
+    public void onPause() {
+        fab.hide();
+        super.onPause();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
-
+        fab.show();
 
 //        StringBuilder sb = new StringBuilder();
 //        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);

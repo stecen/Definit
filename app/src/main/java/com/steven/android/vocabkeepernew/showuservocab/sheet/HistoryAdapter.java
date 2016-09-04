@@ -43,7 +43,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView wordText, dateHeaderText, timeText;
         TextView exampleText;
-        View fillerView;
+        View fillerView, upperShadow;
         RelativeLayout colorView;
         RelativeLayout headerRelative;
         LinearLayout mainLinear;
@@ -55,6 +55,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             headerRelative = (RelativeLayout) v.findViewById(R.id.item_user_vocab_recycler_dateheader);
             timeText = (TextView) v.findViewById(R.id.sheet_time_text);
             mainLinear = (LinearLayout) v.findViewById(R.id.main_linear_history);
+            upperShadow = (View) v.findViewById(R.id.upper_shadow);
 
             final LinearLayout frel = mainLinear;
             mainLinear.setOnClickListener(this);
@@ -143,6 +144,11 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         if (position != 0 && !(date.equals(prevDate))) {
             holder.headerRelative.setVisibility(View.VISIBLE);
             holder.dateHeaderText.setText(date);
+            if (position == 0) {
+                holder.upperShadow.setVisibility(View.GONE);
+            } else {
+                holder.upperShadow.setVisibility(View.VISIBLE);
+            }
         } else if (position != 0) {
 //            holder.dateHeaderText.setText(" "); // if is the same date as yesterday
             holder.headerRelative.setVisibility(View.GONE);
@@ -150,7 +156,14 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             holder.headerRelative.setVisibility(View.VISIBLE);
             holder.dateHeaderText.setPadding(0,0,0,0);
             holder.dateHeaderText.setText(date);
+            if (position == 0) {
+                holder.upperShadow.setVisibility(View.GONE);
+            } else {
+                holder.upperShadow.setVisibility(View.VISIBLE);
+            }
         }
+
+
 
         holder.timeText.setText(DateUtility.getTime(historyVocab.date));
 

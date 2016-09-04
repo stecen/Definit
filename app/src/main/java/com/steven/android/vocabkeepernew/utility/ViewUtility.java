@@ -5,13 +5,19 @@ import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Build;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewAnimationUtils;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
+import android.view.animation.LinearInterpolator;
 import android.view.animation.OvershootInterpolator;
+import android.view.animation.RotateAnimation;
 import android.view.animation.ScaleAnimation;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -57,7 +63,8 @@ public class ViewUtility {
     }
 
     public static void zoomIntoView(View view) {
-        ScaleAnimation anim = new ScaleAnimation(0,1,0,1/*,    50, 50*/);
+        ScaleAnimation anim = new ScaleAnimation(0,1,0,1,/*,    50, 50*/ Animation.RELATIVE_TO_SELF, .5f,
+                Animation.RELATIVE_TO_SELF, .5f);
 //        new ScaleAnimation()
         anim.setFillBefore(true);
         anim.setFillAfter(true);
@@ -68,7 +75,9 @@ public class ViewUtility {
     }
 
     public static void zoomOut(View view) {
-        ScaleAnimation anim = new ScaleAnimation(1,0,1,0/*,    50, 50*/);
+        ScaleAnimation anim = new ScaleAnimation(1,0,1,0/*,*//*,    50, 50*//* Animation.RELATIVE_TO_SELF, 1f,
+                Animation.RELATIVE_TO_SELF, 1f*/);
+
 //        new ScaleAnimation()
         anim.setFillBefore(true);
         anim.setFillAfter(true);
@@ -76,6 +85,45 @@ public class ViewUtility {
         anim.setDuration(100);
         anim.setInterpolator(new OvershootInterpolator());
         view.startAnimation(anim);
+    }
+
+    public static void bOiiiNNnNNnnNGGGgggg(View view) {
+        final int boingDur = 100;
+
+        RotateAnimation anim = new RotateAnimation(0, 360,
+                Animation.RELATIVE_TO_SELF, .5f,
+                Animation.RELATIVE_TO_SELF, .5f);
+        anim.setDuration(100);
+        anim.setInterpolator(new DecelerateInterpolator());
+        view.startAnimation(anim);
+
+//        ScaleAnimation anim = new ScaleAnimation(1, 1.1f, 1, 1.1f/*,    50, 50*/);
+////        new ScaleAnimation()
+//        anim.setFillBefore(true);
+//        anim.setFillAfter(true);
+//        anim.setFillEnabled(true);
+//        anim.setDuration(boingDur);
+//        anim.setInterpolator(new OvershootInterpolator());
+//        view.startAnimation(anim);
+//
+//        final Handler handler = new Handler();
+//        final View fView = view;
+//
+//        handler.postDelayed(new Runnable() {
+//            @Override
+//            public void run() {
+//                ScaleAnimation anim2 = new ScaleAnimation(1.1f, 1, 1.1f, 1/*,    50, 50*/);
+////        new ScaleAnimation()
+//                anim2.setFillBefore(true);
+//                anim2.setFillAfter(true);
+//                anim2.setFillEnabled(true);
+//                anim2.setDuration(boingDur);
+//                anim2.setInterpolator(new OvershootInterpolator());
+//                fView.startAnimation(anim2);
+//            }
+//        }, boingDur);
+
+
     }
 
 

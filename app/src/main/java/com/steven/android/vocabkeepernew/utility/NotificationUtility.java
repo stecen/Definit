@@ -6,8 +6,10 @@ import android.app.PendingIntent;
 import android.app.RemoteInput;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v7.app.NotificationCompat;
+import android.util.Log;
 
 import com.steven.android.vocabkeepernew.R;
 import com.steven.android.vocabkeepernew.input.RelaySpeechActivity;
@@ -57,8 +59,9 @@ public class NotificationUtility {
 //                .addAction(pasteAction)
 //                .addAction(android.R.drawable.arrow_up_float, "Custom", typeWordPendingIntent) // use stop action
                     .setContentIntent(typeWordPendingIntent) // use add pending intent
-                    .setSmallIcon(R.drawable.definit_icon_bs)
+//                    .setSmallIcon(R.drawable.definit_icon_bs)
                     .setPriority(Notification.PRIORITY_LOW);
+
 
             Intent speechIntent = new Intent(context.getApplicationContext(), RelaySpeechActivity.class);
             speechIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //todo: revise flags
