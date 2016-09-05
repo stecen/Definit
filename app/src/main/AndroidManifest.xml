@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.steven.android.vocabkeepernew" >
+    package="com.scentric.android.definit" >
     <uses-permission android:name="ANDROID.PERMISSION.INTERNET"/>
     <uses-permission android:name="ANDROID.PERMISSION.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -19,7 +19,7 @@
             <!--android:value=".show.SearchAndShowActivity"/>-->
 
         <activity
-            android:name=".showuservocab.UserVocabActivity"
+            android:name="com.scentric.android.definit.showuservocab.UserVocabActivity"
             android:label="@string/app_name"
             android:theme="@style/VocabAppTheme"
             android:launchMode="singleTop">
@@ -31,17 +31,17 @@
 
         </activity>
 
-        <activity android:name=".showuservocab.UserDetailsActivity"
+        <activity android:name="com.scentric.android.definit.showuservocab.UserDetailsActivity"
             android:theme="@style/TransAct"
             android:screenOrientation="portrait"
             />
         
-        <activity android:name=".export.QuizletExportActivity"
+        <activity android:name="com.scentric.android.definit.export.QuizletExportActivity"
             android:theme="@style/VocabAppTheme"
             />
 
         <!--HELP:    http://stackoverflow.com/questions/32824079/launchmode-singletask-does-not-create-a-new-task-->
-        <activity android:name=".useless.TypeWordPopupActivity"
+        <activity android:name="com.scentric.android.definit.useless.TypeWordPopupActivity"
             android:label="Define word"
 
         android:taskAffinity=""
@@ -52,10 +52,10 @@
             android:windowSoftInputMode="stateVisible"
               />
 
-        <activity android:name=".export.ImportActivity"
+        <activity android:name="com.scentric.android.definit.export.ImportActivity"
             android:theme="@style/VocabAppTheme"/>
         
-        <activity android:name=".login.LoginActivity"
+        <activity android:name="com.scentric.android.definit.login.LoginActivity"
             android:theme="@style/VocabAppTheme"/>
 
         <!--android:noHistory="true"-->
@@ -63,19 +63,19 @@
         <!--http://stackoverflow.com/questions/3282204/android-open-dialogue-activity-without-opening-main-activity-behind-it-->
 
 
-        <activity android:name=".settings.PreferencesActivity"
+        <activity android:name="com.scentric.android.definit.settings.PreferencesActivity"
             android:theme="@style/PreferencesTheme"
             android:label="Settings"
 
-            android:parentActivityName=".showuservocab.UserVocabActivity" >
+            android:parentActivityName="com.scentric.android.definit.showuservocab.UserVocabActivity" >
         <!-- Parent activity meta-data to support 4.0 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".showuservocab.UserVocabActivity" />
+                android:value="com.scentric.android.definit.showuservocab.UserVocabActivity" />
                 />
         </activity>
 
-        <activity android:name=".useless.DisplayDefinitionPopupActivity"
+        <activity android:name="com.scentric.android.definit.useless.DisplayDefinitionPopupActivity"
             android:theme="@style/VocabDialogTheme"
             android:label="Definition"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -89,7 +89,7 @@
 
             />
 
-        <activity android:name=".show.SearchAndShowActivity"
+        <activity android:name="com.scentric.android.definit.show.SearchAndShowActivity"
             android:theme="@style/VocabDialogTheme"
             android:label="Definition"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -131,18 +131,18 @@
     <!--             http://stackoverflow.com/questions/1979369/android-activity-as-a-dialog-->
 
         <service
-            android:name=".useless.VocabService"
+            android:name="com.scentric.android.definit.useless.VocabService"
             android:exported="false"/>
 
-        <service android:name=".input.ClipboardWatcherService" />
+        <service android:name="com.scentric.android.definit.input.ClipboardWatcherService" />
 
-        <service android:name=".input.FloatingWindowService"/>
+        <service android:name="com.scentric.android.definit.input.FloatingWindowService"/>
 
-        <service android:name=".input.UserVocabInsertService"/>
+        <service android:name="com.scentric.android.definit.input.UserVocabInsertService"/>
 
-        <service android:name=".input.ClipboardInputService"/>
+        <service android:name="com.scentric.android.definit.input.ClipboardInputService"/>
 
-        <activity android:name=".input.RelaySpeechActivity"
+        <activity android:name="com.scentric.android.definit.input.RelaySpeechActivity"
             android:launchMode="singleInstance"
             android:label="Speech"
             android:taskAffinity=""
@@ -150,7 +150,7 @@
         android:theme="@style/Theme.Transparent"
             />
         
-        <activity android:name=".showuservocab.sheet.SheetHistorySavedActivity"
+        <activity android:name="com.scentric.android.definit.showuservocab.sheet.SheetHistorySavedActivity"
             android:label="History"
             android:excludeFromRecents="true"
 android:theme="@style/HistoryTheme"
