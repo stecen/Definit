@@ -8,7 +8,7 @@
     tools:context=".showuservocab.UserVocabActivity">
     <!--android:fitsSystemWindows="true"-->
 
-
+    <!--todo: remove this relative layout-->
     <RelativeLayout
         android:id="@+id/fragments_go_here"
         android:layout_width="match_parent"

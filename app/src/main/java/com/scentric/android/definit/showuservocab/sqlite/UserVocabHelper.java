@@ -78,6 +78,7 @@ public class UserVocabHelper extends SQLiteOpenHelper {
 
         Log.e("addWordHist", historyVocab.word + " " + historyVocab.date);
 
+
         // It's a good idea to wrap our insert in a transaction. This helps with performance and ensures
         // consistency of the database.
         db.beginTransaction();

@@ -72,20 +72,30 @@ public class DateUtility {
                 splitted[1] = Integer.toString(dayInt);
             }
 
+            if (dayInt < 10) {
+                splitted[1] = Integer.toString(dayInt);
+            }
+
+
             String superscript = "";
-            switch (dayInt % 10) { // first, second third, ..
-                case 1:
-                    superscript = "st";
-                    break;
-                case 2:
-                    superscript = "nd";
-                    break;
-                case 3:
-                    superscript = "rd";
-                    break;
-                default:
-                    superscript = "th";
-                    break;
+            if (dayInt != 11) {
+
+                switch (dayInt % 10) { // first, second third, ..
+                    case 1:
+                        superscript = "st";
+                        break;
+                    case 2:
+                        superscript = "nd";
+                        break;
+                    case 3:
+                        superscript = "rd";
+                        break;
+                    default:
+                        superscript = "th";
+                        break;
+                }
+            } else {
+                superscript = "th";
             }
             return (month[monthInt] + " " + splitted[1] + superscript);
         } else {
