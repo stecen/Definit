@@ -63,10 +63,6 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
         for (int i = 0; i < 500; i++) {
             disLen[i] = -1; // unvisited
         }
-
-//        setHasStableIds(true);
-//            abbr.put("preposition", "prep.");
-//            abbr.put("conjunction", "conj.");
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
