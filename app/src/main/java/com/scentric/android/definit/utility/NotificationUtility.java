@@ -49,7 +49,7 @@ public class NotificationUtility {
 //                .build();
 
         // quick reply :D
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) { // TODO!!! CENTRALIZE WITH NOTIFICAITON CREATION IN SEARCHANDSHOWACTIVITY
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) { // TODO: CENTRALIZE WITH NOTIFICAITON CREATION IN SEARCHANDSHOWACTIVITY
             Notification.Builder builder = new Notification.Builder(context)
                     .setContentTitle("Define a word...")
                     .setSubText("Definit")
@@ -57,7 +57,7 @@ public class NotificationUtility {
 //                .addAction(pasteAction)
 //                .addAction(android.R.drawable.arrow_up_float, "Custom", typeWordPendingIntent) // use stop action
                     .setContentIntent(typeWordPendingIntent) // use add pending intent
-//                    .setSmallIcon(R.drawable.definit_icon_bs)
+                    .setSmallIcon(R.drawable.definit_icon_bs)
                     .setPriority(Notification.PRIORITY_LOW);
 
 
