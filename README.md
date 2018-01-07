@@ -7,14 +7,29 @@ Another key feature that separates it from dictionaries I had previously used wa
 
 Development in Android Studio, targeting Nougat devices with support down to KitKat, opened a path to gain experience regarding Android support issues floating windows, fragments, service and activity management, SQL, networking, UX and UI design.
 
-![](imgs/main.png | width=100)
+![](imgs/main.png) {
+  width: 40%;
+  height: 40%
+}
 
 The main screen of the app, showing definitions saved by the user -- notice support for Chinese (and Spanish but it's not shown)!
 Other tabs include user-favorited words, search history, and user preferences.
 
-![](imgs/c1.png | width=100)
-![](imgs/c2.png | width=100)
-![](imgs/c3.png | width=100)
-![](imgs/c4.png | width=100)
+![](imgs/c1.png) {
+  width: 40%;
+  height: 40%
+}
+![](imgs/c2.png) {
+  width: 40%;
+  height: 40%
+}
+![](imgs/c3.png) {
+  width: 40%;
+  height: 40%
+}
+![](imgs/c4.png) {
+  width: 40%;
+  height: 40%
+}
 
 The process of defining a word "from any screen" with the pasteboard.
