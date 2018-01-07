@@ -12,4 +12,9 @@ Development in Android Studio, targeting Nougat devices with support down to Kit
 The main screen of the app, showing definitions saved by the user -- notice support for Chinese (and Spanish but it's not shown)!
 Other tabs include user-favorited words, search history, and user preferences.
 
-[![Alt text](https://www.youtube.com/watch?v=peFRmzGGoT8&feature=youtu.be)](https://www.youtube.com/watch?v=peFRmzGGoT8&feature=youtu.be)
+![Alt text](imgs/c1.png?raw=true "copy1")
+![Alt text](imgs/c2.png?raw=true "copy2")
+![Alt text](imgs/c3.png?raw=true "copy3")
+![Alt text](imgs/c4.png?raw=true "copy4")
+
+The process of defining a word "from any screen" with the pasteboard.
