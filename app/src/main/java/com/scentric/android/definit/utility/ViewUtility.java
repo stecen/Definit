@@ -50,13 +50,13 @@ public class ViewUtility {
 
             anim.start();
         } else {
-        //    // make the view visible and start the animation
+            //    // make the view visible and start the animation
             myView.setVisibility(View.VISIBLE);
         }
     }
 
     public static void zoomIntoView(View view) {
-        ScaleAnimation anim = new ScaleAnimation(0,1,0,1,/*,    50, 50*/ Animation.RELATIVE_TO_SELF, .5f,
+        ScaleAnimation anim = new ScaleAnimation(0, 1, 0, 1,/*,    50, 50*/ Animation.RELATIVE_TO_SELF, .5f,
                 Animation.RELATIVE_TO_SELF, .5f);
 //        new ScaleAnimation()
         anim.setFillBefore(true);
@@ -68,7 +68,7 @@ public class ViewUtility {
     }
 
     public static void zoomOut(View view) {
-        ScaleAnimation anim = new ScaleAnimation(1,0,1,0/*,*//*,    50, 50*//* Animation.RELATIVE_TO_SELF, 1f,
+        ScaleAnimation anim = new ScaleAnimation(1, 0, 1, 0/*,*//*,    50, 50*//* Animation.RELATIVE_TO_SELF, 1f,
                 Animation.RELATIVE_TO_SELF, 1f*/);
 
 //        new ScaleAnimation()
@@ -118,7 +118,6 @@ public class ViewUtility {
 
 
     }
-
 
 
     public static void circleExit(View view) {
@@ -251,17 +250,17 @@ public class ViewUtility {
         return textView;
     }
 
-    public static float convertDpToPixel(float dp, Context context){
+    public static float convertDpToPixel(float dp, Context context) {
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
-        float px = dp * ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+        float px = dp * ((float) metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
         return px;
     }
 
-    public static float convertPixelsToDp(float px, Context context){
+    public static float convertPixelsToDp(float px, Context context) {
         Resources resources = context.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
-        float dp = px / ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+        float dp = px / ((float) metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
         return dp;
     }
 }

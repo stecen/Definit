@@ -20,7 +20,7 @@ public class ClipboardInputService extends IntentService { // from the notificat
 
     @Override
     public void onHandleIntent(Intent intent) {
-        Log.e("clipinput","handling...");
+        Log.e("clipinput", "handling...");
         ClipboardManager cb = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
         if (cb.hasPrimaryClip()) {
             ClipData cd = cb.getPrimaryClip();

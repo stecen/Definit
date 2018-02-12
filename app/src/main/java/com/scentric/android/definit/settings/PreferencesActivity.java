@@ -1,4 +1,5 @@
 package com.scentric.android.definit.settings;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -37,7 +38,7 @@ public class PreferencesActivity extends AppCompatActivity {
         // commit changes made in settings...
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 //        String strUserName = SP.getString("username", "NA");
-        boolean doPaste = SP.getBoolean("paste",false);
+        boolean doPaste = SP.getBoolean("paste", false);
         boolean doShortcut = SP.getBoolean("shortcut", false);
 //        String downloadType = SP.getString("downloadType","1");
 
@@ -54,11 +55,9 @@ public class PreferencesActivity extends AppCompatActivity {
         }
     }
 
-    public static class MyPreferenceFragment extends PreferenceFragment
-    {
+    public static class MyPreferenceFragment extends PreferenceFragment {
         @Override
-        public void onCreate(final Bundle savedInstanceState)
-        {
+        public void onCreate(final Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             addPreferencesFromResource(R.xml.preferences);
         }

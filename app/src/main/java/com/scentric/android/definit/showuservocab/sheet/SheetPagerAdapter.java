@@ -10,7 +10,7 @@ import android.support.v4.app.FragmentPagerAdapter;
  */
 public class SheetPagerAdapter extends FragmentPagerAdapter {
     final int PAGE_COUNT = 2;
-    private String tabTitles[] = new String[] { "Search History", "Saved" };
+    private String tabTitles[] = new String[]{"Search History", "Saved"};
     private Context context;
 
     public SheetPagerAdapter(FragmentManager fm, Context context) {

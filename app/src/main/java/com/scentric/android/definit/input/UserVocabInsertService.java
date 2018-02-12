@@ -24,26 +24,19 @@ public class UserVocabInsertService extends IntentService {
     //todo: option for user to enter their own definitions
 
 
-
-
     // the UserVocab  sent by DisplayDefinitionPopupActivity are "malformed". All of their defExLists should have > 1 length if the user selects multiple defnitions
     // of the same wordForm, but they don't so it is up to this class to combine these defExLists if their words are the same
-
 
 
     @Override
     protected void onHandleIntent(Intent intent) {
 //        UserVocab userVocab = (new Gson()).fromJson(intent.getStringExtra(JSON_KEY), UserVocab.class);
-        ArrayList<UserVocab> userVocabList = (new Gson()).fromJson(intent.getStringExtra(JSON_KEY), new TypeToken<ArrayList<UserVocab>>(){}.getType());
+        ArrayList<UserVocab> userVocabList = (new Gson()).fromJson(intent.getStringExtra(JSON_KEY), new TypeToken<ArrayList<UserVocab>>() {
+        }.getType());
 
         Log.e("intent", "received intent for " + intent.getStringExtra(JSON_KEY));
 
         UserVocabHelper helper = UserVocabHelper.getInstance(getApplicationContext());
-
-//        for (int i = 0; i < userVocabList.size(); i++) {
-//            helper.addWord(userVocabList.get(i));
-//        }
-
 
 
         String lastWord = userVocabList.get(0).word.trim();
@@ -56,10 +49,8 @@ public class UserVocabInsertService extends IntentService {
         for (int i = 0; i < userVocabList.size(); i++) {
             if (userVocabList.get(i).word.trim().equals(lastWord)) { // same word so package into the same UserVocab for the database so it display as one word. but if it's the last word just send it anyway
                 toSend.listOfDefEx.add(userVocabList.get(i).listOfDefEx.get(0)); // length 1
-            }
-            else { // new wordform, so send this one off and create a new toSend
+            } else { // new wordform, so send this one off and create a new toSend
                 helper.addWord(toSend);
-
 
 
                 //reset
@@ -73,7 +64,7 @@ public class UserVocabInsertService extends IntentService {
                 toSend.listOfDefEx.add(userVocabList.get(i).listOfDefEx.get(0));
             }
 
-            if (i == userVocabList.size()-1) { // last one lol
+            if (i == userVocabList.size() - 1) { // last one lol
                 helper.addWord(toSend);
             }
         }

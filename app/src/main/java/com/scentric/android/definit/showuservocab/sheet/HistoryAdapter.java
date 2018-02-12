@@ -12,10 +12,10 @@ import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.scentric.android.definit.R;
 import com.scentric.android.definit.showuservocab.sqlite.HistoryVocab;
 import com.scentric.android.definit.showuservocab.sqlite.UserVocabHelper;
 import com.scentric.android.definit.utility.DateUtility;
-import com.scentric.android.definit.R;
 import com.scentric.android.definit.utility.RecyclerViewClickListener;
 
 import java.util.ArrayList;
@@ -26,7 +26,7 @@ import java.util.ArrayList;
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
     public ArrayList<HistoryVocab> sortedDataSet;
     private RecyclerViewClickListener itemListener;
-    private boolean  mySelected[] = new boolean[500]; //todo: increase
+    private boolean mySelected[] = new boolean[500]; //todo: increase
     public boolean surpressGray; // when finishing activiting only.
     private Context context;
 
@@ -62,38 +62,38 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             mainLinear.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View view) {
-                        final int position = getLayoutPosition();
-                        Log.e("mainRelative", "onLongClick for popup: " + sortedDataSet.get(position).word);
-                        PopupMenu popupMenu = new PopupMenu(context, frel); // mainRelative
-                        popupMenu.getMenuInflater().inflate(R.menu.menu_history_popup, popupMenu.getMenu());
+                    final int position = getLayoutPosition();
+                    Log.e("mainRelative", "onLongClick for popup: " + sortedDataSet.get(position).word);
+                    PopupMenu popupMenu = new PopupMenu(context, frel); // mainRelative
+                    popupMenu.getMenuInflater().inflate(R.menu.menu_history_popup, popupMenu.getMenu());
 
-                        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                            @Override
-                            public boolean onMenuItemClick(MenuItem item) {
-                                Log.e("popup", "you clicked " + item.getTitle() + " " + item.getItemId());
-                                switch (item.getItemId()) {
-                                    case R.id.popup_menu_delete:
-                                        Log.e("popup", "delete");
+                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            Log.e("popup", "you clicked " + item.getTitle() + " " + item.getItemId());
+                            switch (item.getItemId()) {
+                                case R.id.popup_menu_delete:
+                                    Log.e("popup", "delete");
 
 
-                                        UserVocabHelper helper = UserVocabHelper.getInstance(context);
-                                        helper.deleteHistory(sortedDataSet.get(position));
+                                    UserVocabHelper helper = UserVocabHelper.getInstance(context);
+                                    helper.deleteHistory(sortedDataSet.get(position));
 
-                                        sortedDataSet.remove(position);
-                                        notifyItemRemoved(position);
+                                    sortedDataSet.remove(position);
+                                    notifyItemRemoved(position);
 //                                    notifyDataSetChanged();
-                                        break;
-                                    default:
-                                        break;
-                                }
-                                return false;
+                                    break;
+                                default:
+                                    break;
                             }
-                        });
+                            return false;
+                        }
+                    });
 
-                        popupMenu.show();
+                    popupMenu.show();
 
-                        return false;
-                    }
+                    return false;
+                }
 
             });
         }
@@ -126,7 +126,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
     public void onBindViewHolder(ViewHolder holder, int position) {
         final int pos = position;
 
-        Log.e("adapter","called for " + pos);
+        Log.e("adapter", "called for " + pos);
 
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
@@ -138,7 +138,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         String date = DateUtility.getFullDate(historyVocab.date, "MM/dd");
         String prevDate = " ";
         if (position != 0) {
-            prevDate = (DateUtility.getFullDate(sortedDataSet.get(position-1).date, "MM/dd"));
+            prevDate = (DateUtility.getFullDate(sortedDataSet.get(position - 1).date, "MM/dd"));
         }
 //        Log.e("datecmp", date + " vs " + prevDate + "...    " + date.equals(prevDate));
         if (position != 0 && !(date.equals(prevDate))) {
@@ -154,7 +154,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             holder.headerRelative.setVisibility(View.GONE);
         } else { // exclusive for pos == 0
             holder.headerRelative.setVisibility(View.VISIBLE);
-            holder.dateHeaderText.setPadding(0,0,0,0);
+            holder.dateHeaderText.setPadding(0, 0, 0, 0);
             holder.dateHeaderText.setText(date);
             if (position == 0) {
                 holder.upperShadow.setVisibility(View.GONE);
@@ -164,25 +164,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         }
 
 
-
         holder.timeText.setText(DateUtility.getTime(historyVocab.date));
 
-//        String date = DateUtility.getHumanifiedDate(historyVocab.date, "MM/dd");
-//        String prevDate = " ";
-//
-//        if (position != 0) {
-//            prevDate = (DateUtility.getHumanifiedDate(sortedDataSet.get(position-1).date, "MM/dd"));
-//        }
-//
-//
-////        Log.e("datecmp", date + " vs " + prevDate + "...    " + date.equals(prevDate));
-//        if (position != 0 && !(date.equals(prevDate))) {
-//            holder.dateText.setText(date);
-//        } else if (position != 0) {
-//            holder.dateText.setText(" "); // if is the same date as yesterday
-//        } else {
-//            holder.dateText.setText(date);
-//        }
     }
 
     public void replaceData(ArrayList<HistoryVocab> list) {

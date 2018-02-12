@@ -42,7 +42,7 @@ public class ImportActivity extends AppCompatActivity {
             Log.e("tool", "Setting support toolbar...");
             setSupportActionBar(toolbar);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                if (appBarLayout  != null) {
+                if (appBarLayout != null) {
                     appBarLayout.setElevation(8);
 //                    toolbar.setElevation(0);
                 }

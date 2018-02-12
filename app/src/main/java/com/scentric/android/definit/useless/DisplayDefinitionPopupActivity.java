@@ -35,16 +35,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.scentric.android.definit.get.glosbe.GlosbeAsyncTask;
-import com.scentric.android.definit.show.PearsonAdapter;
-import com.scentric.android.definit.utility.RecyclerViewClickListener;
-import com.scentric.android.definit.utility.DividerItemDecoration;
-import com.scentric.android.definit.utility.PearsonAnswer;
 import com.scentric.android.definit.R;
+import com.scentric.android.definit.get.glosbe.GlosbeAsyncTask;
 import com.scentric.android.definit.get.glosbe.GlosbeResponseInterface;
 import com.scentric.android.definit.get.pearson.PearsonAsyncTask;
 import com.scentric.android.definit.get.pearson.PearsonResponseInterface;
+import com.scentric.android.definit.show.PearsonAdapter;
+import com.scentric.android.definit.utility.DividerItemDecoration;
+import com.scentric.android.definit.utility.PearsonAnswer;
 import com.scentric.android.definit.utility.PearsonComparator;
+import com.scentric.android.definit.utility.RecyclerViewClickListener;
 import com.scentric.android.definit.utility.ViewUtility;
 
 import java.util.ArrayList;
@@ -64,7 +64,7 @@ import jp.wasabeef.recyclerview.animators.FadeInRightAnimator;
 
 public class DisplayDefinitionPopupActivity extends AppCompatActivity implements PearsonResponseInterface, GlosbeResponseInterface, RecyclerViewClickListener {
     TextView wordText /*defText, defText2*/, toolbarText;
-//    ListView defExListView;
+    //    ListView defExListView;
     FloatingActionButton fab;
     FrameLayout frame;
     ProgressBar progressBar;
@@ -81,7 +81,7 @@ public class DisplayDefinitionPopupActivity extends AppCompatActivity implements
     public static boolean shouldShowPreviousTypeWordPopup = true; // self explanatory. but the only time this activity finishes when this is true is when the user presses the system back button
 
     public static final String SENT_WORD = "sent_word";
-//    public static final String SENT_DEF = "send_def";
+    //    public static final String SENT_DEF = "send_def";
     public static final String SENT_PACKAGE_JSON = "send_package_json";
 
     private static final String PEARSON_JSON = "pearson_json";
@@ -176,7 +176,7 @@ public class DisplayDefinitionPopupActivity extends AppCompatActivity implements
         ActionBar actionBar = getSupportActionBar();
 //        actionBar.setDisplayHomeAsUpEnabled(true);
 
-        String sent  = getIntent().getStringExtra(DisplayDefinitionPopupActivity.SENT_WORD);
+        String sent = getIntent().getStringExtra(DisplayDefinitionPopupActivity.SENT_WORD);
         toolbarText.setText(sent);
 
 
@@ -203,7 +203,7 @@ public class DisplayDefinitionPopupActivity extends AppCompatActivity implements
 //        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0); // hide
         View view = this.getCurrentFocus();
         if (view != null) {
-            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
 
@@ -227,11 +227,11 @@ public class DisplayDefinitionPopupActivity extends AppCompatActivity implements
 
                 int width = fview.getMeasuredWidth();
                 int height = fview.getHeight();
-                Log.e("viewcf", String.format("(%d, %d) vs (%f, %f)", width, height, screenWidth*.6, screenHeight *.6));
+                Log.e("viewcf", String.format("(%d, %d) vs (%f, %f)", width, height, screenWidth * .6, screenHeight * .6));
                 int widthdp = Math.round(ViewUtility.convertPixelsToDp(width, getApplicationContext()));
                 int heightdp = Math.round(ViewUtility.convertPixelsToDp(height, getApplicationContext()));
 
-                int newHeight = (int)Math.round(screenHeight * .64);
+                int newHeight = (int) Math.round(screenHeight * .64);
                 frame.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, newHeight));
                 Log.e("viewcf", String.format("Settings new height to %d px, or %d dp", newHeight, Math.round(ViewUtility.convertPixelsToDp(newHeight, getApplicationContext()))));
 
@@ -266,7 +266,6 @@ public class DisplayDefinitionPopupActivity extends AppCompatActivity implements
 //        callbackAsyncTask.execute();
 
 
-
 ////        toolbarText.animate().translationX(100);
 //        TranslateAnimation translateAnimation = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 20.0f,
 //                Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f);
@@ -292,31 +291,10 @@ public class DisplayDefinitionPopupActivity extends AppCompatActivity implements
 
     @Override
     public void onNewIntent(Intent intent) {
-        Log.e( "onNewIntent", "wat");
-
-
-
-
-
-
-
-
-
-
+        Log.e("onNewIntent", "wat");
 
 
         // todo: remove getdefinitions to a sep. function
-
-
-
-
-
-
-
-
-
-
-
 
 
         String sent = intent.getStringExtra(DisplayDefinitionPopupActivity.SENT_WORD);
@@ -349,7 +327,7 @@ public class DisplayDefinitionPopupActivity extends AppCompatActivity implements
                     public void run() {
                         recyclerAdapter.add(finalSorted.get(idx));
                         Log.e("callbackfk", idx + " " + finalSorted.size());
-                        if (idx == finalSorted.size()-1) {
+                        if (idx == finalSorted.size() - 1) {
 //                            Toast.makeText(getApplicationContext(), "wtf", Toast.LENGTH_SHORT).show();
                             readjustCoordHeight();
                         }
@@ -359,7 +337,7 @@ public class DisplayDefinitionPopupActivity extends AppCompatActivity implements
 
             }
             // if only one element, still have to readjust
-            if (finalDataSet.size()== 1) {
+            if (finalDataSet.size() == 1) {
                 readjustCoordHeight();
             }
         }
@@ -367,7 +345,7 @@ public class DisplayDefinitionPopupActivity extends AppCompatActivity implements
     }
 
     @Override
-    protected void onDestroy(){
+    protected void onDestroy() {
         Log.e("display", "onDestroy");
 
         // :(( according to this stack overflow guy http://stackoverflow.com/questions/3282204/android-open-dialogue-activity-without-opening-main-activity-behind-it
@@ -402,10 +380,10 @@ public class DisplayDefinitionPopupActivity extends AppCompatActivity implements
                 public void run() {
                     finish();
                 }
-            }, REMOVE_DURATION+50);
+            }, REMOVE_DURATION + 50);
 
 
-        } else  if (source == TOUCH_OUTSIDE && finishedGetting == true) {
+        } else if (source == TOUCH_OUTSIDE && finishedGetting == true) {
             if (TypeWordPopupActivity.typeWordPopupActivity != null) {
                 TypeWordPopupActivity.typeWordPopupActivity.finishMe();
             }
@@ -433,7 +411,7 @@ public class DisplayDefinitionPopupActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void recyclerViewListClicked(View v, int position){
+    public void recyclerViewListClicked(View v, int position) {
 //        int fw = frame.getMeasuredWidth();
 //        int fh = frame.getMeasuredHeight();
 //        int cw = coordinatorLayout.getMeasuredWidth();
@@ -578,42 +556,7 @@ public class DisplayDefinitionPopupActivity extends AppCompatActivity implements
         pA = pearsonAnswer;
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         //todo FUCK
-
-
-
-
-
-
-
-
-
 
 
 //        recyclerAdapter = new PearsonAdapter(this, pearsonAnswer.definitionExamplesList, this, pearsonAnswer.word);
@@ -627,9 +570,9 @@ public class DisplayDefinitionPopupActivity extends AppCompatActivity implements
 
         ArrayList<Integer> removeIdx = new ArrayList<>();
         for (int i = 0; i < finalDataSet.size(); i++) {  // remove blanks
-                Log.e("removeIdx", "testing " + "(" + finalDataSet.get(i).definition.trim() + ")" + " "+ PearsonAnswer.DEFAULT_NO_DEFINITION + i);
+            Log.e("removeIdx", "testing " + "(" + finalDataSet.get(i).definition.trim() + ")" + " " + PearsonAnswer.DEFAULT_NO_DEFINITION + i);
             if (finalDataSet.get(i).definition.trim().equals(PearsonAnswer.DEFAULT_NO_DEFINITION)) {
-                    Log.e("removeIdx", "yBYEEEEEEEEEEEEEEEEEE");
+                Log.e("removeIdx", "yBYEEEEEEEEEEEEEEEEEE");
                 removeIdx.add(i);
             }
         }
@@ -650,48 +593,16 @@ public class DisplayDefinitionPopupActivity extends AppCompatActivity implements
 //            public void waitCallback() {
 //                Log.e("callback", "GRASS MUD HORSE");
             progressBar.setVisibility(View.INVISIBLE);
-    //            }
-    //        })).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            //            }
+            //        })).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
             Collections.sort(finalDataSet, new PearsonComparator(pearsonAnswer.word.trim()));
 
             Log.e("lolsorted", (new Gson()).toJson(finalDataSet));
-            Log.e("countlmao", "unsorted: " +Integer.toString(pearsonAnswer.definitionExamplesList.size()));
-            Log.e("countlmao", "sorted: " +Integer.toString(finalDataSet.size()));
+            Log.e("countlmao", "unsorted: " + Integer.toString(pearsonAnswer.definitionExamplesList.size()));
+            Log.e("countlmao", "sorted: " + Integer.toString(finalDataSet.size()));
 
             addPearsonList(finalDataSet);
-
-//            final ArrayList<PearsonAnswer.DefinitionExamples> finalSorted = finalDataSet;
-//            /// guess I have to use recursion...
-//            if (finalSorted.size() > 0) { // add the definitionExamples gradually for the animation
-//                recyclerAdapter.add(finalSorted.get(0));
-//
-//                for (int i = 1; i < finalDataSet.size(); i++) { // stagger the additions
-//                    final int idx = i;
-//
-//                    final Handler handler = new Handler();
-//                    handler.postDelayed(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            recyclerAdapter.add(finalSorted.get(idx));
-//                            Log.e("callbackfk", idx + " " + finalDataSet.size());
-//                            if (idx == finalDataSet.size()-1) {
-////                            Toast.makeText(getApplicationContext(), "wtf", Toast.LENGTH_SHORT).show();
-//                                readjustCoordHeight();
-//                            }
-//                        }
-//                    }, 40 * idx);
-//
-//
-//                }
-//                // if only one element, still have to readjust
-//                if (finalDataSet.size()== 1) {
-//                    readjustCoordHeight();
-//                }
-//            }
-//            finishedGetting = true;
-
-            //endregion idk
 
         } else { // get the glosbe package
 
@@ -702,12 +613,12 @@ public class DisplayDefinitionPopupActivity extends AppCompatActivity implements
     }
 
     public void readjustCoordHeight() {
-                int fw = frame.getWidth();
+        int fw = frame.getWidth();
         int fh = frame.getHeight();
         int cw = coordinatorLayout.getWidth();
-        int ch =coordinatorLayout.getHeight();
+        int ch = coordinatorLayout.getHeight();
 
-        fh = Math.round(ViewUtility.convertPixelsToDp((float)fh, this));
+        fh = Math.round(ViewUtility.convertPixelsToDp((float) fh, this));
 
         Log.e("newheight", String.format(Locale.US, wordText + " (%d, %d), (%d, %d)", fw, fh, cw, ch));
 
@@ -717,16 +628,15 @@ public class DisplayDefinitionPopupActivity extends AppCompatActivity implements
     }
 
 
-
     //should only happen after onCreate is called, so recyclerview should not be null
     private void truthSelect(int idx, boolean sel) {
 //        if (!(recyclerAdapter.sortedPearsonDataSet.get(idx).definition.trim().equals(PearsonAnswer.DEFAULT_NO_DEFINITION))) { // make sure it's selectable
-            selected[idx] = sel;
-            recyclerAdapter.updateSelect(idx, sel);
+        selected[idx] = sel;
+        recyclerAdapter.updateSelect(idx, sel);
 //        }
     }
 
-    //    https://github.com/codepath/android_guides/wiki/Using-an-ArrayAdapter-with-ListView
+    //  src:  https://github.com/codepath/android_guides/wiki/Using-an-ArrayAdapter-with-ListView
     public class ___PearsonArrayAdapter___LIST extends ArrayAdapter<PearsonAnswer.DefinitionExamples> {
 
         public ___PearsonArrayAdapter___LIST(Context context, ArrayList<PearsonAnswer.DefinitionExamples> definitionExamples) {
@@ -746,13 +656,12 @@ public class DisplayDefinitionPopupActivity extends AppCompatActivity implements
             // Populate the data into the template view using the data object
             definitionText.setText(defEx.definition);
             exampleText.setText((defEx.examples.isEmpty())
-                ? PearsonAnswer.DEFAULT_NO_EXAMPLE :
-                defEx.examples.get(0));
+                    ? PearsonAnswer.DEFAULT_NO_EXAMPLE :
+                    defEx.examples.get(0));
             return convertView;
         }
 
     }
-
 
 
 }

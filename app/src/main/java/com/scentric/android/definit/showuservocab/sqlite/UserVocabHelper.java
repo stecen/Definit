@@ -29,11 +29,11 @@ public class UserVocabHelper extends SQLiteOpenHelper {
 
     // Columns
     private static final String KEY_ID = "_id",
-        KEY_WORD = "word",
-        KEY_JSON = "json",
-        KEY_DATE = "date",
-        KEY_FAVE = "fave",
-        KEY_FAVE_DATE = "lastFaveDate"; // last day it was faved
+            KEY_WORD = "word",
+            KEY_JSON = "json",
+            KEY_DATE = "date",
+            KEY_FAVE = "fave",
+            KEY_FAVE_DATE = "lastFaveDate"; // last day it was faved
     // used for both tables
 
     public static int IS_FAVE = 1;
@@ -58,7 +58,7 @@ public class UserVocabHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_WORDS_TABLE = String.format(Locale.US, "CREATE TABLE IF NOT EXISTS %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s VARCHAR, %s VARCHAR, %s UNSIGNED BIG INT, %s INTEGER, %s UNSIGNED BIG INT);",
-               TABLE_WORDS, KEY_ID, KEY_WORD, KEY_JSON, KEY_DATE, KEY_FAVE, KEY_FAVE_DATE);
+                TABLE_WORDS, KEY_ID, KEY_WORD, KEY_JSON, KEY_DATE, KEY_FAVE, KEY_FAVE_DATE);
 //                "CREATE TABLE IF NOT EXISTS " +TABLE_WORDS+ "(" +KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +KEY_WORD+
 //                        " VARCHAR, " +KEY_JSON+ " VARCHAR, " +KEY_DATE+ " INTEGER, " +KEY_DATETEXT+ " VARCHAR);";
         Log.e("userVocab", "executing sql: " + CREATE_WORDS_TABLE);
@@ -120,7 +120,7 @@ public class UserVocabHelper extends SQLiteOpenHelper {
 
         db.beginTransaction();
         try {
-            String where= KEY_DATE + '=' + historyVocab.date + " AND " + KEY_WORD + " = \"" + historyVocab.word+"\"";
+            String where = KEY_DATE + '=' + historyVocab.date + " AND " + KEY_WORD + " = \"" + historyVocab.word + "\"";
             // Notice how we haven't specified the primary key. SQLite auto increments the primary key column.
             Log.e("deleteWord", where);
             db.delete(TABLE_HISTORY, where, null);
@@ -180,10 +180,10 @@ public class UserVocabHelper extends SQLiteOpenHelper {
 
                         historyVocabs.add(histVocab);
 
-                    } while(cursor.moveToNext() && ((howMany == GET_ALL || (++i <= howMany))));
+                    } while (cursor.moveToNext() && ((howMany == GET_ALL || (++i <= howMany))));
                 }
             } catch (Exception e) {
-                Log.d("hist", "error getting hist "  + e.toString());
+                Log.d("hist", "error getting hist " + e.toString());
             } finally {
                 if (cursor != null && !cursor.isClosed()) {
                     cursor.close();
@@ -255,13 +255,14 @@ public class UserVocabHelper extends SQLiteOpenHelper {
                         userVocab.fave = (faveInt == IS_FAVE);
                         userVocabs.add(userVocab);
 
-                    } while(cursor.moveToNext() && ((howMany == GET_ALL || (++i <= howMany)))); // limit to 25 the first time so that the user is guaranteed to see something on their screen.
-
+                    }
+                    while (cursor.moveToNext() && ((howMany == GET_ALL || (++i <= howMany)))); // limit to 25 the first time so that the user is guaranteed to see something on their screen.
 
 
                 }
             } catch (Exception e) {
-                Log.d("userVocab", "error getting user vocab "  + "" );e.printStackTrace();
+                Log.d("userVocab", "error getting user vocab " + "");
+                e.printStackTrace();
             } finally {
                 if (cursor != null && !cursor.isClosed()) {
                     cursor.close();
@@ -276,7 +277,6 @@ public class UserVocabHelper extends SQLiteOpenHelper {
             asyncInterface.setWordsData(userVocabArrayList);
         }
     }
-
 
 
     public void getFaveVocabList(GetAllWordsAsyncInterface asyncInterface, int howMany) {
@@ -335,10 +335,10 @@ public class UserVocabHelper extends SQLiteOpenHelper {
 
                         userVocabs.add(userVocab);
 
-                    } while(cursor.moveToNext() && ((howMany == GET_ALL || (++i <= howMany))));
+                    } while (cursor.moveToNext() && ((howMany == GET_ALL || (++i <= howMany))));
                 }
             } catch (Exception e) {
-                Log.d("userVocab", "fave error getting user vocab "  + e.toString());
+                Log.d("userVocab", "fave error getting user vocab " + e.toString());
             } finally {
                 if (cursor != null && !cursor.isClosed()) {
                     cursor.close();
@@ -361,38 +361,38 @@ public class UserVocabHelper extends SQLiteOpenHelper {
     public void addWord(UserVocab userVocab) { // todo: make favorite and addword async
         // Create and/or open the database for writing
         SQLiteDatabase db = getWritableDatabase();
-            db.beginTransaction();
-            try {
-                // The user might already exist in the database (i.e. the same user created multiple posts).
-                //long userId = addOrUpdateWord(userVocab.word); //todo: check for duplicates
+        db.beginTransaction();
+        try {
+            // The user might already exist in the database (i.e. the same user created multiple posts).
+            //long userId = addOrUpdateWord(userVocab.word); //todo: check for duplicates
 
-                ContentValues values = new ContentValues();
-                values.put(KEY_WORD, userVocab.word.trim());
+            ContentValues values = new ContentValues();
+            values.put(KEY_WORD, userVocab.word.trim());
 
 //                String json = (new Gson()).toJson(userVocab.listOfDefEx);
-                String json = CustomUVStringAdapter.toString(userVocab.listOfDefEx);
-                values.put(KEY_JSON, json);
-                Log.e("adding word json", json);
+            String json = CustomUVStringAdapter.toString(userVocab.listOfDefEx);
+            values.put(KEY_JSON, json);
+            Log.e("adding word json", json);
 
-                values.put(KEY_DATE, userVocab.date/* + (long)i*/);
-                values.put(KEY_FAVE, (userVocab.fave) ? IS_FAVE : NOT_FAVE);
+            values.put(KEY_DATE, userVocab.date/* + (long)i*/);
+            values.put(KEY_FAVE, (userVocab.fave) ? IS_FAVE : NOT_FAVE);
 
-                String queryString = String.format(Locale.US, "INSERT INTO %s VALUES (%s, %s, %s, %s, %s) VALUES (\"%s\", \"%s\", \"%d\", \"%d\");",
-                        TABLE_WORDS,
-                        KEY_WORD, KEY_JSON, KEY_DATE, KEY_FAVE, KEY_FAVE_DATE,
-                        userVocab.word.trim(), json, userVocab.date, (userVocab.fave) ? IS_FAVE : NOT_FAVE, 1+"");
+            String queryString = String.format(Locale.US, "INSERT INTO %s VALUES (%s, %s, %s, %s, %s) VALUES (\"%s\", \"%s\", \"%d\", \"%d\");",
+                    TABLE_WORDS,
+                    KEY_WORD, KEY_JSON, KEY_DATE, KEY_FAVE, KEY_FAVE_DATE,
+                    userVocab.word.trim(), json, userVocab.date, (userVocab.fave) ? IS_FAVE : NOT_FAVE, 1 + "");
 
 
-                Log.e("userVocab", "adding: " + queryString);
+            Log.e("userVocab", "adding: " + queryString);
 
-                // Notice how we haven't specified the primary key. SQLite auto increments the primary key column.
-                db.insertOrThrow(TABLE_WORDS, null, values);
-                db.setTransactionSuccessful();
-            } catch (Exception e) {
-                Log.d("userVocab", "Error while trying to add post to database + " + e.toString() + "\n\n");
-            } finally {
-                db.endTransaction();
-            }
+            // Notice how we haven't specified the primary key. SQLite auto increments the primary key column.
+            db.insertOrThrow(TABLE_WORDS, null, values);
+            db.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.d("userVocab", "Error while trying to add post to database + " + e.toString() + "\n\n");
+        } finally {
+            db.endTransaction();
+        }
 //        }
     }
 
@@ -404,7 +404,7 @@ public class UserVocabHelper extends SQLiteOpenHelper {
 
         db.beginTransaction();
         try {
-            String where= KEY_DATE + '=' + userVocab.date + " AND " + KEY_WORD + " = \"" + userVocab.word+"\"";
+            String where = KEY_DATE + '=' + userVocab.date + " AND " + KEY_WORD + " = \"" + userVocab.word + "\"";
             // Notice how we haven't specified the primary key. SQLite auto increments the primary key column.
             Log.e("deleteWord", where);
             db.delete(TABLE_WORDS, where, null);
@@ -429,7 +429,7 @@ public class UserVocabHelper extends SQLiteOpenHelper {
             values.put(KEY_FAVE, (!userVocab.fave) ? IS_FAVE : NOT_FAVE);
             values.put(KEY_FAVE_DATE, System.currentTimeMillis()); // when this item was last favorited, to sort by favorited date
 
-            String where= KEY_DATE + '=' + userVocab.date + " AND " + KEY_WORD + " = \"" + userVocab.word+"\"";
+            String where = KEY_DATE + '=' + userVocab.date + " AND " + KEY_WORD + " = \"" + userVocab.word + "\"";
             // Notice how we haven't specified the primary key. SQLite auto increments the primary key column.
             Log.e("toggleFavorite", where);
             db.update(TABLE_WORDS, values, where, null);
@@ -446,7 +446,7 @@ public class UserVocabHelper extends SQLiteOpenHelper {
 //        ArrayList<UserVocab> userVocabArrayList = (new Gson()).fromJson(json, new TypeToken<ArrayList<UserVocab>>(){}.getType());
         SQLiteDatabase db = getWritableDatabase();
 
-        for (int i = 0 ; i < userVocabArrayList.size() ; i++) {
+        for (int i = 0; i < userVocabArrayList.size(); i++) {
 //            db.beginTransaction();
             try {
                 ContentValues values = new ContentValues();
@@ -474,7 +474,7 @@ public class UserVocabHelper extends SQLiteOpenHelper {
         }
     }
 
-// region check duplicate
+    // region check duplicate
 // Insert or update a user in the database
     public long addOrUpdateWord(String word) {
         // The database connection is cached so it's not expensive to call getWriteableDatabase() multiple times.
@@ -538,7 +538,6 @@ public class UserVocabHelper extends SQLiteOpenHelper {
             db.endTransaction();
         }
     }
-
 
 
     // Called when the database needs to be upgraded.

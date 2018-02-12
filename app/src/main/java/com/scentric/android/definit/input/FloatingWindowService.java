@@ -56,15 +56,12 @@ public class FloatingWindowService extends Service {
 
     @Override
     public void onDestroy() {
-//        Toast.makeText(this, "service onDestroy", Toast.LENGTH_SHORT).show();
-//        customHandler
         super.onDestroy();
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-
 
 
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
@@ -77,7 +74,7 @@ public class FloatingWindowService extends Service {
         Log.e(LOG_FLOATINGWINDOW, "width: " + screenWidth + ", height: " + screenHeight);
 
 
-        linearLayout=new LinearLayout(this);
+        linearLayout = new LinearLayout(this);
 
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         linearLayout.setBackgroundColor(Color.argb(0, 200, 200, 200));
@@ -121,7 +118,6 @@ public class FloatingWindowService extends Service {
         });
 
 
-
         final WindowManager.LayoutParams windowParams = new WindowManager.LayoutParams(150, 150, WindowManager.LayoutParams.TYPE_PHONE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, PixelFormat.TRANSLUCENT);
         windowParams.x = 0;
         windowParams.y = /*900*/Math.round(ViewUtility.convertDpToPixel(320f, getApplicationContext()));
@@ -147,48 +143,7 @@ public class FloatingWindowService extends Service {
                     stopSelf();
                 }
             }
-        }, 8000+100);
-
-        //region ontouch
-        //        linearLayout.setOnTouchListener(new View.OnTouchListener() {
-//            private WindowManager.LayoutParams updatedParameters = windowParams;
-//            int x, y;
-//            float touchedX, touchedY;
-//
-//            @Override
-//            public boolean onTouch(View arg0, MotionEvent event) {
-//                switch (event.getAction()) {
-//                    case MotionEvent.ACTION_DOWN:
-//                        x = updatedParameters.x;
-//                        y = updatedParameters.y;
-//
-//                        touchedX = event.getRawX();
-//                        touchedY = event.getRawY();
-//
-//                        Log.e(LOG_FLOATINGWINDOW, "down");
-//
-//                        break;
-//                    case MotionEvent.ACTION_MOVE:
-//                        updatedParameters.x = (int) (x + (event.getRawX() - touchedX));
-//                        updatedParameters.y = (int) (y + (event.getRawY() - touchedY));
-//
-//                        windowManager.updateViewLayout(linearLayout, updatedParameters);
-//
-//                        Log.e(LOG_FLOATINGWINDOW, String.format(Locale.US, "moved to (%.1f, %.1f)", event.getRawX(), event.getRawY()));
-////                    case MotionEvent.ACTION_UP:
-////                        // start popup
-////                        Intent displayDefIntent = new Intent(getApplicationContext(), DisplayDefinitionPopupActivity.class);
-////                        displayDefIntent.putExtra(DisplayDefinitionPopupActivity.SENT_WORD, word);
-////                        displayDefIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-////                        startActivity(displayDefIntent);
-////
-////                        windowManager.removeView(linearLayout);
-////                        stopSelf();
-//
-//                }
-//                return false;
-//            }
-//        });
+        }, 8000 + 100);
 
         try {
             Drawable drawable = getPackageManager().getApplicationIcon("com.steven.android.vocabkeepernew");

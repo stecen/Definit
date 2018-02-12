@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
-//import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,7 +13,6 @@ import android.view.ViewGroup;
 
 import com.google.gson.Gson;
 import com.scentric.android.definit.R;
-import com.scentric.android.definit.utility.RecyclerViewClickListener;
 import com.scentric.android.definit.showuservocab.UserDetailsActivity;
 import com.scentric.android.definit.showuservocab.UserVocabActivity;
 import com.scentric.android.definit.showuservocab.UserVocabAdapter;
@@ -22,8 +20,11 @@ import com.scentric.android.definit.showuservocab.sqlite.GetAllWordsAsyncInterfa
 import com.scentric.android.definit.showuservocab.sqlite.UserVocab;
 import com.scentric.android.definit.showuservocab.sqlite.UserVocabHelper;
 import com.scentric.android.definit.utility.DividerItemDecoration;
+import com.scentric.android.definit.utility.RecyclerViewClickListener;
 
 import java.util.ArrayList;
+
+//import android.support.v7.widget.PopupMenu;
 
 /**
  * Created by Steven on 8/30/2016.
@@ -69,8 +70,6 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
 //        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.user_vocab_recycler, DetailsFrag.newInstance(), "details").commit();
 
 
-
-
 //        dividerItemDecoration = new DividerItemDecoration(appContext);
 
 //        helper = UserVocabHelper.getInstance(appContext);
@@ -84,21 +83,21 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
         final RecyclerViewClickListener listener = this;
 //        final View.OnLongClickListener flong = this;
         helper.getAllUserVocab(new GetAllWordsAsyncInterface() {
-            @Override
-            public void setWordsData(ArrayList<UserVocab> userVocabList) {
-                Log.e("userVocab", "" + userVocabList.size());
-                adapter = new UserVocabAdapter(userVocabList, listener, (activityContext != null) ? activityContext : appContext, false/*, flong*/);
-                recyclerView.setAdapter(/*new SlideInLeftAnimationAdapter(*/adapter/*)*/);
-            }
-        },
-        100); // first only get 100
+                                   @Override
+                                   public void setWordsData(ArrayList<UserVocab> userVocabList) {
+                                       Log.e("userVocab", "" + userVocabList.size());
+                                       adapter = new UserVocabAdapter(userVocabList, listener, (activityContext != null) ? activityContext : appContext, false/*, flong*/);
+                                       recyclerView.setAdapter(/*new SlideInLeftAnimationAdapter(*/adapter/*)*/);
+                                   }
+                               },
+                100); // first only get 100
 
         helper.getAllUserVocab(new GetAllWordsAsyncInterface() {
                                    @Override
                                    public void setWordsData(ArrayList<UserVocab> userVocabList) {
                                        Log.e("userVocab", "" + userVocabList.size());
                                        adapter.replaceData(userVocabList);
-                                       Log.e("adapter count",""+ adapter.getItemCount());
+                                       Log.e("adapter count", "" + adapter.getItemCount());
                                        dataSet = adapter.sortedDataSet;
                                    }
                                },
@@ -121,7 +120,7 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
         });
     }
 
-    //region onlonclick
+    //region onlongclick
 //    @Override
 //    public boolean onLongClick(View view) {
 //        Log.e("mainRelative", "onLongClick for popup");
@@ -173,7 +172,7 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
         refreshRecycler();
     }
 
-    public void refreshRecycler () {
+    public void refreshRecycler() {
         // todo variable to keep track if there are changes so this activity doesnt have to keep reloading the entire sqlite
 //        helper = UserVocabHelper.getInstance(appContext);
 //        ArrayList<UserVocab> userVocabList = helper.getAllUserVocab();
@@ -183,15 +182,15 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
 
         helper = UserVocabHelper.getInstance(appContext);
         helper.getAllUserVocab(new GetAllWordsAsyncInterface() {
-            @Override
-            public void setWordsData(ArrayList<UserVocab> userVocabList) {
-                Log.e("userVocab", "" + userVocabList.size());
-                adapter.replaceData(userVocabList);
-                Log.e("adapter count",""+ adapter.getItemCount());
-                dataSet = adapter.sortedDataSet; // probably not needed due to java references
-            }
-        },
-        UserVocabHelper.GET_ALL);
+                                   @Override
+                                   public void setWordsData(ArrayList<UserVocab> userVocabList) {
+                                       Log.e("userVocab", "" + userVocabList.size());
+                                       adapter.replaceData(userVocabList);
+                                       Log.e("adapter count", "" + adapter.getItemCount());
+                                       dataSet = adapter.sortedDataSet; // probably not needed due to java references
+                                   }
+                               },
+                UserVocabHelper.GET_ALL);
     }
 
     public void recyclerViewListClicked(View v, int position) {
@@ -200,10 +199,10 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
         }
 
         String userVocabString = (new Gson()).toJson(adapter.sortedDataSet.get(position));
-        Log.e("userVocab", "clicked " + position +". " + userVocabString);
+        Log.e("userVocab", "clicked " + position + ". " + userVocabString);
 
         Intent detailIntent = new Intent(appContext, UserDetailsActivity.class);
-        dataSet = adapter.sortedDataSet; //lol SOH CHEAP
+        dataSet = adapter.sortedDataSet;
 
         UserDetailsActivity.isActive = true;
 
@@ -214,7 +213,7 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
         startActivity(detailIntent);
         if (getActivity() != null) {
 //            getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-            getActivity().overridePendingTransition(0,0);
+            getActivity().overridePendingTransition(0, 0);
         }
     }
 }

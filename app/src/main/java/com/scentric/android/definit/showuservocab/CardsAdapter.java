@@ -42,7 +42,6 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
     public static int NOT_FAVE_DRAWABLE = R.drawable.ic_star_border_black_24dp;
 
 
-
     // Provide a suitable constructor (depends on the kind of dataset)
     public CardsAdapter(ArrayList<UserVocab> myDataset, Context context, UserDetailsActivity userDetailsActivity) {
         sortedDataSet = myDataset;
@@ -52,6 +51,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
         Log.e("constructor", sortedDataSet.size() + "  vs " + myDataset.size());
 
     }
+
     public CardsAdapter(ArrayList<UserVocab> myDataset, Context context, UserDetailsActivity userDetailsActivity, boolean isFave) {
         sortedDataSet = myDataset;
         this.context = context;
@@ -85,7 +85,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
         public ViewHolder(View v) {
             super(v);
             wordText = (TextView) v.findViewById(R.id.word_text);
-            cardView  = (CardView) v.findViewById(R.id.card_view);
+            cardView = (CardView) v.findViewById(R.id.card_view);
             recyclerView = (RecyclerView) v.findViewById(R.id.definition_example_recycler);
             cardRelative = (RelativeLayout) v.findViewById(R.id.card_relative);
             faveImage = (ImageView) v.findViewById(R.id.card_fave_image);
@@ -112,14 +112,12 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
             });
 
 
-
 //            def1Text = (TextView) v.findViewById(R.id.def1_text);
 //            mainRelative = (RelativeLayout) v.findViewById(R.id.item_uservocab_main_relative);
 //            headerRelative = (RelativeLayout) v.findViewById(R.id.item_user_vocab_recycler_dateheader);
 //            dateHeaderText = (TextView) v.findViewById(R.id.item_uservocab_main_dateheader_text);
 //            faveImage = (ImageView) v.findViewById(R.id.fave_image);
 //            faveColorView = (TextView) v.findViewById(R.id.fave_color_view);
-
 
 
         }
@@ -130,7 +128,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
     // Create new views (invoked by the layout manager)
     @Override
     public CardsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                          int viewType) {
+                                                      int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_cards_snap, parent, false);
         // set the view's size, margins, paddings and layout parameters
@@ -174,7 +172,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
                 if (userVocab.fave) {
                     // toggle to false, and send to database. regardless of whether the sqlite succeeds, update the ui. responsive :)
                     Drawable notFaveDrawable = context.getResources().getDrawable(NOT_FAVE_DRAWABLE);
-                    ((ImageView)fholder.faveImage).setImageDrawable(notFaveDrawable);
+                    ((ImageView) fholder.faveImage).setImageDrawable(notFaveDrawable);
                     ViewUtility.bOiiiNNnNNnnNGGGgggg(fholder.faveImage);
 
                     UserVocabHelper helper = UserVocabHelper.getInstance(context.getApplicationContext());
@@ -182,7 +180,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
                     sortedDataSet.get(pos).fave = false; // todo: once the sql becomes async, this can't be here
                 } else {
                     Drawable faveDrawable = context.getResources().getDrawable(IS_FAVE_DRAWABLE);
-                    ((ImageView)fholder.faveImage).setImageDrawable(faveDrawable);
+                    ((ImageView) fholder.faveImage).setImageDrawable(faveDrawable);
                     ViewUtility.bOiiiNNnNNnnNGGGgggg(fholder.faveImage);
 
                     UserVocabHelper helper = UserVocabHelper.getInstance(context.getApplicationContext());
@@ -231,7 +229,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
 //            }
 //
 //        });
-            //endregion
+        //endregion
     }
 
 
@@ -240,18 +238,6 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
     public int getItemCount() {
         return sortedDataSet.size();
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     public class CardDefExAdapter extends RecyclerView.Adapter<CardDefExAdapter.ViewHolder> {
@@ -300,9 +286,9 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
         // Replace the contents of a view (invoked by the layout manager)
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-                        final int pos = position;
+            final int pos = position;
 
-            holder.definitionText.setText(/*Html.fromHtml(*/ Integer.toString(pos+1) + ". " + defExDataSet.get(pos).definition/*)*/);
+            holder.definitionText.setText(/*Html.fromHtml(*/ Integer.toString(pos + 1) + ". " + defExDataSet.get(pos).definition/*)*/);
             Log.e("cardadapter", "setting definition text");
 
             if (defExDataSet.get(pos).examples.isEmpty() || defExDataSet.get(pos).examples.get(0).trim().equals(PearsonAnswer.DEFAULT_NO_EXAMPLE)) {
@@ -311,14 +297,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
                 String example = '"' + defExDataSet.get(pos).examples.get(0).trim() + '"';
                 holder.exampleText.setText(example);
             }
-
-
-
         }
-
-
-
-        // Return the size of your dataset (invoked by the layout manager)
         @Override
         public int getItemCount() {
             return defExDataSet.size();

@@ -43,9 +43,6 @@ public class PearsonComparator implements Comparator<PearsonAnswer.DefinitionExa
         int dis1 = computeLevenshteinDistance(de1.wordForm, mainWord);
         int dis2 = computeLevenshteinDistance(de2.wordForm, mainWord);
 
-//        Log.e("lev", de1.wordForm + " to " + mainWord + " = " + dis1);
-//        Log.e("lev", de2.wordForm + " to " + mainWord + " = " + dis2);
-
         if (dis1 < dis2) {
             return -1;
         } else if (dis1 < dis2) {

@@ -3,7 +3,6 @@ package com.scentric.android.definit.showuservocab;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,16 +11,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.scentric.android.definit.R;
+import com.scentric.android.definit.showuservocab.sqlite.UserVocab;
 import com.scentric.android.definit.showuservocab.sqlite.UserVocabHelper;
 import com.scentric.android.definit.utility.CustomUVStringAdapter;
 import com.scentric.android.definit.utility.DateUtility;
 import com.scentric.android.definit.utility.PearsonAnswer;
-import com.scentric.android.definit.R;
 import com.scentric.android.definit.utility.RecyclerViewClickListener;
-import com.scentric.android.definit.showuservocab.sqlite.UserVocab;
 import com.scentric.android.definit.utility.ViewUtility;
 
 import java.util.ArrayList;
@@ -32,7 +32,7 @@ import java.util.ArrayList;
 public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.ViewHolder> {
     public ArrayList<UserVocab> sortedDataSet;
     private RecyclerViewClickListener itemListener;
-    private boolean  mySelected[] = new boolean[500]; //todo: increase
+    private boolean mySelected[] = new boolean[500]; //todo: increase
     public boolean surpressGray; // when finishing activiting only.
     private Context context;
 
@@ -75,7 +75,7 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
         RelativeLayout headerRelative, mainRelative; // main , clickable content. exists because if there is a date header, you don't want ripplies showing through that because it's not supposed to be a part of the item
         TextView dateHeaderText;
 
-//        TextView exampleText;
+        //        TextView exampleText;
 //        View fillerView, upShaView, loShaView;
         TextView faveColorView;
 //        RelativeLayout colorView;
@@ -90,17 +90,7 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
             dateHeaderText = (TextView) v.findViewById(R.id.item_uservocab_main_dateheader_text);
             faveImage = (ImageView) v.findViewById(R.id.fave_image);
             faveColorView = (TextView) v.findViewById(R.id.fave_color_view);
-//            def2Text = (TextView) v.findViewById(R.id.def2_text);
-//            def3Text = (TextView) v.findViewById(R.id.def3_text);
-//            exampleText = (TextView) v.findViewById(R.id.example_text);
-
-//            colorView = (RelativeLayout) v.findViewById(R.id.color_view);
-//            fillerView = v.findViewById(R.id.filler);
-//                relativeLayout = (RelativeLayout) v;
             mainRelative.setOnClickListener(this);
-//            if (onLongClickListener != null) {
-
-//            }
 
             //delete words through a popup menu
             final RelativeLayout frel = mainRelative;
@@ -135,7 +125,7 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
                                     if (sortedDataSet.get(position).fave) {
                                         // toggle to false, and send to database. regardless of whether the sqlite succeeds, update the ui. responsive :)
                                         Drawable notFaveDrawable = context.getResources().getDrawable(NOT_FAVE_DRAWABLE);
-                                        ((ImageView)faveImage).setImageDrawable(notFaveDrawable);
+                                        ((ImageView) faveImage).setImageDrawable(notFaveDrawable);
                                         ViewUtility.bOiiiNNnNNnnNGGGgggg(faveImage);
 
 
@@ -143,7 +133,7 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
                                         sortedDataSet.get(position).fave = false; // todo: once the sql becomes async, this can't be here
                                     } else {
                                         Drawable faveDrawable = context.getResources().getDrawable(IS_FAVE_DRAWABLE);
-                                        ((ImageView)faveImage).setImageDrawable(faveDrawable);
+                                        ((ImageView) faveImage).setImageDrawable(faveDrawable);
                                         ViewUtility.bOiiiNNnNNnnNGGGgggg(faveImage);
 
 //                                        UserVocabHelper helper = UserVocabHelper.getInstance(context.getApplicationContext());
@@ -163,10 +153,6 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
                     return false;
                 }
             });
-
-//            loShaView = v.findViewById(R.id.lower_shadow);
-//            upShaView = v.findViewById(R.id.upper_shadow);
-//            faveImage.setOnClickListener(this);
         }
 
         @Override
@@ -175,9 +161,6 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
                 case R.id.item_uservocab_main_relative:
                     itemListener.recyclerViewListClicked(v, this.getLayoutPosition());
                     break;
-//                case R.id.fave_image: // favorite clicked
-//                    if (((ImageView) v).getDrawable().get)
-//                    break;
             }
 
 
@@ -214,14 +197,14 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
 
     public void add(UserVocab def) {
         sortedDataSet.add(def);
-        notifyItemInserted(sortedDataSet.size()-1);
+        notifyItemInserted(sortedDataSet.size() - 1);
     }
 
     public void removeTemp() {
         int removedSoFar = 0;
         for (int i = 0; i < 500; i++) {
             if (mySelected[i]) {
-                Log.e("selected", i+"");
+                Log.e("selected", i + "");
 //                    remove(sortedDataSet.get(i));
                 removeByIdx(i - (removedSoFar++));
             }
@@ -232,7 +215,7 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
     public void animateSlide() { ///todo: animate one by one
         for (int i = 0; i < 500; i++) {
             if (mySelected[i]) {
-                Log.e("sliding", i+"");
+                Log.e("sliding", i + "");
 //                    remove(sortedDataSet.get(i));
                 slideByIdx(i);
             }
@@ -240,7 +223,7 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
         }
     }
 
-    public void slideByIdx(int idx) {
+    public void slideByIdx(int idx) { // todo: proper slidingss
 //        TranslateAnimation translateAnimation = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 20.0f,
 //                Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f);
 //        translateAnimation.setDuration(REMOVE_DURATION + 50);
@@ -262,7 +245,7 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
     // Create new views (invoked by the layout manager)
     @Override
     public UserVocabAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                        int viewType) {
+                                                          int viewType) {
         // create a new view
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_uservocab, parent, false);
         // set the view's size, margins, paddings and layout parameters
@@ -275,7 +258,7 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
     public void onBindViewHolder(ViewHolder holder, int position) {
         final int pos = position;
 
-        Log.e("adapter","called for " + pos);
+        Log.e("adapter", "called for " + pos);
 
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
@@ -341,7 +324,7 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
             holder.faveImage.setImageDrawable(notFaveDrawable);
         }
 
-        // update ui and send to database
+        // Update ui and send to database
         holder.faveImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View faveImage) {
@@ -349,7 +332,7 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
                 if (userVocab.fave) {
                     // toggle to false, and send to database. regardless of whether the sqlite succeeds, update the ui. responsive :)
                     Drawable notFaveDrawable = context.getResources().getDrawable(NOT_FAVE_DRAWABLE);
-                    ((ImageView)faveImage).setImageDrawable(notFaveDrawable);
+                    ((ImageView) faveImage).setImageDrawable(notFaveDrawable);
                     ViewUtility.bOiiiNNnNNnnNGGGgggg(faveImage);
 
                     UserVocabHelper helper = UserVocabHelper.getInstance(context.getApplicationContext());
@@ -357,7 +340,7 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
                     sortedDataSet.get(pos).fave = false; // todo: once the sql becomes async, this can't be here
                 } else {
                     Drawable faveDrawable = context.getResources().getDrawable(IS_FAVE_DRAWABLE);
-                    ((ImageView)faveImage).setImageDrawable(faveDrawable);
+                    ((ImageView) faveImage).setImageDrawable(faveDrawable);
                     ViewUtility.bOiiiNNnNNnnNGGGgggg(faveImage);
 
                     UserVocabHelper helper = UserVocabHelper.getInstance(context.getApplicationContext());
@@ -368,10 +351,9 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
         });
 
         String s = CustomUVStringAdapter.toString(userVocab.listOfDefEx);
-        Log.e("testUV", "\n" + s );
+        Log.e("testUV", "\n" + s);
         ArrayList<PearsonAnswer.DefinitionExamples> list = CustomUVStringAdapter.fromString(s);
 //        Log.e("testUV json", (new Gson()).toJson(list));
-
 
 
 //        Log.e("adapterGson", (new Gson()).toJson(userVocab));
@@ -391,7 +373,7 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
                 holder.def1Text.setText(text);
             }
         }
-        //region not working list of definitions >:(
+        //region todo: not working list of definitions
 //        if (userVocab.listOfDefEx.size() > 1) {
 //            Log.e("going", "into " + userVocab.word + " 1");
 //            String text ="2. " + userVocab.listOfDefEx.get(1).definition;
@@ -410,11 +392,9 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
 //        }
 
 
-
-
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
+    // Return the size of dataset
     @Override
     public int getItemCount() {
         return sortedDataSet.size();

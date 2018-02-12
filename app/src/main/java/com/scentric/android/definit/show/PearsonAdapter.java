@@ -448,29 +448,13 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
                 RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Math.round(ViewUtility.convertDpToPixel(54f, searchAndShowActivity.getApplicationContext())));
                 layoutParams.addRule(RelativeLayout.BELOW, R.id.de_example_text);
                 holder.exFillerView.setLayoutParams(layoutParams);
-//                ViewUtility.setMarginsRelative(0f, 0f, 0f, 72f, holder.exFillerView, searchAndShowActivity.getApplicationContext());
-
-
-//                holder.exFillerView.setPadding(0, 0, 0, 200);
-//                holder.defFillerView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-//                        Math.round(ViewUtility.convertDpToPixel(100f, searchAndShowActivity.getApplicationContext()))));
             } else { // is example
                 Log.e("position", "setting margins of def filler " + position);
                 RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, Math.round(ViewUtility.convertDpToPixel(54f, searchAndShowActivity.getApplicationContext())));
                 layoutParams.addRule(RelativeLayout.BELOW, R.id.definition_text);
                 holder.defFillerView.setLayoutParams(layoutParams);
-//                ViewUtility.setMarginsRelative(0f, 0f, 0f, 72f, holder.defFillerView, searchAndShowActivity.getApplicationContext());
-
-
-//                holder.defFillerView.setPadding(0, 0, 0 ,200 );
-
-//                holder.exFillerView.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-//                        Math.round(ViewUtility.convertDpToPixel(100f, searchAndShowActivity.getApplicationContext()))));
             }
-//            ViewUtility.setMarginsRelative(0f, 0f, 50f, 50f, holder.defFillerView, searchAndShowActivity.getApplicationContext());
 
-//            holder.defFillerView.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
-//                    Math.round(ViewUtility.convertDpToPixel(24f, searchAndShowActivity.getApplicationContext()))));
         }
 
     }

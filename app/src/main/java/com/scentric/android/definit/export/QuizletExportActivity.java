@@ -31,24 +31,22 @@ public class QuizletExportActivity extends AppCompatActivity /*implements GetAll
             public void setWordsData(ArrayList<UserVocab> userVocabList) {
                 StringBuilder sb = new StringBuilder();
 
-                for (int i  = 0; i < userVocabList.size(); i++) {
+                for (int i = 0; i < userVocabList.size(); i++) {
                     UserVocab userVocab = userVocabList.get(i);
                     sb.append(userVocab.word.trim())
                             .append("\t");
 
-
                     for (int j = 0; j < userVocab.listOfDefEx.size(); j++) { // todo: add a list of examples
                         StringBuilder sbDefEx = new StringBuilder();
                         String defText = userVocab.listOfDefEx.get(j).definition.trim().replaceAll("\t", " ");
-                        if (defText.charAt(defText.length()-1) == '.' ||
-                                defText.charAt(defText.length()-1) == '!' ||
-                                defText.charAt(defText.length()-1) == '?') {
+                        if (defText.charAt(defText.length() - 1) == '.' ||
+                                defText.charAt(defText.length() - 1) == '!' ||
+                                defText.charAt(defText.length() - 1) == '?') {
 
                         } else {
                             defText = defText + ".";
                         }
                         sbDefEx.append(defText.trim());
-
 
                         if (userVocab.listOfDefEx.isEmpty() || (userVocab.listOfDefEx.get(j).examples.get(0).trim().equals(PearsonAnswer.DEFAULT_NO_EXAMPLE))) {
 
@@ -56,9 +54,9 @@ public class QuizletExportActivity extends AppCompatActivity /*implements GetAll
                             sbDefEx.append(" \"");
 
                             String exText = userVocab.listOfDefEx.get(j).examples.get(0).trim().replaceAll("\t", "");
-                            if (exText.charAt(exText.length()-1) == '.' ||
-                                    exText.charAt(exText.length()-1) == '!' ||
-                                    exText.charAt(exText.length()-1) == '?') {
+                            if (exText.charAt(exText.length() - 1) == '.' ||
+                                    exText.charAt(exText.length() - 1) == '!' ||
+                                    exText.charAt(exText.length() - 1) == '?') {
 
                             } else {
                                 exText = exText + ".";
@@ -67,18 +65,10 @@ public class QuizletExportActivity extends AppCompatActivity /*implements GetAll
                             sbDefEx.append(exText);
                             sbDefEx.append("\" ");
                         }
-
                         sb.append(sbDefEx.toString()).append(" ");
-
-
                     }
-
                     sb.append("\n");
-
-
                 }
-
-
                 exportText.setText(sb.toString());
             }
         }, UserVocabHelper.GET_ALL);

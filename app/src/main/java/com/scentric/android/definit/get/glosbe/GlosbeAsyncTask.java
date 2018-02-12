@@ -10,10 +10,10 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.scentric.android.definit.get.sqlite.DictionaryDatabaseHelper;
 import com.scentric.android.definit.settings.PreferencesActivity;
 import com.scentric.android.definit.utility.GlosbePackage;
 import com.scentric.android.definit.utility.PearsonAnswer;
-import com.scentric.android.definit.get.sqlite.DictionaryDatabaseHelper;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -28,29 +28,27 @@ import javax.net.ssl.HttpsURLConnection;
 
 /**
  * Created by Steven on 8/1/2016.
- *
- *
- *
+ * <p>
+ * <p>
+ * <p>
  * Created by Steven on 11/28/2015.
- *
+ * <p>
  * Called by both the dialog in the activity (when entering your own word) and the notification (when getting the text from the clipboard)
- *
+ * <p>
  * API I'm using: https://glosbe.com/a-api   -- choose all json objects with the "meaning"
- *
+ * <p>
  * Yandex API Key: dict.1.1.20151130T032757Z  .c863c538d4343852.98b37b03d9f7a8ba71de4b6ac2c115958f5580fc
  * Each page that uses data from the Yandex.Dictionary service must display the text "Powered by Yandex.Dictionary" with an active hyperlink to the page https://tech.yandex.com/dictionary/.
- *
+ * <p>
  * http://www.droidviews.com/install-rooted-lollipop-on-att-galaxy-s5-sm-g900a/
- *
+ * <p>
  * http://developer.pearson.com/apis/dictionaries#!//listEntries
- * ^ PEARSON IS DA BES!!!!!! :D
- *
+ * ^ Pearson is superior
+ * <p>
  * https://api.pearson.com/v2/dictionaries/ldoce5/entries?headword=test&apikey=rsGRiugAUCRGAkIGXfAnzkMcBTcuKKtM
- *
- *
- * */
+ */
 
-public class GlosbeAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
+public class GlosbeAsyncTask extends AsyncTask<String, Void, PearsonAnswer> {
     Context ctx;
     String wordToDefine;
 
@@ -65,7 +63,7 @@ public class GlosbeAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
 
     public GlosbeResponseInterface glosbeResponseInterface = null;
 
-    public String headWord ="";
+    public String headWord = "";
 
     public GlosbeAsyncTask(Context context, String word, GlosbeResponseInterface adr) {
         ctx = context;
@@ -78,15 +76,13 @@ public class GlosbeAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
         super.onPreExecute();
     }
 
-
     @Override
     protected PearsonAnswer doInBackground(String... strings) {
-        Log.d("async","You sent " + wordToDefine);
+        Log.d("async", "You sent " + wordToDefine);
 
         GlosbePackage defPackage = getDefinition(wordToDefine.replace("\\", "").trim(), ctx);
 
         Log.e("glosbe", (new Gson()).toJson(defPackage));
-
 
         PearsonAnswer pearsonAnswer = new PearsonAnswer();
 
@@ -95,8 +91,7 @@ public class GlosbeAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
         definitionExamples.partOfSpeech = "---";
         definitionExamples.definition = defPackage.onlineDef.get(0); // only one element right now
         definitionExamples.examples.add(DEFAULT_NO_EXAMPLE);
-        definitionExamples.wordForm = headWord; //lolz // nice design pattern steven, dtiching the glosbe object
-
+        definitionExamples.wordForm = headWord; //
         pearsonAnswer.definitionExamplesList.add(definitionExamples);
 
         // adapt defpack to pearson answer here
@@ -141,13 +136,12 @@ public class GlosbeAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
 
         try {
             wordText = wordText.toUpperCase();
-            Log.e("db", "wordText = " +wordText);
+            Log.e("db", "wordText = " + wordText);
             String query = "SELECT * FROM words WHERE word='" + wordText.toUpperCase() + "';";
             Log.e("db", query);
             Cursor cursor = dictDb.rawQuery(query, null);
 
             Log.e("db", "does cursor exist: " + cursor.getCount());
-
 
 
             if (cursor.moveToFirst()) {
@@ -233,7 +227,7 @@ public class GlosbeAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
                                     if (meanings.length() > 0) {
                                         for (int m = 0; m < meanings.length(); m++) {
                                             JSONObject mObj = meanings.getJSONObject(m);
-                                            if (mObj.has("text")&& !mObj.isNull("text")) { // FOUND A DEFINITION IN THE "MEANINGS" ARRAY UNDER "TEXT"
+                                            if (mObj.has("text") && !mObj.isNull("text")) { // FOUND A DEFINITION IN THE "MEANINGS" ARRAY UNDER "TEXT"
                                                 String retVal = mObj.getString("text").trim().replace("\"", "").replace("'", "").replace("\\", "");
                                                 Log.d("lol", "returning (meaning text) " + retVal + " for definition of " + wordText);
                                                 return retVal;
@@ -254,7 +248,7 @@ public class GlosbeAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
                         return DEFAULT_NO_DEFINITION;
                     }
                 } else {
-                    Log.d("lol", "Server error");
+                    Log.d("Server", "Server error");
                     return "Something went wrong with the server.";
                 }
 
@@ -265,7 +259,6 @@ public class GlosbeAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
 
                 String line;
                 while ((line = reader.readLine()) != null) {
-//                    Log.d("lol", "error line read: " +line);
                     sb.append(line).append("\n");
                 }
 

@@ -23,10 +23,10 @@ public class RelaySpeechActivity extends Activity {
     public final static int REQ_CODE_SPEECH_INPUT = 92;
     LinearLayout linearLayout;
     View view;
-    boolean hasReocgnized =false;
+    boolean hasReocgnized = false;
 
     @Override
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_relay);
 
@@ -40,32 +40,7 @@ public class RelaySpeechActivity extends Activity {
             }
         });
 
-//        linearLayout = (LinearLayout) findViewById(R.id.relay_linear);
-//        linearLayout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Log.e("speechlol", "finish me");
-//            }
-//        });
-//        view = findViewById(R.id.relay_view);
-//        view.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Log.e("speechlol", "finish me");
-//                finish();
-//            }
-//        });
-
-
-
-//        final Handler handler = new Handler();
-//        handler.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-                recognizeSpeech();
-//            }
-//        }, 900);
-
+        recognizeSpeech();
     }
 
     public void recognizeSpeech() { // only called from notification action
@@ -106,10 +81,6 @@ public class RelaySpeechActivity extends Activity {
                     ArrayList<String> result = data
                             .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 
-//                    String newString = wordEdit.getText().toString() + result.get(0);
-//                    wordEdit.setText(result.get(0));
-//                    wordEdit.setSelectAllOnFocus(true);
-//                    searchView.setQuery(result.get(0), true);
                     Intent intent = new Intent(this, SearchAndShowActivity.class);
                     intent.putExtra(SearchAndShowActivity.SENT_WORD, result.get(0).trim());
                     Log.e("relay", "sending... " + result.get(0).trim());
@@ -124,14 +95,9 @@ public class RelaySpeechActivity extends Activity {
 
         }
     }
-//
-//    public void finishMe(View v) { // touch linear layout
-//        Log.e("speechlol", "finish me");
-//        finish();
-//    }
 
     @Override
-    protected  void onDestroy() {
+    protected void onDestroy() {
         Log.e("speech", "onDestroy");
         super.onDestroy();
     }

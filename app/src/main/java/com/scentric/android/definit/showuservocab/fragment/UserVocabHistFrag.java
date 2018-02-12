@@ -12,13 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.scentric.android.definit.R;
-import com.scentric.android.definit.showuservocab.sheet.HistoryAdapter;
-import com.scentric.android.definit.showuservocab.sqlite.GetHistoryInterface;
-import com.scentric.android.definit.utility.RecyclerViewClickListener;
 import com.scentric.android.definit.show.SearchAndShowActivity;
 import com.scentric.android.definit.showuservocab.UserVocabActivity;
+import com.scentric.android.definit.showuservocab.sheet.HistoryAdapter;
+import com.scentric.android.definit.showuservocab.sqlite.GetHistoryInterface;
 import com.scentric.android.definit.showuservocab.sqlite.HistoryVocab;
 import com.scentric.android.definit.showuservocab.sqlite.UserVocabHelper;
+import com.scentric.android.definit.utility.RecyclerViewClickListener;
 
 import java.util.ArrayList;
 
@@ -67,12 +67,11 @@ public class UserVocabHistFrag extends Fragment implements RecyclerViewClickList
         final RecyclerViewClickListener fClick = this;
         helper.getHistory50(new GetHistoryInterface() {
             @Override
-            public void setHistoryData (ArrayList<HistoryVocab> historyVocabList) {
+            public void setHistoryData(ArrayList<HistoryVocab> historyVocabList) {
                 adapter = new HistoryAdapter(historyVocabList, fClick, (activityContext != null) ? activityContext : appContext);
                 recyclerView.setAdapter(adapter);
             }
         }, UserVocabHelper.GET_ALL);
-
 
 
         final UserVocabActivity fActivity = (UserVocabActivity) getActivity();
@@ -121,7 +120,7 @@ public class UserVocabHistFrag extends Fragment implements RecyclerViewClickList
         refreshRecycler();
     }
 
-    public void refreshRecycler () {
+    public void refreshRecycler() {
         // todo variable to keep track if there are changes so this activity doesnt have to keep reloading the entire sqlite
         helper = UserVocabHelper.getInstance(appContext);
 //        ArrayList<HistoryVocab> historyVocabs = helper.getHistory50();
@@ -132,7 +131,7 @@ public class UserVocabHistFrag extends Fragment implements RecyclerViewClickList
             @Override
             public void setHistoryData(ArrayList<HistoryVocab> historyVocabList) {
                 Log.e("historyVocab", "" + historyVocabList.size());
-                Log.e("hist adapter count",""+ adapter.getItemCount());
+                Log.e("hist adapter count", "" + adapter.getItemCount());
                 adapter.replaceData(historyVocabList);
             }
         }, UserVocabHelper.GET_ALL);
@@ -141,7 +140,7 @@ public class UserVocabHistFrag extends Fragment implements RecyclerViewClickList
 
     public void recyclerViewListClicked(View v, int position) {
         String query = adapter.sortedDataSet.get(position).word;
-        Log.e("sheet", "clicked " + position +". " + query);
+        Log.e("sheet", "clicked " + position + ". " + query);
 
         Intent defineIntent = new Intent(appContext, SearchAndShowActivity.class);
         defineIntent.putExtra(SearchAndShowActivity.SENT_WORD, query);

@@ -38,7 +38,7 @@ public class CallbackAsyncTask extends AsyncTask<Void, Void, Void> {
         try {
             Thread.sleep(time);
         } catch (Exception e) {
-            Log.e("eeeeeeeeeeeeeee", e.toString());
+            Log.e("callback error", e.toString());
         }
         return null;
     }

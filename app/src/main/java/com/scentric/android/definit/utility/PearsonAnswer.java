@@ -20,12 +20,6 @@ public class PearsonAnswer {
         definitionExamplesList = new ArrayList<>(); //todo. while displaying, prioritize those with matching headword forms. doubt=doubt. doubt<doubtfulness
     }
 
-//    public PearsonAnswer(String def) { // definition but no examples -- guaranteed
-//        partOfSpeech = "---";
-//        definitionExamplesList = new ArrayList<>();
-//        definitionExamplesList.add
-//    }
-
     public static class DefinitionExamples {
         public String partOfSpeech;
         public String definition;
@@ -33,7 +27,7 @@ public class PearsonAnswer {
         public ArrayList<String> examples;
         public ArrayList<String> ipa;
 
-        public DefinitionExamples () {
+        public DefinitionExamples() {
             partOfSpeech = "---";
             definition = GlosbeAsyncTask.DEFAULT_NO_DEFINITION;
             wordForm = "";

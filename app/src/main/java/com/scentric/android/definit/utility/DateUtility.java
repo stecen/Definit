@@ -10,7 +10,7 @@ import java.util.Calendar;
  */
 public class DateUtility {
     public static String[]
-        monthAbbr = {"",
+            monthAbbr = {"",
             "Jan",
             "Feb",
             "Mar",
@@ -42,7 +42,7 @@ public class DateUtility {
     public static String getHumanifiedDate(long millis, String dateFormat) {
         String formatted = DateFormat.format(dateFormat, millis).toString();
         String[] splitted = formatted.split("/");
-        Log.e("splitted", ""+splitted.length);
+        Log.e("splitted", "" + splitted.length);
         if (splitted.length == 2) { // make sure
             int monthInt = Integer.parseInt(splitted[0]);
             Log.e("splitted", "month: " + monthInt + ", of " + monthAbbr[monthInt]);
@@ -62,7 +62,7 @@ public class DateUtility {
         }
 
         String[] splitted = formatted.split("/");
-        Log.e("splitted", ""+splitted.length);
+        Log.e("splitted", "" + splitted.length);
         if (splitted.length == 2) { // make sure
             int monthInt = Integer.parseInt(splitted[0]);
             int dayInt = Integer.parseInt(splitted[1]);
@@ -110,9 +110,9 @@ public class DateUtility {
         cal.setTimeInMillis(milliseconds);
 
         int minute = cal.get(Calendar.MINUTE);
-        String minuteStr = ""+minute;
+        String minuteStr = "" + minute;
         if (minute <= 9) {
-            minuteStr = "0"+minuteStr;
+            minuteStr = "0" + minuteStr;
         }
 
         int hour = cal.get(Calendar.HOUR);
@@ -123,10 +123,10 @@ public class DateUtility {
 
         time = hourStr + ":" + minuteStr;
 
-        if(cal.get(Calendar.AM_PM)==0)
-            time=time+" am";
+        if (cal.get(Calendar.AM_PM) == 0)
+            time = time + " am";
         else
-            time=time+" pm";
+            time = time + " pm";
 
         return time;
 

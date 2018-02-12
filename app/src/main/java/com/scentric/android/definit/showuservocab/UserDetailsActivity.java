@@ -27,8 +27,6 @@ public class UserDetailsActivity extends AppCompatActivity implements RecyclerVi
     LinearLayout linearLayout;
     UserVocabHelper helper;
     CardsAdapter adapter;
-//    UserVocabAdapter adapter;
-//    RecyclerView recyclerView;
     SnappyRecyclerView recyclerView;
     RelativeLayout relativeLayout;
     LinearLayoutManager manager;
@@ -75,26 +73,8 @@ public class UserDetailsActivity extends AppCompatActivity implements RecyclerVi
             Log.e("details", "fave? " + isFave);
 
 
-            // show the user that you can scroll lol. for the first time
-//            final Handler handler  = new Handler();
-//            handler.postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    try {
-//                        recyclerView.smoothScrollToPosition(position + 1);
-//                    }catch (Exception e) {
-//                        Log.e("scroll", "outof bounds....");
-//                    }
-//                }
-//            }, 300);
-//            handler.postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    recyclerView.smoothScrollToPosition(position);
-//                }
-//            }, 500);
+            // todo: show the user that you can scroll
         }
-
 
 
         helper = UserVocabHelper.getInstance(this);
@@ -114,14 +94,6 @@ public class UserDetailsActivity extends AppCompatActivity implements RecyclerVi
                 bye();
             }
         });
-//        recyclerView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                bye();
-//            }
-//        });
-
-
     }
 
     public void bye() {
@@ -131,7 +103,7 @@ public class UserDetailsActivity extends AppCompatActivity implements RecyclerVi
             @Override
             public void run() {
                 finish();
-                overridePendingTransition(android.R.anim.fade_in,android.R.anim.fade_out);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         }, 50);
     }

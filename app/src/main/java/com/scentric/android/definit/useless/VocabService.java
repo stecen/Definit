@@ -13,8 +13,8 @@ import android.database.sqlite.SQLiteQuery;
 import android.util.Log;
 
 import com.google.gson.Gson;
-import com.scentric.android.definit.utility.GlosbePackage;
 import com.scentric.android.definit.get.sqlite.DictionaryDatabaseHelper;
+import com.scentric.android.definit.utility.GlosbePackage;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -29,21 +29,19 @@ import javax.net.ssl.HttpsURLConnection;
 
 /**
  * Created by Steven on 11/28/2015.
- *
+ * <p>
  * Called by both the dialog in the activity (when entering your own word) and the notification (when getting the text from the clipboard)
- *
+ * <p>
  * API I'm using: https://glosbe.com/a-api   -- choose all json objects with the "meaning"
- *
+ * <p>
  * Yandex API Key: dict.1.1.20151130T032757Z  .c863c538d4343852.98b37b03d9f7a8ba71de4b6ac2c115958f5580fc
  * Each page that uses data from the Yandex.Dictionary service must display the text "Powered by Yandex.Dictionary" with an active hyperlink to the page https://tech.yandex.com/dictionary/.
- *
+ * <p>
  * http://www.droidviews.com/install-rooted-lollipop-on-att-galaxy-s5-sm-g900a/
- *
+ * <p>
  * http://developer.pearson.com/apis/dictionaries#!//listEntries
  * ^ PEARSON IS DA BES!!!!!! :D
- *
- *
- * */
+ */
 
 // todo: section in the app for "preliminary" vocab words
 
@@ -68,7 +66,6 @@ public class VocabService extends IntentService {
     public final static String DEFAULT_NO_EXAMPLE = "No example found";
 
 
-
     // Glosbse API
     public final static String GLOSBE_QUERY = "https://glosbe.com/gapi/translate?from=eng&dest=eng&format=json&pretty=true&phrase=";
 
@@ -83,7 +80,7 @@ public class VocabService extends IntentService {
         // check to make sure clip data is text
 
         // check where to get the text
-        int where = intent.getIntExtra(GET_FROM_LOCATION, GET_FROM_CLIPBOARD+1123923); // make sure u dont get fmo clipboard
+        int where = intent.getIntExtra(GET_FROM_LOCATION, GET_FROM_CLIPBOARD + 1123923); // make sure u dont get fmo clipboard
         boolean popup = intent.getBooleanExtra(SHOW_POPUP, false);
         if (where == GET_FROM_CLIPBOARD) {
             ClipboardManager clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
@@ -108,7 +105,7 @@ public class VocabService extends IntentService {
                 Log.d("lol", "Not plain text but is a " + mimeType + ": " + item.coerceToText(this));
             }
 
-        } else if (where == GET_FROM_DIALOG){ // take the text from the edit text of the custom input
+        } else if (where == GET_FROM_DIALOG) { // take the text from the edit text of the custom input
             Log.e("lol", "Defining: " + intent.getStringExtra(WORD_TO_DEFINE_FROM_DIALOG));
             //insertIntoDatabase(intent.getStringExtra(WORD_TO_DEFINE_FROM_DIALOG), VocabService.getDefinition(intent.getStringExtra(WORD_TO_DEFINE_FROM_DIALOG), this));
 
@@ -165,7 +162,7 @@ public class VocabService extends IntentService {
 //        Log.d("lol", "executing SQL -- " + exe);
 
         String randomDefinition = "a foo that calls a bar";
-        exe = "INSERT INTO words VALUES(NULL, \"" + wordText + "\", \"" + d1 + "\", \""+ DEFAULT_NO_EXAMPLE + "\", \"" + DEFAULT_NO_DEFINITION + "\", \"" + DEFAULT_NO_EXAMPLE + "\");";
+        exe = "INSERT INTO words VALUES(NULL, \"" + wordText + "\", \"" + d1 + "\", \"" + DEFAULT_NO_EXAMPLE + "\", \"" + DEFAULT_NO_DEFINITION + "\", \"" + DEFAULT_NO_EXAMPLE + "\");";
         vocabDB.execSQL(exe);
         Log.d("lol", "executing SQL -- " + exe);
 
@@ -199,13 +196,12 @@ public class VocabService extends IntentService {
 
         try {
             wordText = wordText.toUpperCase();
-            Log.e("db", "wordText = " +wordText);
+            Log.e("db", "wordText = " + wordText);
             String query = "SELECT * FROM words WHERE word='" + wordText.toUpperCase() + "';";
             Log.e("db", query);
             Cursor cursor = dictDb.rawQuery(query, null);
 
             Log.e("db", "does cursor exist: " + cursor.getCount());
-
 
 
             if (cursor.moveToFirst()) {

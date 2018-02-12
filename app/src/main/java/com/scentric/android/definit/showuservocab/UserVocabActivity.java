@@ -45,7 +45,7 @@ import java.util.Locale;
 
 public class UserVocabActivity extends AppCompatActivity implements /*RecyclerViewClickListener,*/ TabLayout.OnTabSelectedListener {
     TextView serviceText;
-//    ListView wordList;
+    //    ListView wordList;
     Button startButton, stopButton;
     TextView animationText;
 
@@ -90,7 +90,7 @@ public class UserVocabActivity extends AppCompatActivity implements /*RecyclerVi
             Log.e("tool", "Setting support toolbar...");
             setSupportActionBar(toolbar);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                if (appBarLayout  != null) {
+                if (appBarLayout != null) {
                     appBarLayout.setElevation(8);
 //                    toolbar.setElevation(0);
                 }
@@ -147,10 +147,10 @@ public class UserVocabActivity extends AppCompatActivity implements /*RecyclerVi
                             if (icon0 != null) icon0.setAlpha(255);
 
                             Drawable icon1 = tabLayout.getTabAt(1).getIcon();
-                            if (icon1!=null) icon1.setAlpha(UNSEL_TAB_ALPHA);
+                            if (icon1 != null) icon1.setAlpha(UNSEL_TAB_ALPHA);
 
                             Drawable icon2 = tabLayout.getTabAt(2).getIcon();
-                            if (icon2!=null) icon2.setAlpha(UNSEL_TAB_ALPHA);
+                            if (icon2 != null) icon2.setAlpha(UNSEL_TAB_ALPHA);
 
                             tabLayout.getTabAt(3).getIcon().setAlpha(UNSEL_TAB_ALPHA);
 
@@ -228,34 +228,15 @@ public class UserVocabActivity extends AppCompatActivity implements /*RecyclerVi
             }
         });
 
-
-        // recycler stuff
-//        recyclerView = (RecyclerView) findViewById(R.id.user_vocab_recycler);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-//
-//        dividerItemDecoration = new DividerItemDecoration(this);
-//
-//        helper = UserVocabHelper.getInstance(this);
-//        ArrayList<UserVocab> userVocabList = helper.getAllUserVocab();
-//        Log.e("userVocab", "" + userVocabList.size());
-//        adapter = new UserVocabAdapter(userVocabList, this, getApplicationContext());
-////        recyclerView.addItemDecoration(dividerItemDecoration);
-//        recyclerView.setAdapter(/*new SlideInLeftAnimationAdapter(*/adapter/*)*/);
-////        Log.e("adapter count",""+ adapter.getItemCount());
-
-
         NotificationUtility.createConvenienceNotif(this);
         //start clipboard watcher service
         startService(new Intent(getBaseContext(), ClipboardWatcherService.class));
 
-        doFirstTimeShebang();
+        doFirstTimeIntro();
 
         // set default preferences
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
-//        ViewUtility.zoomIntoView(fab);
-
-//        animationText = (TextView) findViewById(R.id.animation_text);
 
         final Context ctx = this;
         fab.setOnClickListener(new View.OnClickListener() {
@@ -263,14 +244,8 @@ public class UserVocabActivity extends AppCompatActivity implements /*RecyclerVi
             @Override
             public void onClick(View view) {
                 Intent defineIntent = new Intent(ctx, SearchAndShowActivity.class);
-//                defineIntent.putExtra(SearchAndShowActivity.SENT_WORD, query);
                 defineIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(defineIntent);
-
-//                UserVocabMainFrag fragment = (UserVocabMainFrag) finalAdapter.instantiateItem(viewPager, 0);
-//                Log.e("fab", "pressed " + fragment.adapter.getItemCount());
-//
-//                getSupportFragmentManager().beginTransaction().add(R.id.fragments_go_here, DetailsFrag.newInstance(), "details").commit();
             }
         });
     }
@@ -336,10 +311,10 @@ public class UserVocabActivity extends AppCompatActivity implements /*RecyclerVi
 //        serviceText.setText(sb.toString());
     }
 
-    public void doFirstTimeShebang() { // todo: move shevang into the service so no faceplanting
+    public void doFirstTimeIntro() { // todo: move shevang into the service so no faceplanting
         SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
         int userWindowPermission = sharedPreferences.getInt(PREF_KEY_WINDOW_ASKED, PREF_NO);
-        if(userWindowPermission == PREF_NO  && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { // ask permission only the first time
+        if (userWindowPermission == PREF_NO && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { // ask permission only the first time
             // Show alert dialog to the user saying a separate permission is needed
             // Launch the settings activity if the user prefers
             Intent myIntent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
@@ -362,14 +337,15 @@ public class UserVocabActivity extends AppCompatActivity implements /*RecyclerVi
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+        // Handles action bar item clicks
+        // The action bar will
+        // automatically handle clicks on the Home/Up button
+        // since I specified a parent activity in AndroidManifest.xml
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+        //noinspection SimplifiableIfStatement?
         if (id == R.id.action_settings) {
-           // region animation test
+            // region animation test
 //            Log.e("build", Build.VERSION.SDK_INT +  " ? " + Build.VERSION_CODES.LOLLIPOP);
 //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 //                // set transitions...
@@ -383,28 +359,7 @@ public class UserVocabActivity extends AppCompatActivity implements /*RecyclerVi
             startActivity(intent);
 
             return true;
-        }/* else if (id == R.id.drop_table) {
-//            try {
-//
-//                UserVocabHelper helper = UserVocabHelper.getInstance(getApplicationContext());
-//                helper.deleteAllUserVocab();
-//
-//                adapter.replaceData(helper.getAllUserVocab());
-//                adapter.notifyDataSetChanged();
-////                SQLiteDatabase vocabDB = openOrCreateDatabase("vocab.db", MODE_PRIVATE, null);
-////                Toast.makeText(this, "Resetting table...", Toast.LENGTH_SHORT).show();
-////                vocabDB.execSQL("DELETE FROM words;");
-////
-////                String query = "SELECT * FROM words;"; // get an empty cursor
-////                Cursor emptyCursor= vocabDB.rawQuery(query, null);
-////                emptyCursor.moveToFirst();
-////
-////                wordDisplayCursorAdapter.swapCursor(emptyCursor);
-//            }catch (Exception e) {
-//                Log.d("lol", e.toString());
-//            }
-//            return true;
-        }*/
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -420,10 +375,6 @@ public class UserVocabActivity extends AppCompatActivity implements /*RecyclerVi
         return dbFile.exists();
     }
 
-
-
-
-    //////////////////////
 
     public final static int REQ_CODE_SPEECH_INPUT = 92;
 

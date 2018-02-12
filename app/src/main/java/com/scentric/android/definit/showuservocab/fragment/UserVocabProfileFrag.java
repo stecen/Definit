@@ -110,7 +110,6 @@ public class UserVocabProfileFrag extends Fragment implements FragmentRefresher,
                                     startActivity(intent);
 
 
-
                                     break;
                                 case R.id.popup_menu_quizlet:
                                     Log.e("popup", "export quizlet");

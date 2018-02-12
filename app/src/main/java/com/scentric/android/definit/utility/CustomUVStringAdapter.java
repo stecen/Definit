@@ -79,18 +79,6 @@ public class CustomUVStringAdapter {
             }
         }
 
-
-//
-//        for (int defIdx = 0; defIdx < splitted.length; defIdx++) {
-//            String[] defExSplitted = splitted[defIdx].split(EXAMPLE_BREAK);
-//            Log.e("defExSplitted", defExSplitted.length + ""); // should always equal 2
-//            PearsonAnswer.DefinitionExamples de = new PearsonAnswer.DefinitionExamples();
-//            de.definition = defExSplitted[0].trim();
-//            de.examples.add(defExSplitted[1].trim());
-//
-//            list.add(de);
-//        }
-
         return list;
 
     }

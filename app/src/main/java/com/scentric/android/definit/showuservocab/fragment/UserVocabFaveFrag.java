@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 
 import com.google.gson.Gson;
 import com.scentric.android.definit.R;
-import com.scentric.android.definit.utility.RecyclerViewClickListener;
 import com.scentric.android.definit.showuservocab.UserDetailsActivity;
 import com.scentric.android.definit.showuservocab.UserVocabActivity;
 import com.scentric.android.definit.showuservocab.UserVocabAdapter;
@@ -21,13 +20,14 @@ import com.scentric.android.definit.showuservocab.sqlite.GetAllWordsAsyncInterfa
 import com.scentric.android.definit.showuservocab.sqlite.UserVocab;
 import com.scentric.android.definit.showuservocab.sqlite.UserVocabHelper;
 import com.scentric.android.definit.utility.DividerItemDecoration;
+import com.scentric.android.definit.utility.RecyclerViewClickListener;
 
 import java.util.ArrayList;
 
 /**
  * Created by Steven on 8/30/2016.
  */
-public class UserVocabFaveFrag extends Fragment implements RecyclerViewClickListener, FragmentRefresher, FragmentReselected{
+public class UserVocabFaveFrag extends Fragment implements RecyclerViewClickListener, FragmentRefresher, FragmentReselected {
     RecyclerView recyclerView;
     DividerItemDecoration dividerItemDecoration;
     UserVocabHelper helper;
@@ -78,24 +78,24 @@ public class UserVocabFaveFrag extends Fragment implements RecyclerViewClickList
 
         final RecyclerViewClickListener listener = this;
         helper.getFaveVocabList(new GetAllWordsAsyncInterface() {
-            @Override
-            public void setWordsData(ArrayList<UserVocab> userVocabList) {
-                Log.e("faveVocab", "" + userVocabList.size());
-                adapter = new UserVocabAdapter(userVocabList, listener, (activityContext != null) ? activityContext : appContext, true);
-                recyclerView.setAdapter(adapter);
-            }
-        },
+                                    @Override
+                                    public void setWordsData(ArrayList<UserVocab> userVocabList) {
+                                        Log.e("faveVocab", "" + userVocabList.size());
+                                        adapter = new UserVocabAdapter(userVocabList, listener, (activityContext != null) ? activityContext : appContext, true);
+                                        recyclerView.setAdapter(adapter);
+                                    }
+                                },
                 100);
 
         helper.getFaveVocabList(new GetAllWordsAsyncInterface() {
-            @Override
-            public void setWordsData(ArrayList<UserVocab> userVocabList) {
-                Log.e("fave", "" + userVocabList.size());
-                adapter.replaceData(userVocabList);
-                Log.e("adapter count",""+ adapter.getItemCount());
-            }
-        },
-        UserVocabHelper.GET_ALL);
+                                    @Override
+                                    public void setWordsData(ArrayList<UserVocab> userVocabList) {
+                                        Log.e("fave", "" + userVocabList.size());
+                                        adapter.replaceData(userVocabList);
+                                        Log.e("adapter count", "" + adapter.getItemCount());
+                                    }
+                                },
+                UserVocabHelper.GET_ALL);
 
         final UserVocabActivity fActivity = (UserVocabActivity) getActivity();
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -137,37 +137,26 @@ public class UserVocabFaveFrag extends Fragment implements RecyclerViewClickList
         refreshRecycler();
     }
 
-    public void refreshRecycler () {
+    public void refreshRecycler() {
         helper.getFaveVocabList(new GetAllWordsAsyncInterface() {
                                     @Override
                                     public void setWordsData(ArrayList<UserVocab> userVocabList) {
                                         Log.e("fave", "" + userVocabList.size());
                                         adapter.replaceData(userVocabList);
-                                        Log.e("adapter count",""+ adapter.getItemCount());
+                                        Log.e("adapter count", "" + adapter.getItemCount());
                                     }
                                 },
                 UserVocabHelper.GET_ALL);
 //        // todo variable to keep track if there are changes so this activity doesnt have to keep reloading the entire sqlite
-//        helper = UserVocabHelper.getInstance(appContext);
-//        ArrayList<UserVocab> userVocabList = helper.getFaveVocabList();
-//        if (adapter == null) {
-//            recyclerView = (RecyclerView) getView().findViewById(R.id.fave_recycler);
-//            adapter = new UserVocabAdapter(userVocabList, this, appContext, true);
-//            recyclerView.setAdapter(/*new SlideInLeftAnimationAdapter(*/adapter/*)*/);
-//        }
-//        Log.e("userVocabfave", "" + userVocabList.size());
-//        Log.e("adapter fave count",""+ adapter.getItemCount());
-//        adapter.replaceData(userVocabList);
-//        adapter.notifyDataSetChanged();
     }
 
     public void recyclerViewListClicked(View v, int position) {
 
         String userVocabString = (new Gson()).toJson(adapter.sortedDataSet.get(position));
-        Log.e("userVocab", "clicked " + position +". " + userVocabString);
+        Log.e("userVocab", "clicked " + position + ". " + userVocabString);
 
         Intent detailIntent = new Intent(appContext, UserDetailsActivity.class);
-        dataSet = adapter.sortedDataSet; //lol SOH CHEAP
+        dataSet = adapter.sortedDataSet;
 
 
 //        detailIntent.putExtra(UserDetailsActivity.KEY_JSON, userVocabString);
@@ -177,7 +166,7 @@ public class UserVocabFaveFrag extends Fragment implements RecyclerViewClickList
         startActivity(detailIntent);
         if (getActivity() != null) {
 //            getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-            getActivity().overridePendingTransition(0,0);
+            getActivity().overridePendingTransition(0, 0);
         }
 
 //        Intent detailIntent = new Intent(appContext, UserDetailsActivity.class);

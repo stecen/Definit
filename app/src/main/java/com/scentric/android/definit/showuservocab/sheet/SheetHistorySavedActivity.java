@@ -24,11 +24,11 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.scentric.android.definit.R;
-import com.scentric.android.definit.showuservocab.sqlite.GetHistoryInterface;
-import com.scentric.android.definit.utility.RecyclerViewClickListener;
 import com.scentric.android.definit.show.SearchAndShowActivity;
+import com.scentric.android.definit.showuservocab.sqlite.GetHistoryInterface;
 import com.scentric.android.definit.showuservocab.sqlite.HistoryVocab;
 import com.scentric.android.definit.showuservocab.sqlite.UserVocabHelper;
+import com.scentric.android.definit.utility.RecyclerViewClickListener;
 import com.scentric.android.definit.utility.ViewUtility;
 
 import java.util.ArrayList;
@@ -54,7 +54,7 @@ public class SheetHistorySavedActivity extends AppCompatActivity implements Recy
     //////
 
     ImageView navImage;
-        BottomSheetBehavior bottomSheetBehavior;
+    BottomSheetBehavior bottomSheetBehavior;
     CoordinatorLayout coordinatorLayout;
 
     @Override
@@ -122,7 +122,7 @@ public class SheetHistorySavedActivity extends AppCompatActivity implements Recy
 //                finalSheet.setPeekHeight(200);
                 canFinish = true;
             }
-        },150);
+        }, 150);
 
         ///todo: set sheet percentage height
 
@@ -140,14 +140,14 @@ public class SheetHistorySavedActivity extends AppCompatActivity implements Recy
         final RecyclerViewClickListener fclick = this;
         final Context activityCtx = this;
         helper.getHistory50(new GetHistoryInterface() {
-            @Override
-            public void setHistoryData(ArrayList<HistoryVocab> historyVocabList) {
-                adapter = new HistoryAdapter(historyVocabList, fclick, activityCtx);
-                recyclerView.setNestedScrollingEnabled(false);
+                                @Override
+                                public void setHistoryData(ArrayList<HistoryVocab> historyVocabList) {
+                                    adapter = new HistoryAdapter(historyVocabList, fclick, activityCtx);
+                                    recyclerView.setNestedScrollingEnabled(false);
 //        recyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext()));
-                recyclerView.setAdapter(adapter);
-            }
-        },
+                                    recyclerView.setAdapter(adapter);
+                                }
+                            },
                 UserVocabHelper.GET_ALL);
 
 
@@ -157,24 +157,13 @@ public class SheetHistorySavedActivity extends AppCompatActivity implements Recy
         }
 
 
-
-
-
-
 //        setScrollHeight();
-
-
-
 
 
 //        viewPager = (ViewPager) findViewById(R.id.view_pager);
 //        viewPager.setAdapter(new SheetPagerAdapter(getSupportFragmentManager(), this));
 //        tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
 //        tabLayout.setupWithViewPager(viewPager);
-
-
-
-
 
 
         //scroll test
@@ -186,13 +175,12 @@ public class SheetHistorySavedActivity extends AppCompatActivity implements Recy
 //        text.setText(sb.toString());
 
 
-
     }
 
 
     public void recyclerViewListClicked(View v, int position) {
         String query = adapter.sortedDataSet.get(position).word;
-        Log.e("sheet", "clicked " + position +". " + query);
+        Log.e("sheet", "clicked " + position + ". " + query);
 
         Intent defineIntent = new Intent(this, SearchAndShowActivity.class);
         defineIntent.putExtra(SearchAndShowActivity.SENT_WORD, query);
@@ -200,7 +188,7 @@ public class SheetHistorySavedActivity extends AppCompatActivity implements Recy
         startActivity(defineIntent);
     }
 
-    public void setScrollHeight () {
+    public void setScrollHeight() {
 
         //set frame layout height
         final WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
@@ -221,11 +209,11 @@ public class SheetHistorySavedActivity extends AppCompatActivity implements Recy
 
                 int width = fview.getMeasuredWidth();
                 int height = fview.getHeight();
-                Log.e("viewcfsheet", String.format("(%d, %d) vs (%f, %f)", width, height, screenWidth*.75, screenHeight *.75));
+                Log.e("viewcfsheet", String.format("(%d, %d) vs (%f, %f)", width, height, screenWidth * .75, screenHeight * .75));
                 int widthdp = Math.round(ViewUtility.convertPixelsToDp(width, getApplicationContext()));
                 int heightdp = Math.round(ViewUtility.convertPixelsToDp(height, getApplicationContext()));
 
-                int newHeight = (int)Math.round(screenHeight * .75);
+                int newHeight = (int) Math.round(screenHeight * .75);
                 fview.setLayoutParams(new CoordinatorLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, newHeight));
                 Log.e("viewcfsheet", String.format("Settings new height to %d px, or %d dp", newHeight, Math.round(ViewUtility.convertPixelsToDp(newHeight, getApplicationContext()))));
 
@@ -238,10 +226,6 @@ public class SheetHistorySavedActivity extends AppCompatActivity implements Recy
 
         });
     }
-
-
-
-
 
 
 }

@@ -39,7 +39,7 @@ public class TypeWordPopupActivity extends AppCompatActivity {
     int countResume = 0;
 
     @Override
-    public void onNewIntent (Intent intent) { // from recognize speech action of notification
+    public void onNewIntent(Intent intent) { // from recognize speech action of notification
         Log.e("shouldspeech", "onnewintent called");
         if (intent != null && intent.hasExtra(KEY_RECOG_NOW)) {
             String shouldSpeech = intent.getStringExtra(KEY_RECOG_NOW);
@@ -58,7 +58,7 @@ public class TypeWordPopupActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_typeword);
 
-        wordEdit = (EditText)findViewById(R.id.word_edit);
+        wordEdit = (EditText) findViewById(R.id.word_edit);
 
         wordEdit.setFocusable(true);
         wordEdit.setFocusableInTouchMode(true);
@@ -84,7 +84,6 @@ public class TypeWordPopupActivity extends AppCompatActivity {
         }
 
         typeWordPopupActivity = this;
-
 
 
         //region enter listener
@@ -117,7 +116,7 @@ public class TypeWordPopupActivity extends AppCompatActivity {
 
 
 //        if (!isFromSpeech) {
-            showKeyboardAndHighlight();
+        showKeyboardAndHighlight();
 //        }
 
 
@@ -142,12 +141,10 @@ public class TypeWordPopupActivity extends AppCompatActivity {
 
 
     public void showKeyboardAndHighlight() {
-//        Toast.makeText(this, "wtfffffffffffffffffffffff", Toast.LENGTH_SHORT).show();
-
 //        for (int i = 0; i < 1000;i ++) {
-            wordEdit.requestFocus();
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.showSoftInput(wordEdit, InputMethodManager.SHOW_IMPLICIT);
+        wordEdit.requestFocus();
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.showSoftInput(wordEdit, InputMethodManager.SHOW_IMPLICIT);
 //        }
 
         final Handler handler = new Handler();
@@ -232,7 +229,7 @@ public class TypeWordPopupActivity extends AppCompatActivity {
 //            finish();
 //        } else {
 
-            //get keyboard
+        //get keyboard
 
 ////
 //            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -279,8 +276,8 @@ public class TypeWordPopupActivity extends AppCompatActivity {
 
         //hide keyboard
 //        if (isFromSpeech) {
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(wordEdit.getWindowToken(), 0);
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(wordEdit.getWindowToken(), 0);
 //        }
         isFromSpeech = false;
         super.onPause();

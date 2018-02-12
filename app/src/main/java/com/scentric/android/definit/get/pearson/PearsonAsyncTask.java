@@ -25,29 +25,26 @@ import javax.net.ssl.HttpsURLConnection;
 
 /**
  * Created by Steven on 8/1/2016.
- *
- *
- *
+ * <p>
+ * <p>
+ * <p>
  * Created by Steven on 11/28/2015.
- *
+ * <p>
  * Called by both the dialog in the activity (when entering your own word) and the notification (when getting the text from the clipboard)
- *
+ * <p>
  * API I'm using: https://glosbe.com/a-api   -- choose all json objects with the "meaning"
- *
+ * <p>
  * Yandex API Key: dict.1.1.20151130T032757Z  .c863c538d4343852.98b37b03d9f7a8ba71de4b6ac2c115958f5580fc
  * Each page that uses data from the Yandex.Dictionary service must display the text "Powered by Yandex.Dictionary" with an active hyperlink to the page https://tech.yandex.com/dictionary/.
- *
+ * <p>
  * http://www.droidviews.com/install-rooted-lollipop-on-att-galaxy-s5-sm-g900a/
- *
+ * <p>
  * http://developer.pearson.com/apis/dictionaries#!//listEntries
- * ^ PEARSON IS DA BES!!!!!! :D
- *
+ * <p>
  * https://api.pearson.com/v2/dictionaries/ldoce5/entries?headword=test&apikey=rsGRiugAUCRGAkIGXfAnzkMcBTcuKKtM
- *
- *
- * */
+ */
 
-public class PearsonAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
+public class PearsonAsyncTask extends AsyncTask<String, Void, PearsonAnswer> {
     public final static String PEARSON_ENG_QUERY = "https://api.pearson.com/v2/dictionaries/ldoce5/entries?apikey=rsGRiugAUCRGAkIGXfAnzkMcBTcuKKtM&headword=";
     public final static String PEARSON_CHN_QUERY = "https://api.pearson.com/v2/dictionaries/ldec/entries?apikey=rsGRiugAUCRGAkIGXfAnzkMcBTcuKKtM&headword=";
     public final static String PEARSON_SPA_QUERY = "https://api.pearson.com/v2/dictionaries/laes/entries?apikey=rsGRiugAUCRGAkIGXfAnzkMcBTcuKKtM&headword=";
@@ -74,15 +71,9 @@ public class PearsonAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
 
     @Override
     protected PearsonAnswer doInBackground(String... strings) {
-        Log.e("asynctag","You sent " + wordToDefine);
+        Log.e("asynctag", "You sent " + wordToDefine);
 
         PearsonAnswer defPackage = getDefinition(wordToDefine.replace("\\", "").trim(), ctx);
-//            insertIntoDatabase(textToDefine, d1);
-//        try {
-//            Thread.sleep(5000);
-//        } catch (Exception e) {
-//            Log.e("eeeee", e.toString());
-//        }
         return defPackage;
     }
 
@@ -103,10 +94,6 @@ public class PearsonAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
         }
 
         PearsonAnswer pearsonDefinition = getDefinitionPearson(wordText);
-
-//        Gson gson = new Gson();
-//        Log.e("obj", gson.toJson(pearsonDefinition));
-
         return pearsonDefinition;
 
     }
@@ -171,11 +158,6 @@ public class PearsonAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
                             JSONObject answer = results.getJSONObject(i);
 
                             definitionExamples.wordForm = answer.getString("headword"); //todo make sure it exists
-
-//                            if (!answer.getString("headword").equals(wordText) && i != 0) { // other definitions are related words
-//                                continue;
-//                            }
-
                             if (answer.has("part_of_speech")) {
                                 definitionExamples.partOfSpeech = answer.getString("part_of_speech");
                             } else {
@@ -361,22 +343,16 @@ public class PearsonAsyncTask extends AsyncTask<String, Void, PearsonAnswer>{
 
             didFail = true;
 
-            Log.d("pearson","sockettimeout");
+            Log.d("pearson", "sockettimeout");
         } catch (Exception e) {
             PearsonAnswer.DefinitionExamples definitionExamples = new PearsonAnswer.DefinitionExamples();
             definitionExamples.wordForm = PearsonAnswer.DEFAULT_NO_DEFINITION;
             definitionExamples.definition = PearsonAnswer.DEFAULT_NO_DEFINITION;
             definitionExamples.examples.add(PearsonAnswer.DEFAULT_NO_EXAMPLE);
-//            definitionExamples.partOfSpeech = "---";
 
             pearsonAnswer.definitionExamplesList.add(definitionExamples); //same
 
-//            runO
-
             didFail = true;
-//            Toast.makeText(ctx, "Oops! The connection failed somehow :(", Toast.LENGTH_SHORT).show();
-
-//            Log.d("lol", e.toString() + " WOW " + e.getStackTrace().toString());
 
         } finally {
             if (reader != null) {
