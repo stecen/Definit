@@ -5,7 +5,7 @@ I created this app out of desire to help myself improve my measly vocabulary. I'
 This app allows you to define words from any screen, using a persistent notification (with speech and text input), and a convenient automatic pop-up that activates when a word is copied to the pasteboard (similar to Messenger chatheads). 
 Another key feature that separates it from dictionaries I had previously used was the ability to do the above as well as save the words for later viewing, so that I could actually look back at all the words I had encountered, searched up and learned. 
 
-Development in Android Studio, targeting Nougat devices with support down to KitKat, opened a path to gain experience regarding Android support issues floating windows, fragments, service and activity management, SQL, networking, UX and UI design.
+Development in Android Studio, targeting Nougat devices with support down to KitKat, opened a path to gain experience with Android support libraries and issues, floating windows, fragments, service and activity management, SQL, networking, and UX and UI design.
 
 <img src="imgs/main.png" height="30%" width="30%">
 
