@@ -48,12 +48,8 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
         appContext = getActivity().getApplicationContext();
     }
 
-    //Overriden method onCreateView
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        //Returning the layout file after inflating
-        //Change R.layout.tab1 in you classes
         return inflater.inflate(R.layout.fragment_uservocab_main, container, false);
     }
 
@@ -67,18 +63,6 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
 
         activityContext = getActivity();
 
-//        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.user_vocab_recycler, DetailsFrag.newInstance(), "details").commit();
-
-
-//        dividerItemDecoration = new DividerItemDecoration(appContext);
-
-//        helper = UserVocabHelper.getInstance(appContext);
-//        ArrayList<UserVocab> userVocabList = helper.getAllUserVocab();
-//        Log.e("userVocab", "" + userVocabList.size());
-//        adapter = new UserVocabAdapter(userVocabList, this, appContext, false);
-////        recyclerView.addItemDecoration(dividerItemDecoration);
-//        recyclerView.setAdapter(/*new SlideInLeftAnimationAdapter(*/adapter/*)*/);
-////        Log.e("adapter count",""+ adapter.getItemCount());
         helper = UserVocabHelper.getInstance(appContext);
         final RecyclerViewClickListener listener = this;
 //        final View.OnLongClickListener flong = this;
@@ -120,37 +104,6 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
         });
     }
 
-    //region onlongclick
-//    @Override
-//    public boolean onLongClick(View view) {
-//        Log.e("mainRelative", "onLongClick for popup");
-//        PopupMenu popupMenu = new PopupMenu(appContext, recyclerView); // mainRelative
-//        popupMenu.getMenuInflater().inflate(R.menu.menu_uservocab_popup, popupMenu.getMenu());
-//
-//        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-//            @Override
-//            public boolean onMenuItemClick(MenuItem item) {
-//                Log.e("popup", "you clicked " + item.getTitle() + " " + item.getItemId());
-//                switch (item.getItemId()) {
-//                    case R.id.popup_menu_delete:
-//                        Log.e("popup", "delete");
-//                        break;
-//                    case R.id.popup_menu_favorite:
-//                        Log.e("popup", "favorite");
-//                        break;
-//                    default:
-//                        break;
-//                    }
-//                return false;
-//            }
-//        });
-//
-//        popupMenu.show();
-//
-//        return false;
-//    }
-    // endregion
-
     @Override
     public void reselect() {
 //        if (linearLayoutManager != null) {
@@ -173,13 +126,6 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
     }
 
     public void refreshRecycler() {
-        // todo variable to keep track if there are changes so this activity doesnt have to keep reloading the entire sqlite
-//        helper = UserVocabHelper.getInstance(appContext);
-//        ArrayList<UserVocab> userVocabList = helper.getAllUserVocab();
-//        Log.e("userVocab", "" + userVocabList.size());
-//        Log.e("adapter count",""+ adapter.getItemCount());
-//        adapter.replaceData(userVocabList);
-
         helper = UserVocabHelper.getInstance(appContext);
         helper.getAllUserVocab(new GetAllWordsAsyncInterface() {
                                    @Override

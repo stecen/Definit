@@ -112,12 +112,10 @@ public class GlosbeAsyncTask extends AsyncTask<String, Void, PearsonAnswer> {
 
 
     public GlosbePackage getDefinition(String wordText, Context context) {
-//        String localDefinition = getDefinitionLocal(wordText, context);
         String onlineDefinition = getDefinitionOnline(wordText);
 
         GlosbePackage returnPackage = new GlosbePackage();
         if (returnPackage != null) {
-//            returnPackage.localDef.add(localDefinition);
             returnPackage.onlineDef.add(onlineDefinition);
 
             returnPackage.word = wordText;

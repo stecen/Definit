@@ -48,7 +48,6 @@ public class TypeWordPopupActivity extends AppCompatActivity {
                 recognizeSpeech();
                 isFromSpeech = true;
             }
-//            wordEdit.setText(word.trim());
         }
     }
 
@@ -80,61 +79,10 @@ public class TypeWordPopupActivity extends AppCompatActivity {
                 recognizeSpeech();
                 isFromSpeech = true;
             }
-//            wordEdit.setText(word.trim());
         }
 
         typeWordPopupActivity = this;
-
-
-        //region enter listener
-//        if (edittext != null) {
-//            Log.e("edittext", "setting listener...");
-////            edittext.setOnKeyListener(new View.OnKeyListener() {
-////                public boolean onKey(View v, int keyCode, KeyEvent event) {
-////                    // If the event is a key-down event on the "enter" button
-////                    if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
-////                            (keyCode == KeyEvent.KEYCODE_ENTER)) {
-////                        // Perform action on key press
-////                        Toast.makeText(getApplicationContext(), "enter pressed on " + edittext.getText(), Toast.LENGTH_SHORT).show();
-////                        return true;
-////                    }
-////                    return false;
-////                }
-////            });
-//            edittext.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-//                @Override
-//                public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-//                    if (actionId == EditorInfo.IME_ACTION_DONE){
-//                        //do stuff
-//                        Log.e("edittext", "enter pressed");
-//                        return true;
-//                    }
-//                    return false;
-//                }
-//            });
-//        }
-
-
-//        if (!isFromSpeech) {
         showKeyboardAndHighlight();
-//        }
-
-
-//        showKeyboard(wordEdit, this);
-
-
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.VocabAppTheme);
-//        builder.setTitle("New word");
-//
-//        LayoutInflater inflater = this.getLayoutInflater();
-//        final View dV = inflater.inflate(R.layout.dialog_new_word, null);
-//        builder.setView(dV);
-//
-//        EditText newWordEdit = (EditText) dV.findViewById(R.id.new_word_edit);
-//
-//        AlertDialog dialog = builder.create();
-//        dialog.setCanceledOnTouchOutside(true); // http://stackoverflow.com/questions/8384067/how-to-dismiss-the-dialog-with-click-on-outside-of-the-dialog
-////        dialog.show();
 
 
     }

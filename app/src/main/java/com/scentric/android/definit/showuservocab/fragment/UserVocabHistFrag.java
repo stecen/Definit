@@ -58,12 +58,6 @@ public class UserVocabHistFrag extends Fragment implements RecyclerViewClickList
         activityContext = getActivity();
         helper = UserVocabHelper.getInstance(appContext);
 
-//        ArrayList<HistoryVocab> historyVocabs = helper.getHistory50();
-//        adapter = new HistoryAdapter(historyVocabs, this, appContext);
-////        recyclerView.setNestedScrollingEnabled(false);
-////        recyclerView.addItemDecoration(new DividerItemDecoration(appContext));
-//        recyclerView.setAdapter(adapter);
-
         final RecyclerViewClickListener fClick = this;
         helper.getHistory50(new GetHistoryInterface() {
             @Override

@@ -71,16 +71,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
         RecyclerView recyclerView;
         View toolbarView;
         TextView dateText;
-
-        RelativeLayout headerRelative, mainRelative; // main , clickable content. exists because if there is a date header, you don't want ripplies showing through that because it's not supposed to be a part of the item
-        TextView dateHeaderText;
-
-        //        TextView exampleText;
-//        View fillerView, upShaView, loShaView;
-        TextView faveColorView;
         RelativeLayout cardRelative;
-//        RelativeLayout colorView;
-//            RelativeLayout relativeLayout;
 
         public ViewHolder(View v) {
             super(v);
@@ -110,15 +101,6 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
                     Log.e("card", "clicked");
                 }
             });
-
-
-//            def1Text = (TextView) v.findViewById(R.id.def1_text);
-//            mainRelative = (RelativeLayout) v.findViewById(R.id.item_uservocab_main_relative);
-//            headerRelative = (RelativeLayout) v.findViewById(R.id.item_user_vocab_recycler_dateheader);
-//            dateHeaderText = (TextView) v.findViewById(R.id.item_uservocab_main_dateheader_text);
-//            faveImage = (ImageView) v.findViewById(R.id.fave_image);
-//            faveColorView = (TextView) v.findViewById(R.id.fave_color_view);
-
 
         }
 
@@ -173,7 +155,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
                     // toggle to false, and send to database. regardless of whether the sqlite succeeds, update the ui. responsive :)
                     Drawable notFaveDrawable = context.getResources().getDrawable(NOT_FAVE_DRAWABLE);
                     ((ImageView) fholder.faveImage).setImageDrawable(notFaveDrawable);
-                    ViewUtility.bOiiiNNnNNnnNGGGgggg(fholder.faveImage);
+                    ViewUtility.boing(fholder.faveImage);
 
                     UserVocabHelper helper = UserVocabHelper.getInstance(context.getApplicationContext());
                     helper.toggleFavorite(userVocab);
@@ -181,7 +163,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
                 } else {
                     Drawable faveDrawable = context.getResources().getDrawable(IS_FAVE_DRAWABLE);
                     ((ImageView) fholder.faveImage).setImageDrawable(faveDrawable);
-                    ViewUtility.bOiiiNNnNNnnNGGGgggg(fholder.faveImage);
+                    ViewUtility.boing(fholder.faveImage);
 
                     UserVocabHelper helper = UserVocabHelper.getInstance(context.getApplicationContext());
                     helper.toggleFavorite(userVocab);
@@ -193,43 +175,6 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
         if (isFave) { // set color to yellow
             holder.cardView.setCardBackgroundColor(Color.parseColor("#ffffca"));
         }
-
-//         region adjust width of  card
-//        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-//        Display display = wm.getDefaultDisplay();
-//        Point size = new Point();
-//        display.getSize(size);
-//        final int width = size.x;
-//        final int height = size.y;
-//        Log.e("cards", width + " " + height);
-
-//        final WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-//        final CardView fview = holder.cardView;
-//        final ViewTreeObserver vto = fview.getViewTreeObserver();
-//        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-//            @Override
-//            public void onGlobalLayout() {
-////                LayerDrawable ld = (LayerDrawable)tv.getBackground();
-////                ld.setLayerInset(1, 0, tv.getHeight() / 2, 0, 0);
-////                ViewTreeObserver obs = tv.getViewTreeObserver();
-//
-////                ViewUtility.circleRevealExtra(coordinatorLayout); // lmfao
-////                    ViewUtility.zoomIntoView(coordinatorLayout);
-//
-////                fview.setLayoutParams(new RelativeLayout.LayoutParams(Math.round((float) width * .66f), height));
-////                fview.setLayoutParams(new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-//
-//
-//
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-//                    fview.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-//                } else {
-//                    fview.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-//                }
-//            }
-//
-//        });
-        //endregion
     }
 
 
@@ -262,12 +207,6 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
 
 
                 v.setOnClickListener(this);
-            }
-
-            @Override
-            public void onClick(View v) {
-//            itemListener.recyclerViewListClicked(v, this.getLayoutPosition());
-
             }
         }
 

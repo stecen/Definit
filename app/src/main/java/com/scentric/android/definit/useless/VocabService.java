@@ -54,9 +54,6 @@ public class VocabService extends IntentService {
     public final static String WORD_TO_DEFINE_FROM_DIALOG = "Word to define"; // key
 
     public static final String SENT_WORD = "sent_word";
-    public static final String SENT_DEF = "send_def";
-
-    public final static String DIALOG_TEXT = "DIALOG_TEXT"; // extra key to get the word that the user entered into a dialog
 
     public final static String SHOW_POPUP = "show_popup"; // key on whether to show popup or definition or not (probably yes) boolean
 
@@ -133,9 +130,6 @@ public class VocabService extends IntentService {
         String defPackageJson = gson.toJson(defPackage);
 
         disDefIntent.putExtra(DisplayDefinitionPopupActivity.SENT_PACKAGE_JSON, defPackageJson);
-//        disDefIntent.putExtra(DisplayDefinitionPopupActivity.SENT_WORD, word);
-//        disDefIntent.putExtra(DisplayDefinitionPopupActivity.SENT_DEF, def);
-        //todo: check if word has spaces, and / or whether it exists in the dictionary
         startActivity(disDefIntent);
     }
 
@@ -159,8 +153,6 @@ public class VocabService extends IntentService {
 
         String exe = "CREATE TABLE IF NOT EXISTS words(_id INTEGER PRIMARY KEY AUTOINCREMENT, word VARCHAR, d1 VARCHAR, e1 VARCHAR, d2 VARCHAR, e2 VARCHAR);";
         vocabDB.execSQL(exe); // word, 2 definitions, 2 examples
-//        Log.d("lol", "executing SQL -- " + exe);
-
         String randomDefinition = "a foo that calls a bar";
         exe = "INSERT INTO words VALUES(NULL, \"" + wordText + "\", \"" + d1 + "\", \"" + DEFAULT_NO_EXAMPLE + "\", \"" + DEFAULT_NO_DEFINITION + "\", \"" + DEFAULT_NO_EXAMPLE + "\");";
         vocabDB.execSQL(exe);
@@ -316,6 +308,6 @@ public class VocabService extends IntentService {
             }
         }
 
-        return DEFAULT_NO_DEFINITION; // todo: nothing should rly come here...
+        return DEFAULT_NO_DEFINITION;
     }
 }

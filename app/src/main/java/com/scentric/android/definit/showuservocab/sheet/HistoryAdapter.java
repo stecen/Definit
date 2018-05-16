@@ -105,12 +105,6 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         }
     }
 
-
-//    public void add(UserVocab def) {
-//        sortedDataSet.add(def);
-//        notifyItemInserted(sortedDataSet.size()-1);
-//    }
-
     @Override
     public HistoryAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                         int viewType) {

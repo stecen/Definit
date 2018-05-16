@@ -44,7 +44,6 @@ public class ImportActivity extends AppCompatActivity {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 if (appBarLayout != null) {
                     appBarLayout.setElevation(8);
-//                    toolbar.setElevation(0);
                 }
             }
         }

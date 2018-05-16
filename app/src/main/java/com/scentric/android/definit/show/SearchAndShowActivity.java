@@ -288,17 +288,6 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
         }
 
         progressBar.setVisibility(View.INVISIBLE);
-        final Handler handler = new Handler();
-//        handler.postDelayed(new Runnable() { // todo: apply this handler everywhere
-//            @Override
-//            public void run() {
-//                progressBar.setVisibility(View.INVISIBLE);
-//                //Do something after 100ms
-//            }
-//        }, 100);
-
-
-//        getDefinition("brighter"); // todo: make more obvious
         progressBar.setVisibility(View.INVISIBLE);
         makeSpaceView.setVisibility(View.GONE);
         frame.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -507,9 +496,6 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-//                LayerDrawable ld = (LayerDrawable)tv.getBackground();
-//                ld.setLayerInset(1, 0, tv.getHeight() / 2, 0, 0);
-//                ViewTreeObserver obs = tv.getViewTreeObserver();
 
                 Display display = windowManager.getDefaultDisplay();
                 Point size = new Point(); // for positioning
@@ -551,22 +537,8 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
         searchView.setQuery(query, false);
 
         searchView.clearFocus();
-
-//        defExRecycler.invalidateItemDecorations(); //todo why is this null when oncreate is already called
-
-//        final Handler handler1 = new Handler();
-//        handler1.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
         progressBar.setVisibility(View.VISIBLE); // redundant sometimes
         fab.setVisibility(View.GONE);
-//            }
-//        }, 100);
-//        ViewUtility.circleExit(fab);
-
-//        makeSpaceView.setVisibility(View.VISIBLE);
-
-        //clear Adapter and set progress bar
 
         didUserCancel = false;
 
@@ -586,7 +558,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 
         query = query.replace("\n", " ");
         if (query.length() > 50) {
-            query = query.substring(0, 50); // volcanoisis
+            query = query.substring(0, 50);
         }
 
 
@@ -677,13 +649,6 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
             }
             // if only one element, still have to readjust
             if (finalDataSet.size() == 1) {
-//                if (showExtraElement) {
-//                    //add another
-//                    addExtraElementContext(1);
-//                } else {
-//
-////                defExRecycler.addItemDecoration(dividerItemDecoration);
-//                }
                 readjustCoordHeight();
             }
         }
@@ -701,48 +666,26 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
         Log.e("display", "onDestroy");
 
         iAlreadyExist = false; // idk if it's necessary
-
-        // :(( according to this stack overflow guy http://stackoverflow.com/questions/3282204/android-open-dialogue-activity-without-opening-main-activity-behind-it
-
-//        Intent mainIntent = new Intent(this, DisplayDefinitionPopupActivity.class);
-//        mainIntent.putExtra(UserVocabActivity.KEY_TASK, UserVocabActivity.IS_BACK);
-//        startActivity(mainIntent);
         super.onDestroy();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_sheet, menu);
         Log.e("sheet", "options menu called");
-//        searchView.setMaxWidth(Integer.MAX_VALUE);
-//        searchView.setLayoutParams(new RelativeLayout.LayoutParams(Integer.MAX_VALUE, ViewGroup.LayoutParams.WRAP_CONTENT));
         return true;
     }
 
     public void touchHandler(int source) {
-        //called when touching framelayout/outside. note: is not called when the user sends something, because of the async needed. so if u change this chaneg that:)
-//        DisplayDefinitionPopupActivity.shouldShowPreviousTypeWordPopup = false;
-
         if (source == TOUCH_SEND) {
             Log.e("touch", "touched sent " + String.format(Locale.US, "%d, %d", fab.getWidth(), fab.getHeight()));
 
             recyclerAdapter.animateSlidesAndInsertUserVocab(); // removetemp lol
 
-
-//            DisplayDefinitionPopupActivity.shouldShowPreviousTypeWordPopup = false;
-            if (TypeWordPopupActivity.typeWordPopupActivity != null) { // todo: delete this
+            if (TypeWordPopupActivity.typeWordPopupActivity != null) {
                 TypeWordPopupActivity.typeWordPopupActivity.finishMe();
             }
 
             endingActivity = true; // disable clicks
-//            CallbackAsyncTask callbackAsyncTask = new CallbackAsyncTask(REMOVE_DURATION + 50, this); // wait 300 milliseconds for moving animations to finish
-//            callbackAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-
-
-//            ViewUtility.circleExit(coordinatorLayout, 100);
-
-
             final Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
@@ -784,7 +727,6 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
         if (view != null) {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-//            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         }
     }
 
@@ -796,11 +738,6 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
         try {
             if (searchInnerText != null &&
                     (searchInnerText.getText().toString().equals("") || searchInnerText.getText().toString().trim().equals(""))) {
-
-
-                Log.e("searchInnerText yassss", searchInnerText.getText().toString() + " ");
-//                searchView.requestFocus();
-
                 searchInnerText.requestFocus();
 
                 ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).
@@ -820,7 +757,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
                 Log.e("searchInnerText", "NULL +" + searchInnerText.getText().toString() + ".");
             }
         } catch (NullPointerException e) {
-            Log.e("searchinnertext", "null pointer exception at " + e.toString());
+            Log.e("searchInnerText", "null pointer exception at " + e.toString());
         }
 
 
@@ -1042,8 +979,6 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
             }
         }
 
-        Log.e("hi", "hi");
-
     }
 
     @Override
@@ -1114,7 +1049,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
         Collections.sort(removeIdx);
         Collections.reverse(removeIdx);
         for (int i = 0; i < removeIdx.size(); i++) {
-            Log.e("removeIdx", "aaa removing " + removeIdx.get(i));
+            Log.e("removeIdx", "removing " + removeIdx.get(i));
             finalDataSet.remove((int) removeIdx.get(i));
         }
 
@@ -1128,11 +1063,6 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 
 
             Collections.sort(finalDataSet, new PearsonComparator(pearsonAnswer.word.trim()));
-
-            Log.e("lolsorted", (new Gson()).toJson(finalDataSet));
-            Log.e("countlmao", "unsorted: " + Integer.toString(pearsonAnswer.definitionExamplesList.size()));
-            Log.e("countlmao", "sorted: " + Integer.toString(finalDataSet.size()));
-
             addPearsonList(finalDataSet, true);
 
         } else { // get the glosbe package
@@ -1170,7 +1100,6 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 
     //should only happen after onCreate is called, so recyclerview should not be null
     private void truthSelect(int idx, boolean sel) {
-//        if (!(recyclerAdapter.sortedPearsonDataSet.get(idx).definition.trim().equals(PearsonAnswer.DEFAULT_NO_DEFINITION))) { // make sure it's selectable
         selected[idx] = sel;
         recyclerAdapter.updateSelect(idx, sel);
 //        }

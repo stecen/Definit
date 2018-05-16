@@ -44,39 +44,20 @@ import java.util.Locale;
 
 
 public class UserVocabActivity extends AppCompatActivity implements /*RecyclerViewClickListener,*/ TabLayout.OnTabSelectedListener {
-    TextView serviceText;
-    //    ListView wordList;
-    Button startButton, stopButton;
-    TextView animationText;
 
     AppBarLayout appBarLayout;
-
-    TextView toolbarText;
 
     TabLayout tabLayout;
     ViewPager viewPager;
 
-    RecyclerView recyclerView;
-    UserVocabAdapter adapter;
-
     public FloatingActionButton fab;
 
-    WordDisplayCursorAdapter wordDisplayCursorAdapter;
-
-    UserVocabHelper helper;
-
-    private DictionaryDatabaseHelper dictionaryDatabase;
-
-    public static final String KEY_TASK = "keyTask";
-    public static final String IS_BACK = "isBack";
 
     public static final String PREF_KEY_WINDOW_ASKED = "prefKeyWindow";
     public static final int PREF_YES = 1;
     public static final int PREF_NO = 0;
 
     public static final int UNSEL_TAB_ALPHA = 90;
-
-    DividerItemDecoration dividerItemDecoration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,12 +80,7 @@ public class UserVocabActivity extends AppCompatActivity implements /*RecyclerVi
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
 
-//        toolbarText = (TextView) findViewById(R.id.uservocab_toolbar_text);
-
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            tabLayout.setElevation(0);
-//        }
         tabLayout.addTab(tabLayout.newTab()/*.setText("Saved")*/.setIcon(R.drawable.ic_home_white_24dp));
         tabLayout.addTab(tabLayout.newTab()/*.setText("Favorited")*/.setIcon(R.drawable.ic_star_white_24dp));
         tabLayout.addTab(tabLayout.newTab()/*.setText("History")*/.setIcon(R.drawable.ic_history_white_24dp));
@@ -261,32 +237,6 @@ public class UserVocabActivity extends AppCompatActivity implements /*RecyclerVi
     }
 
     @Override
-    public void onTabReselected(TabLayout.Tab tab) {
-
-    }
-
-//    public void refreshRecycler () {
-//        // todo variable to keep track if there are changes so this activity doesnt have to keep reloading the entire sqlite
-//        helper = UserVocabHelper.getInstance(getApplicationContext());
-//        ArrayList<UserVocab> userVocabList = helper.getAllUserVocab();
-//        Log.e("userVocab", "" + userVocabList.size());
-//                Log.e("adapter count",""+ adapter.getItemCount());
-//        adapter.replaceData(userVocabList);
-//        adapter.notifyDataSetChanged();
-//    }
-//
-//    public void recyclerViewListClicked(View v, int position) {
-//        String userVocabString = (new Gson()).toJson(adapter.sortedDataSet.get(position));
-//        Log.e("userVocab", "clicked " + position +". " + userVocabString);
-//
-//        Intent detailIntent = new Intent(this, UserDetailsActivity.class);
-//        detailIntent.putExtra(UserDetailsActivity.KEY_JSON, userVocabString);
-//        startActivity(detailIntent);
-////        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-////        overridePendingTransition(0,0);
-//    }
-
-    @Override
     public void onPause() {
         fab.hide();
         super.onPause();
@@ -296,19 +246,6 @@ public class UserVocabActivity extends AppCompatActivity implements /*RecyclerVi
     protected void onResume() {
         super.onResume();
         fab.show();
-
-//        StringBuilder sb = new StringBuilder();
-//        ActivityManager manager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-//        for (ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-//            sb.append(service.service.getClassName()).append("\n");
-////            if (service.service.getClassName().contains("VocabService")) {
-////                serviceText.setText(service.service.getClassName());
-////                break;
-////            } else {
-////                serviceText.setText("Nope");
-////            }
-//        }
-//        serviceText.setText(sb.toString());
     }
 
     public void doFirstTimeIntro() { // todo: move shevang into the service so no faceplanting
@@ -337,30 +274,15 @@ public class UserVocabActivity extends AppCompatActivity implements /*RecyclerVi
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handles action bar item clicks
-        // The action bar will
-        // automatically handle clicks on the Home/Up button
-        // since I specified a parent activity in AndroidManifest.xml
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement?
         if (id == R.id.action_settings) {
-            // region animation test
-//            Log.e("build", Build.VERSION.SDK_INT +  " ? " + Build.VERSION_CODES.LOLLIPOP);
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                // set transitions...
-//                Intent intent = new Intent(this, UserDetailsActivity.class);
-////                intent.putExtra(UserDetailsActivity.KEY_WORD, )
-//                ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, (View) animationText, "word");
-//                startActivity(intent, options.toBundle());
-//            }
 
             Intent intent = new Intent(this, PreferencesActivity.class);
             startActivity(intent);
 
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 

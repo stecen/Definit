@@ -12,21 +12,6 @@ public class CustomUVStringAdapter {
 
     public static String toString(ArrayList<PearsonAnswer.DefinitionExamples> listOfDefEx) {
         StringBuilder sb = new StringBuilder();
-
-//        //assumes that there is only one example. todo: support for an actual list of examples
-//        for (int i = 0; i < listOfDefEx.size(); i++) {
-//            // assumes that String contains no newlines
-//            sb.append(listOfDefEx.get(i).definition)
-//              .append(" ")
-//              .append(EXAMPLE_BREAK)
-//              .append(" ");
-//            if ((listOfDefEx.get(i).examples.get(0)) != null){
-//                sb.append(listOfDefEx.get(i).examples.get(0));
-//            } else {
-//                sb.append(PearsonAnswer.DEFAULT_NO_EXAMPLE);
-//            }
-//            sb.append("\n");
-//        }
         for (int i = 0; i < listOfDefEx.size(); i++) {
             sb.append(DEFINE_BREAK)
                     .append(" ")

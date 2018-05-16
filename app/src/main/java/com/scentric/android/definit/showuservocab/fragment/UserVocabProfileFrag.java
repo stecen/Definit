@@ -87,9 +87,6 @@ public class UserVocabProfileFrag extends Fragment implements FragmentRefresher,
             ixLinear.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    Intent intent = new Intent(appContext, QuizletExportActivity.class);
-//                    startActivity(intent);
-//                    sendNativeExport();
                     PopupMenu popupMenu = new PopupMenu((actContext != null) ? actContext : appContext, ixLinear);
                     popupMenu.getMenuInflater().inflate(R.menu.menu_export_popup, popupMenu.getMenu());
 
@@ -247,7 +244,6 @@ public class UserVocabProfileFrag extends Fragment implements FragmentRefresher,
     }
 
     public void refreshViews() {
-        // yooo
     }
 
 

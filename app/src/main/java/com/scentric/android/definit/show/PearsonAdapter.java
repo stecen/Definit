@@ -364,40 +364,6 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
                 }
             }
         }
-
-        // todo: make fade work
-
-
-//        // OMG IT WORKS!!! YOU JUST HAVE TO SET THE OPPPOSTE
-//        // set alpha based on lev distance
-////        if (sortedPearsonDataSet.size() > 1) { // don't do alpha if there's only one definition
-//        int dis = PearsonComparator.computeLevenshteinDistance(sortedPearsonDataSet.get(position).wordForm, mainWord);
-////        int alphaInt = dis - 5; // 6 is an arbitrary number
-//        if (dis < 7 ) {
-//            if (holder.definitionText != null) {
-////                Log.e("levDis", "setting def alpha " + (.87f) + " " + sortedPearsonDataSet.get(position).wordForm + " vs " + mainWord + "... " + dis);
-//                holder.definitionText.setAlpha(.87f);
-//            }
-//            if (holder.exampleText != null) {
-//                holder.exampleText.setAlpha(.54f);
-//            }
-//        } else {
-//            if (/*disBig[position] ||*/ (disLen[position] != -1 && disLen[position] >= 7) || dis >= 7) { // close enough to the actual wor
-////                disBig[position] = true;
-//                disLen[position]= dis;
-//                if (holder.definitionText != null) {
-//                    Log.e("levDis", "setting def alpha " + (.6f * .87f) + " " + sortedPearsonDataSet.get(position).wordForm + " vs " + mainWord + "... " + dis);
-//                    holder.definitionText.setAlpha(.6f * .87f);
-//                }
-//                if (holder.exampleText != null) {
-//                    holder.exampleText.setAlpha(.6f * .54f);
-//                }
-//            }
-//        }
-
-
-             // set alpha based on lev distance
-            // if (sortedPearsonDataSet.size() > 1) { // don't do alpha if there's only one definition
             int dis = PearsonComparator.computeLevenshteinDistance(sortedPearsonDataSet.get(position).wordForm, mainWord);
             int alphaInt = dis - 5; // 6 is an arbitrary number
             if (alphaInt < 0) { // close enough to the actual wor
@@ -431,11 +397,7 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
                     holder.posText.setAlpha(alpha * .70f);
                 }
             }
-//        }
-
-                /*if (position == 0*//* || position == searchAndShowActivity.lastIdx*//*) { // add space above because of send button
-            ViewUtility.setMarginsRelative(16f, 40f, 16f, (hasExample) ? 16f : 16f, holder.definitionText, searchAndShowActivity.getApplicationContext());
-        } else*/ if (position != searchAndShowActivity.lastIdx) { // reset margins
+        if (position != searchAndShowActivity.lastIdx) { // reset margins
             RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 0);
             layoutParams.addRule(RelativeLayout.BELOW, R.id.de_example_text);
             holder.exFillerView.setLayoutParams(layoutParams);

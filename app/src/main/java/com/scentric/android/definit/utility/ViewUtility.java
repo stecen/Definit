@@ -27,8 +27,6 @@ public class ViewUtility {
         // previously invisible view
         final View myView = view;
 
-//        myView.setVisibility(View.VISIBLE);
-
         Log.e("fab", "showing");
 
         // create the animator for this view (the start radius is zero)
@@ -80,7 +78,7 @@ public class ViewUtility {
         view.startAnimation(anim);
     }
 
-    public static void bOiiiNNnNNnnNGGGgggg(View view) {
+    public static void boing(View view) {
         final int boingDur = 100;
 
         RotateAnimation anim = new RotateAnimation(0, 360,
@@ -89,34 +87,6 @@ public class ViewUtility {
         anim.setDuration(100);
         anim.setInterpolator(new DecelerateInterpolator());
         view.startAnimation(anim);
-
-//        ScaleAnimation anim = new ScaleAnimation(1, 1.1f, 1, 1.1f/*,    50, 50*/);
-////        new ScaleAnimation()
-//        anim.setFillBefore(true);
-//        anim.setFillAfter(true);
-//        anim.setFillEnabled(true);
-//        anim.setDuration(boingDur);
-//        anim.setInterpolator(new OvershootInterpolator());
-//        view.startAnimation(anim);
-//
-//        final Handler handler = new Handler();
-//        final View fView = view;
-//
-//        handler.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                ScaleAnimation anim2 = new ScaleAnimation(1.1f, 1, 1.1f, 1/*,    50, 50*/);
-////        new ScaleAnimation()
-//                anim2.setFillBefore(true);
-//                anim2.setFillAfter(true);
-//                anim2.setFillEnabled(true);
-//                anim2.setDuration(boingDur);
-//                anim2.setInterpolator(new OvershootInterpolator());
-//                fView.startAnimation(anim2);
-//            }
-//        }, boingDur);
-
-
     }
 
 

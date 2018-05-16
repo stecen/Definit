@@ -135,8 +135,6 @@ public class SheetHistorySavedActivity extends AppCompatActivity implements Recy
         recyclerView.setHasFixedSize(true);
         helper = UserVocabHelper.getInstance(this);
 
-//        ArrayList<HistoryVocab> historyVocabs = helper.getHistory50();
-
         final RecyclerViewClickListener fclick = this;
         final Context activityCtx = this;
         helper.getHistory50(new GetHistoryInterface() {
@@ -144,7 +142,6 @@ public class SheetHistorySavedActivity extends AppCompatActivity implements Recy
                                 public void setHistoryData(ArrayList<HistoryVocab> historyVocabList) {
                                     adapter = new HistoryAdapter(historyVocabList, fclick, activityCtx);
                                     recyclerView.setNestedScrollingEnabled(false);
-//        recyclerView.addItemDecoration(new DividerItemDecoration(getApplicationContext()));
                                     recyclerView.setAdapter(adapter);
                                 }
                             },
@@ -155,25 +152,6 @@ public class SheetHistorySavedActivity extends AppCompatActivity implements Recy
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
             nested.setElevation(16f);
         }
-
-
-//        setScrollHeight();
-
-
-//        viewPager = (ViewPager) findViewById(R.id.view_pager);
-//        viewPager.setAdapter(new SheetPagerAdapter(getSupportFragmentManager(), this));
-//        tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
-//        tabLayout.setupWithViewPager(viewPager);
-
-
-        //scroll test
-//        TextView text = (TextView) findViewById(R.id.sheet_text);
-//        StringBuilder sb = new StringBuilder();
-//        for (int i = 0; i < 50; i++) {
-//            sb.append("https://developer.android.com/reference/android/support/design/widget/BottomSheetBehavior.html");
-//        }
-//        text.setText(sb.toString());
-
 
     }
 
@@ -197,10 +175,6 @@ public class SheetHistorySavedActivity extends AppCompatActivity implements Recy
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-//                LayerDrawable ld = (LayerDrawable)tv.getBackground();
-//                ld.setLayerInset(1, 0, tv.getHeight() / 2, 0, 0);
-//                ViewTreeObserver obs = tv.getViewTreeObserver();
-
                 Display display = windowManager.getDefaultDisplay();
                 Point size = new Point(); // for positioning
                 display.getSize(size);

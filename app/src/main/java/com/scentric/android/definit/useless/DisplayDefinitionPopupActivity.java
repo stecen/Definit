@@ -53,14 +53,6 @@ import java.util.Locale;
 
 import jp.wasabeef.recyclerview.animators.FadeInRightAnimator;
 
-//import jp.wasabeef.recyclerview.animators.FadeInLeftAnimator;
-
-//import jp.wasabeef.recyclerview.animators.ScaleInBottomAnimator;
-//import jp.wasabeef.recyclerview.animators.SlideInDownAnimator;
-//import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
-//import jp.wasabeef.recyclerview.animators.SlideInRightAnimator;
-//import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
-
 
 public class DisplayDefinitionPopupActivity extends AppCompatActivity implements PearsonResponseInterface, GlosbeResponseInterface, RecyclerViewClickListener {
     TextView wordText /*defText, defText2*/, toolbarText;
@@ -246,43 +238,6 @@ public class DisplayDefinitionPopupActivity extends AppCompatActivity implements
     }
 
     public void sendToDatabase(View v) { // FAB action
-
-        //region with old and async and all tha work -_-
-////        int coordHeight = coordinatorLayout.getLayoutParams().height;
-////        int coordWith = coordinatorLayout.getLayoutParams().width;
-//        int coordHeight = coordinatorLayout.getHeight();
-//        int coordWith = coordinatorLayout.getWidth();
-//
-//        Log.e("width", "ch: " + coordHeight + " cw: " + coordWith);
-//
-////        Log.e("heightssend", ""+ defExRecycler.getHeight() /*+ " " + convertPixelsToDp((float)screenHeight, getApplicationContext())*/);
-//        recyclerAdapter.removeTemp();
-//        defExRecycler.removeItemDecoration(dividerItemDecoration);
-//        coordinatorLayout.setLayoutParams(new FrameLayout.LayoutParams(coordWith, coordHeight)); // maintain height
-//
-//
-//
-//        CallbackAsyncTask callbackAsyncTask = new CallbackAsyncTask(REMOVE_DURATION + 50, this); // wait 300 milliseconds for moving animations to finish
-//        callbackAsyncTask.execute();
-
-
-////        toolbarText.animate().translationX(100);
-//        TranslateAnimation translateAnimation = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 20.0f,
-//                Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f);
-//        translateAnimation.setDuration(REMOVE_DURATION);
-//        toolbarText.startAnimation(translateAnimation);
-//
-//        AlphaAnimation alphaAnimation = new AlphaAnimation(1.0f, 0.0f);
-//        alphaAnimation.setDuration(REMOVE_DURATION);
-////        toolbarText.startAnimation(alphaAnimation);
-//
-//        AnimationSet animationSet = new AnimationSet(true);
-//        animationSet.addAnimation(translateAnimation);
-////        animationSet.addAnimation(translateAnimation);
-//        animationSet.start();
-
-        //endregion
-
         if (!endingActivity) {
             touchHandler(TOUCH_SEND);
         }
@@ -292,10 +247,6 @@ public class DisplayDefinitionPopupActivity extends AppCompatActivity implements
     @Override
     public void onNewIntent(Intent intent) {
         Log.e("onNewIntent", "wat");
-
-
-        // todo: remove getdefinitions to a sep. function
-
 
         String sent = intent.getStringExtra(DisplayDefinitionPopupActivity.SENT_WORD);
         if (lastWord == null || !lastWord.equals(sent)) { // if defining the same word
@@ -314,7 +265,6 @@ public class DisplayDefinitionPopupActivity extends AppCompatActivity implements
 
 
         final ArrayList<PearsonAnswer.DefinitionExamples> finalSorted = finalDataSet;
-        /// guess I have to use recursion...
         if (finalSorted.size() > 0) { // add the definitionExamples gradually for the animation
             recyclerAdapter.add(finalSorted.get(0));
 
@@ -412,18 +362,6 @@ public class DisplayDefinitionPopupActivity extends AppCompatActivity implements
 
     @Override
     public void recyclerViewListClicked(View v, int position) {
-//        int fw = frame.getMeasuredWidth();
-//        int fh = frame.getMeasuredHeight();
-//        int cw = coordinatorLayout.getMeasuredWidth();
-//        int ch =coordinatorLayout.getMeasuredHeight();
-
-//        int fw = frame.getWidth();
-//        int fh = frame.getHeight();
-//        int cw = coordinatorLayout.getWidth();
-//        int ch =coordinatorLayout.getHeight();
-//
-//        Log.e("newheight", String.format(Locale.US, "(%d, %d), (%d, %d)", fw, fh, cw, ch));
-
         if (!endingActivity) { // if not already animating the finishing of activity
             final View outerView = v;
             final TextView defText = (TextView) v.findViewById(R.id.definition_text);
@@ -431,21 +369,16 @@ public class DisplayDefinitionPopupActivity extends AppCompatActivity implements
             final RelativeLayout colorView = (RelativeLayout) v.findViewById(R.id.color_view);
 
             if (!selected[position]) {
-//            selected[position] = true;
                 if (!(recyclerAdapter.sortedPearsonDataSet.get(position).definition.trim().equals(PearsonAnswer.DEFAULT_NO_DEFINITION))) { // make sure it's selectable
                     truthSelect(position, true);
                     selectedCount++;
 
-                    //enable fab
-//                fab.requestLayout();
-//                fab.setVisibility(View.VISIBLE);
                     Log.e("selected", "" + selectedCount);
                     if (selectedCount == 1) {
                         ViewUtility.circleReveal(fab);
                     }
 
                     Log.e("click", "click @ " + Integer.toString(position));
-
 
                     //animate shading
                     int colorFrom = Color.parseColor(COLOR_NEUTRAL);
@@ -585,22 +518,8 @@ public class DisplayDefinitionPopupActivity extends AppCompatActivity implements
 
         // if the data set has definitions to display
         if (!(finalDataSet.isEmpty())) { // do glosbe asynctask
-//        AlphaAnimation alphaAnimation = new AlphaAnimation(1.0f, 0.0f); // remove progress bar
-//        alphaAnimation.setDuration(120);
-//        progressBar.startAnimation(alphaAnimation);
-//        (new CallbackAsyncTask(120, new CallbackAsyncInterface() {
-//            @Override
-//            public void waitCallback() {
-//                Log.e("callback", "GRASS MUD HORSE");
             progressBar.setVisibility(View.INVISIBLE);
-            //            }
-            //        })).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-
             Collections.sort(finalDataSet, new PearsonComparator(pearsonAnswer.word.trim()));
-
-            Log.e("lolsorted", (new Gson()).toJson(finalDataSet));
-            Log.e("countlmao", "unsorted: " + Integer.toString(pearsonAnswer.definitionExamplesList.size()));
-            Log.e("countlmao", "sorted: " + Integer.toString(finalDataSet.size()));
 
             addPearsonList(finalDataSet);
 
@@ -630,38 +549,8 @@ public class DisplayDefinitionPopupActivity extends AppCompatActivity implements
 
     //should only happen after onCreate is called, so recyclerview should not be null
     private void truthSelect(int idx, boolean sel) {
-//        if (!(recyclerAdapter.sortedPearsonDataSet.get(idx).definition.trim().equals(PearsonAnswer.DEFAULT_NO_DEFINITION))) { // make sure it's selectable
         selected[idx] = sel;
         recyclerAdapter.updateSelect(idx, sel);
-//        }
     }
-
-    //  src:  https://github.com/codepath/android_guides/wiki/Using-an-ArrayAdapter-with-ListView
-    public class ___PearsonArrayAdapter___LIST extends ArrayAdapter<PearsonAnswer.DefinitionExamples> {
-
-        public ___PearsonArrayAdapter___LIST(Context context, ArrayList<PearsonAnswer.DefinitionExamples> definitionExamples) {
-            super(context, 0, definitionExamples);
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            PearsonAnswer.DefinitionExamples defEx = getItem(position);
-            // Check if an existing view is being reused, otherwise inflate the view
-            if (convertView == null) {
-                convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_definition_example, parent, false);
-            }
-            // Lookup view for data population
-            TextView definitionText = (TextView) convertView.findViewById(R.id.definition_text);
-            TextView exampleText = (TextView) convertView.findViewById(R.id.de_example_text);
-            // Populate the data into the template view using the data object
-            definitionText.setText(defEx.definition);
-            exampleText.setText((defEx.examples.isEmpty())
-                    ? PearsonAnswer.DEFAULT_NO_EXAMPLE :
-                    defEx.examples.get(0));
-            return convertView;
-        }
-
-    }
-
 
 }

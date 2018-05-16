@@ -168,9 +168,5 @@ public class UserVocabFaveFrag extends Fragment implements RecyclerViewClickList
 //            getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             getActivity().overridePendingTransition(0, 0);
         }
-
-//        Intent detailIntent = new Intent(appContext, UserDetailsActivity.class);
-//        detailIntent.putExtra(UserDetailsActivity.KEY_JSON, userVocabString);
-//        startActivity(detailIntent);
     }
 }
