@@ -1,4 +1,4 @@
-# Definit <img src="imgs/definit.png" height="4%" width="4%">
+# <img src="imgs/definit.png" height="3%" width="3%"> Definit
 
 Definit is an native Android app I created out of desire to help myself improve my measly vocabulary. I'd always heard from teachers that one of the best ways to expand one's vocabulary was by reading things and keeping track of the unknown words, and that is what this app aims to automate.
 
