@@ -24,10 +24,4 @@ Viewing words as flashcards
 The main screen of the app, showing definitions saved by the user -- notice support for Chinese (and Spanish but it's not shown)!<br/>
 
 <img src="imgs/gif/favorite.gif" height="30%" width="30%">
-Other tabs include user-favorited words, search history, and user preferences.<br/><br/>
-<img src="imgs/c1.png" height="30%" width="30%">
-<img src="imgs/c2.png" height="30%" width="30%">
-<img src="imgs/c3.png" height="30%" width="30%">
-<img src="imgs/c4.png" height="30%" width="30%">
-
-The process of defining a word "from any screen" with the pasteboard.
+Other tabs include user-favorited words, search history, and user preferences.<br/><br/><br/>
