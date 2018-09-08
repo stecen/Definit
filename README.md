@@ -7,14 +7,10 @@ this app allows you to define words from any screen, using a persistent notifica
 Another key feature that separates it from dictionaries I had previously used was the ability to do the above as well as save the words and context for later viewing, so that I could actually look back at all the words I had encountered, searched up and learned.
 
 <img src="imgs/gif/context1.gif" height="30%" width="30%">
-Convenient context/pasteboard word lookup
-
-
+Convenient context/pasteboard word lookup<br/><br/>
 
 <img src="imgs/gif/save.gif" height="30%" width="30%">
-Saving definitions for later review
-
-
+Saving definitions for later review<br/><br/>
 
 Development in Android Studio, targeting Nougat devices with support down to KitKat, opened a path to gain experience with Android support libraries and issues, floating windows, fragments, service and activity management, SQL, networking, Maven, Git, and UX and UI design. 
 
@@ -22,12 +18,13 @@ Design was a strong focus in this project -- I conducted user tested and careful
 
 <img src="imgs/gif/seren.gif" height="30%" width="30%">
 Viewing words as flashcards
+<br/><br/>
 
 <img src="imgs/main.png" height="30%" width="30%">
-The main screen of the app, showing definitions saved by the user -- notice support for Chinese (and Spanish but it's not shown)!
-Other tabs include user-favorited words, search history, and user preferences.
+The main screen of the app, showing definitions saved by the user -- notice support for Chinese (and Spanish but it's not shown)!<br/>
 
 <img src="imgs/gif/favorite.gif" height="30%" width="30%">
+Other tabs include user-favorited words, search history, and user preferences.<br/><br/>
 <img src="imgs/c1.png" height="30%" width="30%">
 <img src="imgs/c2.png" height="30%" width="30%">
 <img src="imgs/c3.png" height="30%" width="30%">
