@@ -10,6 +10,8 @@ Development in Android Studio, targeting Nougat devices with support down to Kit
 
 Design was a strong focus in this project -- I conducted user tested and carefully storyboarded on paper and with Adobe Illustrator. Making sure the app took Material Design and fleshed out its own identity was also something I was aiming for, with the inclusion of specific animations, and consistent color scheme.
 
+<blockquote class="imgur-embed-pub" lang="en" data-id="a/84pOZqE"><a href="//imgur.com/84pOZqE"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
+
 <img src="imgs/main.png" height="30%" width="30%">
 
 The main screen of the app, showing definitions saved by the user -- notice support for Chinese (and Spanish but it's not shown)!
