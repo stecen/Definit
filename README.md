@@ -1,9 +1,9 @@
 # <img src="imgs/definit.png" height="3%" width="3%"> Definit
 
-Definit is an native Android app I created out of desire to help myself improve my measly vocabulary. I'd always heard from teachers that one of the best ways to expand one's vocabulary was by reading things and keeping track of the unknown words, and that is what this app aims to automate.
+Definit is an native Android app I created out of desire to help myself improve my measly vocabulary. I'd always heard from teachers that one of the best ways to expand one's vocabulary was by reading things and keeping track of the unknown words, and this context0based is what this app aims to automate.
 
 Flashcards are a secondary feature in this app. The main idea I was going for was implemented with the following:
-this app allows you to define words from any screen, using a persistent notification (with speech and text input), and a convenient automatic pop-up that activates when a word is copied to the pasteboard (similar to Messenger chatheads). 
+this app allows you to define words from any screen, using a persistent notification (with speech and text input), and a convenient automatic pop-up that activates when a words are copied to the pasteboard (similar to Messenger chatheads). 
 Another key feature that separates it from dictionaries I had previously used was the ability to do the above as well as save the words and context for later viewing, so that I could actually look back at all the words I had encountered, searched up and learned.
 
 <img src="imgs/gif/context1.gif" height="30%" width="30%">
