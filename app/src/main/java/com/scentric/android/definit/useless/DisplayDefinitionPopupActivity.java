@@ -316,9 +316,9 @@ public class DisplayDefinitionPopupActivity extends AppCompatActivity implements
 
 
 //            DisplayDefinitionPopupActivity.shouldShowPreviousTypeWordPopup = false;
-            if (TypeWordPopupActivity.typeWordPopupActivity != null) {
-                TypeWordPopupActivity.typeWordPopupActivity.finishMe();
-            }
+//            if (TypeWordPopupActivity.typeWordPopupActivity != null) {
+//                TypeWordPopupActivity.typeWordPopupActivity.finishMe();
+//            }
 
             endingActivity = true; // disable clicks
 //            CallbackAsyncTask callbackAsyncTask = new CallbackAsyncTask(REMOVE_DURATION + 50, this); // wait 300 milliseconds for moving animations to finish
@@ -334,9 +334,9 @@ public class DisplayDefinitionPopupActivity extends AppCompatActivity implements
 
 
         } else if (source == TOUCH_OUTSIDE && finishedGetting == true) {
-            if (TypeWordPopupActivity.typeWordPopupActivity != null) {
-                TypeWordPopupActivity.typeWordPopupActivity.finishMe();
-            }
+//            if (TypeWordPopupActivity.typeWordPopupActivity != null) {
+//                TypeWordPopupActivity.typeWordPopupActivity.finishMe();
+//            }
             Log.e("touch", "touching outside");
             finish();
         }

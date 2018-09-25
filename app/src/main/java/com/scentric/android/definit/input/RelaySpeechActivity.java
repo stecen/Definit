@@ -59,7 +59,7 @@ public class RelaySpeechActivity extends Activity {
 
     @Override
     public void onResume() {
-        Log.e("speechlol", "onResume...");
+        Log.e("speechlog", "onResume...");
         if (hasReocgnized) {
             finish();
         }
@@ -70,7 +70,7 @@ public class RelaySpeechActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        Log.e("speechlol", "onActivityResult... " + requestCode + " " + resultCode);
+        Log.e("speechlog", "onActivityResult... " + requestCode + " " + resultCode);
 
         switch (requestCode) {
             case REQ_CODE_SPEECH_INPUT: {
@@ -87,7 +87,7 @@ public class RelaySpeechActivity extends Activity {
                     startActivity(intent);
                     finish();
                 } else if (resultCode == RESULT_CANCELED /*&& data != null*/) {
-                    Log.e("relay", "finishing cuz user cancelled lol");
+                    Log.e("relay", "finishing because user cancelled");
                     finish();
                 }
                 break;

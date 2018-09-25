@@ -29,7 +29,7 @@ import java.util.Locale;
 public class TypeWordPopupActivity extends AppCompatActivity {
     EditText wordEdit;
     public final static int REQ_CODE_SPEECH_INPUT = 92;
-    public static TypeWordPopupActivity typeWordPopupActivity;
+    public static TypeWordPopupActivity typeWordPopupActivity; // singleton
 
     public static final String KEY_RECOG_NOW = "recognow";
     public static final String YES = "yes";

@@ -24,6 +24,8 @@ import com.scentric.android.definit.utility.ViewUtility;
 
 /**
  * Created by Steven on 8/7/2016.
+ *
+ * Defines the Messenger-like poup window
  */
 public class FloatingWindowService extends Service {
     public static final String LOG_FLOATINGWINDOW = "floating";
@@ -35,7 +37,7 @@ public class FloatingWindowService extends Service {
 
     boolean isKilled = false; // prevent this service from killing its windows when the windows are already killed
 
-    String word; //word receive from ClipboardService
+    String word; // word receive from ClipboardService
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -82,7 +84,9 @@ public class FloatingWindowService extends Service {
 
         //display the app icon
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        ImageView icon = (ImageView) layoutInflater.inflate(R.layout.popup_icon, null);
+//        ImageView icon = (ImageView) layoutInflater.inflate(R.layout.popup_icon, null);
+        ImageView icon = new ImageView(this);
+        icon.setImageResource(R.drawable.definit_icon);
 
         icon.setOnClickListener(new View.OnClickListener() {
             @Override

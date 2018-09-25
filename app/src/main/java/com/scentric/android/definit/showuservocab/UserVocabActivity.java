@@ -43,7 +43,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 
-public class UserVocabActivity extends AppCompatActivity {//implements /*RecyclerViewClickListener, TabLayout.OnTabSelectedListener {
+public class UserVocabActivity extends AppCompatActivity {
 
     AppBarLayout appBarLayout;
 
@@ -51,7 +51,6 @@ public class UserVocabActivity extends AppCompatActivity {//implements /*Recycle
     ViewPager viewPager;
 
     public FloatingActionButton fab;
-
 
     public static final String PREF_KEY_WINDOW_ASKED = "prefKeyWindow";
     public static final int PREF_YES = 1;
@@ -183,6 +182,7 @@ public class UserVocabActivity extends AppCompatActivity {//implements /*Recycle
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
 //                super.onTabSelected(tab);
+                viewPager.setCurrentItem(tab.getPosition());
             }
 
             @Override
@@ -225,16 +225,6 @@ public class UserVocabActivity extends AppCompatActivity {//implements /*Recycle
             }
         });
     }
-
-//    @Override
-//    public void onTabSelected(TabLayout.Tab tab) {
-//        viewPager.setCurrentItem(tab.getPosition());
-//    }
-//
-//    @Override
-//    public void onTabUnselected(TabLayout.Tab tab) {
-//
-//    }
 
     @Override
     public void onPause() {

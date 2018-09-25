@@ -24,7 +24,7 @@ public class NotificationUtility {
 
         // Intents for stopping the notification
 
-        //todo: figure out why this thing still shows up in the backstack
+        // todo: figure out why this thing still shows up in the backstack
         Intent typeWordIntent = new Intent(context.getApplicationContext(), SearchAndShowActivity.class);
         typeWordIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK /*| Intent.FLAG_ACTIVITY_NO_HISTORY*/);
         PendingIntent typeWordPendingIntent = PendingIntent.getActivity(context, 0, typeWordIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -38,12 +38,13 @@ public class NotificationUtility {
 //                .addAction(pasteAction)
 //                .addAction(android.R.drawable.arrow_up_float, "Custom", typeWordPendingIntent) // use stop action
                     .setContentIntent(typeWordPendingIntent) // use add pending intent
-                    .setSmallIcon(R.drawable.definit_icon_bs)
+//                    .setSmallIcon(R.drawable.definit_icon_bs)
+                    .setSmallIcon(R.drawable.definit_icon)
                     .setPriority(Notification.PRIORITY_LOW);
 
 
             Intent speechIntent = new Intent(context.getApplicationContext(), RelaySpeechActivity.class);
-            speechIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //todo: revise flags
+            speechIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // todo: revise flags
             speechIntent.setFlags(/*Intent.FLAG_ACTIVITY_NEW_TASK | */Intent.FLAG_ACTIVITY_SINGLE_TOP);
             PendingIntent pendingSpeechIntent = PendingIntent.getActivity(context, 2, speechIntent, PendingIntent.FLAG_UPDATE_CURRENT);
             int speechIconInt;
@@ -58,7 +59,7 @@ public class NotificationUtility {
 
 
             Intent replyIntent = new Intent(context.getApplicationContext(), SearchAndShowActivity.class);
-            replyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //todo: revise flags
+            replyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // todo: revise flags
 //        speechIntent.putExtra(SearchAndShowActivity.KEY_RECOG_NOW, true);
             replyIntent.setFlags(/*Intent.FLAG_ACTIVITY_NEW_TASK | */Intent.FLAG_ACTIVITY_SINGLE_TOP);
             PendingIntent pendingReplyIntent = PendingIntent.getActivity(context, 2, replyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -93,7 +94,8 @@ public class NotificationUtility {
 //                .addAction(pasteAction)
 //                .addAction(android.R.drawable.arrow_up_float, "Custom", typeWordPendingIntent) // use stop action
                     .setContentIntent(typeWordPendingIntent) // use add pending intent
-                    .setSmallIcon(R.drawable.definit_icon_bs)
+//                    .setSmallIcon(R.drawable.definit_icon_bs)
+                    .setSmallIcon(R.drawable.definit_icon)
                     .setPriority(Notification.PRIORITY_LOW);
 
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {

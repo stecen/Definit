@@ -71,8 +71,6 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
     SearchView searchView;
     Intent comingIntent;
 
-    //////
-
     //    ListView defExListView;
     FloatingActionButton fab;
     FrameLayout frame;
@@ -102,7 +100,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 
     private static final String PEARSON_JSON = "pearson_json";
 
-    public static String lastWord = " "; // not null pls :)
+    public static String lastWord = " "; // not null, please :)
 
     PearsonAsyncTask pearsonAsyncTask;
     GlosbeAsyncTask glosbeAsyncTask;
@@ -113,7 +111,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
     public static final int REMOVE_DURATION = 350;
     public static final int SELECT_DURATION = 75;
 
-    public static final int TOUCH_OUTSIDE = 1; // for outsideclick
+    public static final int TOUCH_OUTSIDE = 1; // for out-of-window clicks
     public static final int TOUCH_SEND = 2;
     public static final int TOUCH_FRAME = 3;
 
@@ -256,7 +254,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
         defExRecycler.setLayoutManager(new LinearLayoutManager(this));
         dividerItemDecoration = new DividerItemDecoration(this);
 
-        //region oldanim
+        // region oldanim
         defExRecycler.setItemAnimator(new FadeInRightAnimator());
         defExRecycler.getItemAnimator().setAddDuration(150);
 
@@ -293,7 +291,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
         frame.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
 
-        //todo : remove this, and instead in the future just update the adapter
+        // todo: remove this, and instead in the future just update the adapter
         recyclerAdapter = new PearsonAdapter(this, new ArrayList<PearsonAnswer.DefinitionExamples>(), this, "Word");
         defExRecycler.setAdapter(recyclerAdapter);
 
@@ -327,7 +325,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
             searchView.clearFocus();
 
             lastWord = query;
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && comingIntent != null) { //quick reply
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && comingIntent != null) { // quick reply
             Bundle remoteInput = RemoteInput.getResultsFromIntent(comingIntent);
             if (remoteInput != null) {
                 String replyQuery = ((String) remoteInput.getCharSequence(KEY_TEXT_REPLY));
@@ -395,7 +393,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
                 lastWord = query;
             }
 
-            //hide keyboard
+            // hide keyboard
             View view = this.getCurrentFocus();
             if (view != null) {
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -403,7 +401,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
             }
 
         } else if (intent.hasExtra(SENT_WORD)) {
-            // wow
+
             String word = intent.getStringExtra(SENT_WORD).trim();
 
             Log.e("searchandshow", "wow u sent " + word);
@@ -420,7 +418,6 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
                     truthSelect(i, false);
                     selectedCount = 0;
                 }
-
 
                 getDefinition(word);
 
@@ -480,10 +477,6 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
                     toggleSoftInput(InputMethodManager.SHOW_FORCED,
                             InputMethodManager.HIDE_IMPLICIT_ONLY);
         }
-
-        /*else if (intent.hasExtra(KEY_RECOG_NOW)) {
-            recognizeSpeech();
-        }*/
     }
 
 
@@ -531,7 +524,6 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
     public void getDefinition(String query) {
         Log.e("searchomg", query);
 
-
         query = query.replaceAll("\"", "");
         query = query.replace("\\", "/");
         searchView.setQuery(query, false);
@@ -561,7 +553,6 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
             query = query.substring(0, 50);
         }
 
-
         pearsonAsyncTask = new PearsonAsyncTask(this, query, this);
         pearsonAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
@@ -574,7 +565,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
 
-        //hide keyboard again///////////// well thats annoying
+        // hide keyboard, once again
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
@@ -587,11 +578,11 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
             }
         }, 25);
 
-        addToHistory(query); // add to history
+        addToHistory(query); // save into history database
 
     }
 
-    // add t history table for viewing :)
+    // add to history table for quick viewing :)
     public void addToHistory(String word) {
         Log.e("sql", "adding " + word + " to database");
         UserVocabHelper sqlHelper = UserVocabHelper.getInstance(getApplicationContext());
@@ -600,12 +591,10 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 
 
     public void sendToDatabase(View v) { // FAB action
-
-        if (!endingActivity) {
+        if (!endingActivity) { // prevent encouragement of user-indecision
             touchHandler(TOUCH_SEND);
         }
     }
-
 
     public void addPearsonList(ArrayList<PearsonAnswer.DefinitionExamples> finalDataSet, boolean showExtraElement) {
         progressBar.setVisibility(View.INVISIBLE);
@@ -614,7 +603,6 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
             makeSpaceView.setVisibility(View.GONE);
         }
 
-
         final ArrayList<PearsonAnswer.DefinitionExamples> finalSorted = finalDataSet;
 
         if (finalSorted.size() > 0) { // add the definitionExamples gradually for the animation
@@ -622,7 +610,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 
             recyclerAdapter.add(finalSorted.get(0));
 
-            for (int i = 1; i < finalDataSet.size() /*+ ((showExtraElement)?1:0)*/; i++) { // stagger the additions.. PLUS ADD ONE FILLER if not come from glosbe.
+            for (int i = 1; i < finalDataSet.size() /*+ ((showExtraElement)?1:0)*/; i++) { // stagger the additions.. and add a filler if doesn't come from glosbe.
                 final int idx = i;
 
                 final Handler handler = new Handler();
@@ -633,8 +621,6 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 //                            addExtraElementContext(idx);
 //                            return;
 //                        }
-
-
                         recyclerAdapter.add(finalSorted.get(idx));
                         Log.e("callbackfk", idx + " " + finalSorted.size());
                         if (idx == finalSorted.size() - 1) {
@@ -658,14 +644,14 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
     public void addExtraElementContext(int idx) {
         PearsonAnswer.DefinitionExamples de = new PearsonAnswer.DefinitionExamples();
         de.definition = PearsonAdapter.EXTRA_CONTEXT;
-        recyclerAdapter.add(de); //filler
+        recyclerAdapter.add(de); // filler
     }
 
     @Override
     protected void onDestroy() {
         Log.e("display", "onDestroy");
 
-        iAlreadyExist = false; // idk if it's necessary
+        iAlreadyExist = false; // should not be necessary?
         super.onDestroy();
     }
 
@@ -679,11 +665,11 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
         if (source == TOUCH_SEND) {
             Log.e("touch", "touched sent " + String.format(Locale.US, "%d, %d", fab.getWidth(), fab.getHeight()));
 
-            recyclerAdapter.animateSlidesAndInsertUserVocab(); // removetemp lol
+            recyclerAdapter.animateSlidesAndInsertUserVocab();
 
-            if (TypeWordPopupActivity.typeWordPopupActivity != null) {
-                TypeWordPopupActivity.typeWordPopupActivity.finishMe();
-            }
+//            if (TypeWordPopupActivity.typeWordPopupActivity != null) {
+//                TypeWordPopupActivity.typeWordPopupActivity.finishMe();
+//            }
 
             endingActivity = true; // disable clicks
             final Handler handler = new Handler();
@@ -696,9 +682,9 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 
 
         } else if (source == TOUCH_OUTSIDE) {
-            if (TypeWordPopupActivity.typeWordPopupActivity != null) {
-                TypeWordPopupActivity.typeWordPopupActivity.finishMe();
-            }
+//            if (TypeWordPopupActivity.typeWordPopupActivity != null) {
+//                TypeWordPopupActivity.typeWordPopupActivity.finishMe();
+//            }
             Log.e("touch", "2 touching outside");
             finish();
         } else if (source == TOUCH_FRAME && finishedGetting) {
@@ -716,7 +702,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
             return true;
         }
 
-        return super.onTouchEvent(event); // Delegate everything else to Activity.
+        return super.onTouchEvent(event); // Delegate everything else to Activity
     }
 
     @Override
@@ -787,9 +773,6 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 
             });
         }
-
-//        if (searchVie)
-
 
 //        DisplayDefinitionPopupActivity.shouldShowPreviousTypeWordPopup = true; // reset to true, in case
     }

@@ -216,7 +216,7 @@
 
 
             android:layout_margin="@dimen/fab_margin"
-            android:src="@drawable/ic_send_white_24dp" />
+            android:src="@drawable/ic_save_white_24dp" />
         <!--app:layout_anchor="@id/definition_example_recycler"-->
         <!--app:layout_anchorGravity="bottom|right"-->
 
