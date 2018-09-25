@@ -208,6 +208,12 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
 
                 v.setOnClickListener(this);
             }
+
+            @Override
+            public void onClick(View v) {
+//            itemListener.recyclerViewListClicked(v, this.getLayoutPosition());
+
+            }
         }
 
 

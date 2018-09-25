@@ -72,7 +72,7 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.scentric.android.definit.showuservocab.UserVocabActivity" />
-                />
+
         </activity>
 
         <activity android:name="com.scentric.android.definit.useless.DisplayDefinitionPopupActivity"
@@ -86,7 +86,6 @@
 
 
             android:windowSoftInputMode="stateHidden"
-
             />
 
         <activity android:name="com.scentric.android.definit.show.SearchAndShowActivity"

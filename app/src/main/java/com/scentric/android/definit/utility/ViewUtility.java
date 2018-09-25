@@ -45,7 +45,6 @@ public class ViewUtility {
 
             anim.setDuration(CIRCLE_ANIM_DURATION);
 
-
             anim.start();
         } else {
             //    // make the view visible and start the animation

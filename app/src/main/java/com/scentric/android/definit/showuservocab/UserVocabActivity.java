@@ -43,7 +43,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 
-public class UserVocabActivity extends AppCompatActivity implements /*RecyclerViewClickListener,*/ TabLayout.OnTabSelectedListener {
+public class UserVocabActivity extends AppCompatActivity {//implements /*RecyclerViewClickListener, TabLayout.OnTabSelectedListener {
 
     AppBarLayout appBarLayout;
 
@@ -177,7 +177,7 @@ public class UserVocabActivity extends AppCompatActivity implements /*RecyclerVi
 
             }
         });
-        tabLayout.addOnTabSelectedListener(this); // for view swiping
+//        tabLayout.addOnTabSelectedListener(this); // for view swiping
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -226,15 +226,15 @@ public class UserVocabActivity extends AppCompatActivity implements /*RecyclerVi
         });
     }
 
-    @Override
-    public void onTabSelected(TabLayout.Tab tab) {
-        viewPager.setCurrentItem(tab.getPosition());
-    }
-
-    @Override
-    public void onTabUnselected(TabLayout.Tab tab) {
-
-    }
+//    @Override
+//    public void onTabSelected(TabLayout.Tab tab) {
+//        viewPager.setCurrentItem(tab.getPosition());
+//    }
+//
+//    @Override
+//    public void onTabUnselected(TabLayout.Tab tab) {
+//
+//    }
 
     @Override
     public void onPause() {
