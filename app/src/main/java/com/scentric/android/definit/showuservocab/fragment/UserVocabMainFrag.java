@@ -18,7 +18,7 @@ import com.scentric.android.definit.showuservocab.UserVocabActivity;
 import com.scentric.android.definit.showuservocab.UserVocabAdapter;
 import com.scentric.android.definit.showuservocab.sqlite.GetAllWordsAsyncInterface;
 import com.scentric.android.definit.showuservocab.sqlite.UserVocab;
-import com.scentric.android.definit.showuservocab.sqlite.UserVocabHelper;
+import com.scentric.android.definit.showuservocab.sqlite.UserVocabSQLHelper;
 import com.scentric.android.definit.utility.DividerItemDecoration;
 import com.scentric.android.definit.utility.RecyclerViewClickListener;
 
@@ -32,7 +32,7 @@ import java.util.ArrayList;
 public class UserVocabMainFrag extends Fragment implements RecyclerViewClickListener, FragmentRefresher, FragmentReselected/*, View.OnLongClickListener*/ {
     public RecyclerView recyclerView;
     DividerItemDecoration dividerItemDecoration;
-    UserVocabHelper helper;
+    UserVocabSQLHelper helper;
     public UserVocabAdapter adapter;
     LinearLayoutManager linearLayoutManager;
 
@@ -63,7 +63,7 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
 
         activityContext = getActivity();
 
-        helper = UserVocabHelper.getInstance(appContext);
+        helper = UserVocabSQLHelper.getInstance(appContext);
         final RecyclerViewClickListener listener = this;
 //        final View.OnLongClickListener flong = this;
         helper.getAllUserVocab(new GetAllWordsAsyncInterface() {
@@ -85,7 +85,7 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
                                        dataSet = adapter.sortedDataSet;
                                    }
                                },
-                UserVocabHelper.GET_ALL); // then get ALL of them!
+                UserVocabSQLHelper.GET_ALL); // then get ALL of them!
 
 
         final UserVocabActivity fActivity = (UserVocabActivity) getActivity();
@@ -126,7 +126,7 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
     }
 
     public void refreshRecycler() {
-        helper = UserVocabHelper.getInstance(appContext);
+        helper = UserVocabSQLHelper.getInstance(appContext);
         helper.getAllUserVocab(new GetAllWordsAsyncInterface() {
                                    @Override
                                    public void setWordsData(ArrayList<UserVocab> userVocabList) {
@@ -136,7 +136,7 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
                                        dataSet = adapter.sortedDataSet; // probably not needed due to java references
                                    }
                                },
-                UserVocabHelper.GET_ALL);
+                UserVocabSQLHelper.GET_ALL);
     }
 
     public void recyclerViewListClicked(View v, int position) {

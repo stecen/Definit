@@ -20,7 +20,7 @@ import com.scentric.android.definit.export.ImportActivity;
 import com.scentric.android.definit.settings.PreferencesActivity;
 import com.scentric.android.definit.showuservocab.sqlite.GetAllWordsAsyncInterface;
 import com.scentric.android.definit.showuservocab.sqlite.UserVocab;
-import com.scentric.android.definit.showuservocab.sqlite.UserVocabHelper;
+import com.scentric.android.definit.showuservocab.sqlite.UserVocabSQLHelper;
 import com.scentric.android.definit.utility.PearsonAnswer;
 
 import java.util.ArrayList;
@@ -138,7 +138,7 @@ public class UserVocabProfileFrag extends Fragment implements FragmentRefresher,
             sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareStr);
             startActivity(sharingIntent);
         } else {
-            UserVocabHelper helper = UserVocabHelper.getInstance(appContext);
+            UserVocabSQLHelper helper = UserVocabSQLHelper.getInstance(appContext);
             helper.getAllUserVocab(new GetAllWordsAsyncInterface() {
                 @Override
                 public void setWordsData(ArrayList<UserVocab> userVocabList) {
@@ -149,7 +149,7 @@ public class UserVocabProfileFrag extends Fragment implements FragmentRefresher,
                     sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareStr);
                     startActivity(sharingIntent);
                 }
-            }, UserVocabHelper.GET_ALL);
+            }, UserVocabSQLHelper.GET_ALL);
         }
     }
 
@@ -215,7 +215,7 @@ public class UserVocabProfileFrag extends Fragment implements FragmentRefresher,
             sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareStr);
             startActivity(sharingIntent);
         } else {
-            UserVocabHelper helper = UserVocabHelper.getInstance(appContext);
+            UserVocabSQLHelper helper = UserVocabSQLHelper.getInstance(appContext);
             helper.getAllUserVocab(new GetAllWordsAsyncInterface() {
                 @Override
                 public void setWordsData(ArrayList<UserVocab> userVocabList) {
@@ -226,7 +226,7 @@ public class UserVocabProfileFrag extends Fragment implements FragmentRefresher,
                     sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareStr);
                     startActivity(sharingIntent);
                 }
-            }, UserVocabHelper.GET_ALL);
+            }, UserVocabSQLHelper.GET_ALL);
         }
     }
 

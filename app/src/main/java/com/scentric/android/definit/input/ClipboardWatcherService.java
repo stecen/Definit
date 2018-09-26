@@ -28,7 +28,6 @@ public class ClipboardWatcherService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-//        Toast.makeText(this, "OnStartCommand called...", Toast.LENGTH_SHORT).show();
         isServiceActive = true;
 
         return START_STICKY;
@@ -42,7 +41,7 @@ public class ClipboardWatcherService extends Service {
     private void performClipboardCheck() {
         if (!isServiceActive)
             return; // for some reason stopping the service won't stop the listener
-        ClipboardManager cb = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+        ClipboardManager cb = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE); // notifies us when the user copies something to the pasteboard
         if (cb.hasPrimaryClip()) {
             ClipData cd = cb.getPrimaryClip();
             if (cd.getDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_PLAIN) || cd.getDescription().hasMimeType(ClipDescription.MIMETYPE_TEXT_HTML)) {
@@ -55,12 +54,11 @@ public class ClipboardWatcherService extends Service {
 
                 if (word.contains(" ")) {
                     Log.e("tag", "This word + '" + word + "' contains space(s).");
-                } else {
-//                    Toast.makeText(this, "Getting definition for " + word, Toast.LENGTH_SHORT).show();
                 }
 
                 // todo: make sure only has 1 word, make sure actually exists in dict.
 
+                // call the Messenger-like popup
                 Intent popupIntent = new Intent(ClipboardWatcherService.this, FloatingWindowService.class);
                 popupIntent.putExtra(FloatingWindowService.KEY_WORD, word.toLowerCase());
                 startService(popupIntent);
@@ -72,7 +70,6 @@ public class ClipboardWatcherService extends Service {
     @Override
     public void onDestroy() {
         isServiceActive = false;
-        Toast.makeText(this, "Stopping service...", Toast.LENGTH_SHORT).show();
         super.onDestroy();
     }
 

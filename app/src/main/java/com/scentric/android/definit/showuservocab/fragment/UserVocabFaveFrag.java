@@ -18,7 +18,7 @@ import com.scentric.android.definit.showuservocab.UserVocabActivity;
 import com.scentric.android.definit.showuservocab.UserVocabAdapter;
 import com.scentric.android.definit.showuservocab.sqlite.GetAllWordsAsyncInterface;
 import com.scentric.android.definit.showuservocab.sqlite.UserVocab;
-import com.scentric.android.definit.showuservocab.sqlite.UserVocabHelper;
+import com.scentric.android.definit.showuservocab.sqlite.UserVocabSQLHelper;
 import com.scentric.android.definit.utility.DividerItemDecoration;
 import com.scentric.android.definit.utility.RecyclerViewClickListener;
 
@@ -30,7 +30,7 @@ import java.util.ArrayList;
 public class UserVocabFaveFrag extends Fragment implements RecyclerViewClickListener, FragmentRefresher, FragmentReselected {
     RecyclerView recyclerView;
     DividerItemDecoration dividerItemDecoration;
-    UserVocabHelper helper;
+    UserVocabSQLHelper helper;
     UserVocabAdapter adapter;
     LinearLayoutManager linearLayoutManager;
 
@@ -68,7 +68,7 @@ public class UserVocabFaveFrag extends Fragment implements RecyclerViewClickList
 
 //        dividerItemDecoration = new DividerItemDecoration(appContext);
 
-        helper = UserVocabHelper.getInstance(appContext);
+        helper = UserVocabSQLHelper.getInstance(appContext);
 //        ArrayList<UserVocab> userVocabList = helper.getFaveVocabList();
 //        Log.e("userVocab", "" + userVocabList.size());
 //        adapter = new UserVocabAdapter(userVocabList, this, appContext, true);
@@ -95,7 +95,7 @@ public class UserVocabFaveFrag extends Fragment implements RecyclerViewClickList
                                         Log.e("adapter count", "" + adapter.getItemCount());
                                     }
                                 },
-                UserVocabHelper.GET_ALL);
+                UserVocabSQLHelper.GET_ALL);
 
         final UserVocabActivity fActivity = (UserVocabActivity) getActivity();
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -146,7 +146,7 @@ public class UserVocabFaveFrag extends Fragment implements RecyclerViewClickList
                                         Log.e("adapter count", "" + adapter.getItemCount());
                                     }
                                 },
-                UserVocabHelper.GET_ALL);
+                UserVocabSQLHelper.GET_ALL);
 //        // todo variable to keep track if there are changes so this activity doesnt have to keep reloading the entire sqlite
     }
 

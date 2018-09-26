@@ -62,8 +62,7 @@ public class NotificationUtility {
             replyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // todo: revise flags
 //        speechIntent.putExtra(SearchAndShowActivity.KEY_RECOG_NOW, true);
             replyIntent.setFlags(/*Intent.FLAG_ACTIVITY_NEW_TASK | */Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            PendingIntent pendingReplyIntent = PendingIntent.getActivity(context, 2, replyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
+            PendingIntent pendingReplyIntent = PendingIntent.getActivity(context, 0, replyIntent, PendingIntent.FLAG_UPDATE_CURRENT); // reqCode was 2
 
             String replyLabel = "Define inline";//getResources().getString(R.string.reply_label);
 

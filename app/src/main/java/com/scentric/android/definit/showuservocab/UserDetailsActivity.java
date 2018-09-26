@@ -15,7 +15,7 @@ import com.scentric.android.definit.R;
 import com.scentric.android.definit.showuservocab.fragment.UserVocabFaveFrag;
 import com.scentric.android.definit.showuservocab.fragment.UserVocabMainFrag;
 import com.scentric.android.definit.showuservocab.sqlite.UserVocab;
-import com.scentric.android.definit.showuservocab.sqlite.UserVocabHelper;
+import com.scentric.android.definit.showuservocab.sqlite.UserVocabSQLHelper;
 import com.scentric.android.definit.utility.RecyclerViewClickListener;
 import com.scentric.android.definit.utility.SnappyRecyclerView;
 import com.scentric.android.definit.utility.ViewUtility;
@@ -25,7 +25,7 @@ import com.scentric.android.definit.utility.ViewUtility;
  */
 public class UserDetailsActivity extends AppCompatActivity implements RecyclerViewClickListener {
     LinearLayout linearLayout;
-    UserVocabHelper helper;
+    UserVocabSQLHelper helper;
     CardsAdapter adapter;
     SnappyRecyclerView recyclerView;
     RelativeLayout relativeLayout;
@@ -77,7 +77,7 @@ public class UserDetailsActivity extends AppCompatActivity implements RecyclerVi
         }
 
 
-        helper = UserVocabHelper.getInstance(this);
+        helper = UserVocabSQLHelper.getInstance(this);
         final RecyclerViewClickListener listener = this;
         final Context ctx = this;
 

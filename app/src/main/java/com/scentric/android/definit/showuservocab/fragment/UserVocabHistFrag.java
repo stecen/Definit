@@ -17,7 +17,7 @@ import com.scentric.android.definit.showuservocab.UserVocabActivity;
 import com.scentric.android.definit.showuservocab.sheet.HistoryAdapter;
 import com.scentric.android.definit.showuservocab.sqlite.GetHistoryInterface;
 import com.scentric.android.definit.showuservocab.sqlite.HistoryVocab;
-import com.scentric.android.definit.showuservocab.sqlite.UserVocabHelper;
+import com.scentric.android.definit.showuservocab.sqlite.UserVocabSQLHelper;
 import com.scentric.android.definit.utility.RecyclerViewClickListener;
 
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ import java.util.ArrayList;
 public class UserVocabHistFrag extends Fragment implements RecyclerViewClickListener, FragmentRefresher, FragmentReselected {
     RecyclerView recyclerView;
     Context appContext, activityContext;
-    UserVocabHelper helper;
+    UserVocabSQLHelper helper;
     HistoryAdapter adapter;
     LinearLayoutManager linearLayoutManager;
 
@@ -56,7 +56,7 @@ public class UserVocabHistFrag extends Fragment implements RecyclerViewClickList
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setHasFixedSize(true);
         activityContext = getActivity();
-        helper = UserVocabHelper.getInstance(appContext);
+        helper = UserVocabSQLHelper.getInstance(appContext);
 
         final RecyclerViewClickListener fClick = this;
         helper.getHistory50(new GetHistoryInterface() {
@@ -65,7 +65,7 @@ public class UserVocabHistFrag extends Fragment implements RecyclerViewClickList
                 adapter = new HistoryAdapter(historyVocabList, fClick, (activityContext != null) ? activityContext : appContext);
                 recyclerView.setAdapter(adapter);
             }
-        }, UserVocabHelper.GET_ALL);
+        }, UserVocabSQLHelper.GET_ALL);
 
 
         final UserVocabActivity fActivity = (UserVocabActivity) getActivity();
@@ -116,7 +116,7 @@ public class UserVocabHistFrag extends Fragment implements RecyclerViewClickList
 
     public void refreshRecycler() {
         // todo variable to keep track if there are changes so this activity doesnt have to keep reloading the entire sqlite
-        helper = UserVocabHelper.getInstance(appContext);
+        helper = UserVocabSQLHelper.getInstance(appContext);
 //        ArrayList<HistoryVocab> historyVocabs = helper.getHistory50();
 //        Log.e("historyVocab", "" + historyVocabs.size());
 //        Log.e("hist adapter count",""+ adapter.getItemCount());
@@ -128,7 +128,7 @@ public class UserVocabHistFrag extends Fragment implements RecyclerViewClickList
                 Log.e("hist adapter count", "" + adapter.getItemCount());
                 adapter.replaceData(historyVocabList);
             }
-        }, UserVocabHelper.GET_ALL);
+        }, UserVocabSQLHelper.GET_ALL);
     }
 
 

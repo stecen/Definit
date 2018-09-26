@@ -16,8 +16,8 @@ import java.util.Locale;
 /**
  * Created by Steven on 8/12/2016.
  */
-public class UserVocabHelper extends SQLiteOpenHelper {
-    private static UserVocabHelper sInstance; // singleton
+public class UserVocabSQLHelper extends SQLiteOpenHelper {
+    private static UserVocabSQLHelper sInstance; // singleton
 
     // Database Info
     private static final String DATABASE_NAME = "userVocab";
@@ -39,16 +39,16 @@ public class UserVocabHelper extends SQLiteOpenHelper {
     public static int IS_FAVE = 1;
     public static int NOT_FAVE = 0;
 
-    public UserVocabHelper(Context context) {
+    public UserVocabSQLHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    public static synchronized UserVocabHelper getInstance(Context context) {
+    public static synchronized UserVocabSQLHelper getInstance(Context context) {
         // Use the application context, which will ensure that you
         // don't accidentally leak an Activity's context.
-        // See this article for more information: http://bit.ly/6LRzfx
+        // article for more information: http://bit.ly/6LRzfx
         if (sInstance == null) {
-            sInstance = new UserVocabHelper(context.getApplicationContext());
+            sInstance = new UserVocabSQLHelper(context.getApplicationContext());
         }
         return sInstance;
     }

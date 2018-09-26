@@ -16,7 +16,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.scentric.android.definit.R;
 import com.scentric.android.definit.showuservocab.sqlite.UserVocab;
-import com.scentric.android.definit.showuservocab.sqlite.UserVocabHelper;
+import com.scentric.android.definit.showuservocab.sqlite.UserVocabSQLHelper;
 
 import java.util.ArrayList;
 
@@ -53,7 +53,7 @@ public class ImportActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                UserVocabHelper helper = UserVocabHelper.getInstance(ctx);
+                UserVocabSQLHelper helper = UserVocabSQLHelper.getInstance(ctx);
                 ArrayList<UserVocab> userVocabList;
                 try {
                     userVocabList = (new Gson()).fromJson(importEdit.getText().toString().trim(), new TypeToken<ArrayList<UserVocab>>() {

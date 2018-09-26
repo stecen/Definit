@@ -15,27 +15,20 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.scentric.android.definit.R;
-import com.scentric.android.definit.get.sqlite.DictionaryDatabaseHelper;
 import com.scentric.android.definit.input.ClipboardWatcherService;
 import com.scentric.android.definit.settings.PreferencesActivity;
 import com.scentric.android.definit.show.SearchAndShowActivity;
 import com.scentric.android.definit.showuservocab.fragment.FragmentRefresher;
 import com.scentric.android.definit.showuservocab.fragment.FragmentReselected;
 import com.scentric.android.definit.showuservocab.fragment.Pager;
-import com.scentric.android.definit.showuservocab.sqlite.UserVocabHelper;
-import com.scentric.android.definit.useless.WordDisplayCursorAdapter;
-import com.scentric.android.definit.utility.DividerItemDecoration;
 import com.scentric.android.definit.utility.NotificationUtility;
 
 import java.io.File;
@@ -72,13 +65,37 @@ public class UserVocabActivity extends AppCompatActivity {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 if (appBarLayout != null) {
                     appBarLayout.setElevation(8);
-//                    toolbar.setElevation(0);
                 }
             }
         }
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
 
+        setTabs(toolbar);
+
+        NotificationUtility.createConvenienceNotif(this);
+
+        // start clipboard watcher service
+        startService(new Intent(getBaseContext(), ClipboardWatcherService.class));
+
+        doFirstTimeIntro();
+
+        // set default preferences
+        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+
+        final Context ctx = this;
+        fab.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Intent defineIntent = new Intent(ctx, SearchAndShowActivity.class);
+                defineIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(defineIntent);
+            }
+        });
+    }
+
+    private void setTabs(final Toolbar toolbar) {
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
         tabLayout.addTab(tabLayout.newTab()/*.setText("Saved")*/.setIcon(R.drawable.ic_home_white_24dp));
         tabLayout.addTab(tabLayout.newTab()/*.setText("Favorited")*/.setIcon(R.drawable.ic_star_white_24dp));
@@ -97,11 +114,10 @@ public class UserVocabActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         viewPager.setOffscreenPageLimit(4);
-//        final TextView ftext = toolbarText;
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//                Log.e("viewpager", "scrolled to" + position);
+                Log.e("viewpager", "scrolled to" + position);
             }
 
             @Override
@@ -115,7 +131,6 @@ public class UserVocabActivity extends AppCompatActivity {
                 try {
                     switch (position) {
                         case 0:
-//                            ftext.setText("Definit");
                             toolbar.setTitle("Definit");
 
                             Drawable icon0 = tabLayout.getTabAt(0).getIcon();
@@ -132,7 +147,6 @@ public class UserVocabActivity extends AppCompatActivity {
                             fab.show();
                             break;
                         case 1:
-//                            ftext.setText("Starred");
                             toolbar.setTitle("Starred");
 
                             tabLayout.getTabAt(0).getIcon().setAlpha(UNSEL_TAB_ALPHA);
@@ -143,7 +157,6 @@ public class UserVocabActivity extends AppCompatActivity {
                             fab.show();
                             break;
                         case 2:
-//                            ftext.setText("History");
                             toolbar.setTitle("History");
 
                             tabLayout.getTabAt(0).getIcon().setAlpha(UNSEL_TAB_ALPHA);
@@ -154,7 +167,6 @@ public class UserVocabActivity extends AppCompatActivity {
                             fab.show();
                             break;
                         case 3:
-//                            ftext.setText("User");
                             toolbar.setTitle("User");
 
                             tabLayout.getTabAt(0).getIcon().setAlpha(UNSEL_TAB_ALPHA);
@@ -173,7 +185,7 @@ public class UserVocabActivity extends AppCompatActivity {
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
+                Log.e("viewpager", "scroll state changed");
             }
         });
 //        tabLayout.addOnTabSelectedListener(this); // for view swiping
@@ -187,7 +199,7 @@ public class UserVocabActivity extends AppCompatActivity {
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-
+                Log.e("tab", "onTapUnselected");
             }
 
             @Override
@@ -201,27 +213,6 @@ public class UserVocabActivity extends AppCompatActivity {
                 }
 
                 appBarLayout.setExpanded(true, true);
-            }
-        });
-
-        NotificationUtility.createConvenienceNotif(this);
-        //start clipboard watcher service
-        startService(new Intent(getBaseContext(), ClipboardWatcherService.class));
-
-        doFirstTimeIntro();
-
-        // set default preferences
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-
-
-        final Context ctx = this;
-        fab.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                Intent defineIntent = new Intent(ctx, SearchAndShowActivity.class);
-                defineIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(defineIntent);
             }
         });
     }
@@ -244,8 +235,8 @@ public class UserVocabActivity extends AppCompatActivity {
         if (userWindowPermission == PREF_NO && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { // ask permission only the first time
             // Show alert dialog to the user saying a separate permission is needed
             // Launch the settings activity if the user prefers
-            Intent myIntent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
-            startActivity(myIntent);
+            Intent permIntent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+            startActivity(permIntent);
         }
 
         // not first time anymore!!!

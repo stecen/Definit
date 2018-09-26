@@ -7,12 +7,15 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.scentric.android.definit.showuservocab.sqlite.UserVocab;
-import com.scentric.android.definit.showuservocab.sqlite.UserVocabHelper;
+import com.scentric.android.definit.showuservocab.sqlite.UserVocabSQLHelper;
 
 import java.util.ArrayList;
 
 /**
  * Created by Steven on 8/14/2016.
+ *
+ * Finalizes and inserts vocabulary definition list into SQL
+ *
  */
 public class UserVocabInsertService extends IntentService {
     public final static String JSON_KEY = "jsonKey";
@@ -24,7 +27,7 @@ public class UserVocabInsertService extends IntentService {
     //todo: option for user to enter their own definitions
 
 
-    // the UserVocab  sent by DisplayDefinitionPopupActivity are "malformed". All of their defExLists should have > 1 length if the user selects multiple defnitions
+    // the UserVocab sent by DisplayDefinitionPopupActivity are "malformed". All of their defExLists should have > 1 length if the user selects multiple definitions
     // of the same wordForm, but they don't so it is up to this class to combine these defExLists if their words are the same
 
 
@@ -36,7 +39,7 @@ public class UserVocabInsertService extends IntentService {
 
         Log.e("intent", "received intent for " + intent.getStringExtra(JSON_KEY));
 
-        UserVocabHelper helper = UserVocabHelper.getInstance(getApplicationContext());
+        UserVocabSQLHelper userVocabHelper = UserVocabSQLHelper.getInstance(getApplicationContext());
 
 
         String lastWord = userVocabList.get(0).word.trim();
@@ -50,10 +53,9 @@ public class UserVocabInsertService extends IntentService {
             if (userVocabList.get(i).word.trim().equals(lastWord)) { // same word so package into the same UserVocab for the database so it display as one word. but if it's the last word just send it anyway
                 toSend.listOfDefEx.add(userVocabList.get(i).listOfDefEx.get(0)); // length 1
             } else { // new wordform, so send this one off and create a new toSend
-                helper.addWord(toSend);
+                userVocabHelper.addWord(toSend);
 
-
-                //reset
+                // reset
                 lastWord = userVocabList.get(i).word.trim(); // assume
                 Log.e("service", "new word " + lastWord);
                 toSend = new UserVocab(); /// assume that the old toSend thrown away by the garbage collector?
@@ -64,8 +66,8 @@ public class UserVocabInsertService extends IntentService {
                 toSend.listOfDefEx.add(userVocabList.get(i).listOfDefEx.get(0));
             }
 
-            if (i == userVocabList.size() - 1) { // last one lol
-                helper.addWord(toSend);
+            if (i == userVocabList.size() - 1) { // last one
+                userVocabHelper.addWord(toSend);
             }
         }
 

@@ -14,7 +14,7 @@ import android.widget.TextView;
 
 import com.scentric.android.definit.R;
 import com.scentric.android.definit.showuservocab.sqlite.HistoryVocab;
-import com.scentric.android.definit.showuservocab.sqlite.UserVocabHelper;
+import com.scentric.android.definit.showuservocab.sqlite.UserVocabSQLHelper;
 import com.scentric.android.definit.utility.DateUtility;
 import com.scentric.android.definit.utility.RecyclerViewClickListener;
 
@@ -76,7 +76,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
                                     Log.e("popup", "delete");
 
 
-                                    UserVocabHelper helper = UserVocabHelper.getInstance(context);
+                                    UserVocabSQLHelper helper = UserVocabSQLHelper.getInstance(context);
                                     helper.deleteHistory(sortedDataSet.get(position));
 
                                     sortedDataSet.remove(position);

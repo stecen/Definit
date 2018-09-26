@@ -28,17 +28,17 @@ import java.util.HashMap;
 
 /**
  * Created by Steven on 8/17/2016.
- */ //todo: animation for adding elements
-//todo: swirling loading button
+ */
+
 public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHolder> {
-    private SearchAndShowActivity searchAndShowActivity;
+    private SearchAndShowActivity searchAndShowActivity; // Adapter is inextricably connected to searchAndShowActivity
     public ArrayList<PearsonAnswer.DefinitionExamples> unsortedDataSet, sortedPearsonDataSet;
     private RecyclerViewClickListener itemListener;
     private boolean mySelected[] = new boolean[500], disBig[] = new boolean[500]; // myselected is for saving to database, disbig is for remembering which ones to make big
     private int disLen[] = new int[500];
     private String mainWord; // main word, without stem changes
     public HashMap<String, String> abbr;
-    public boolean surpressGray; // when finishing activiting only.
+    public boolean surpressGray; // when finishing activity only.
     public static String EXTRA_CONTEXT = "PutExtraContextHerePleaseLmao";
     public int contextIdx = -1;
 

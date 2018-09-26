@@ -25,7 +25,7 @@ import com.scentric.android.definit.utility.ViewUtility;
 /**
  * Created by Steven on 8/7/2016.
  *
- * Defines the Messenger-like poup window
+ * Defines the Messenger-like popup window
  */
 public class FloatingWindowService extends Service {
     public static final String LOG_FLOATINGWINDOW = "floating";
@@ -35,7 +35,7 @@ public class FloatingWindowService extends Service {
     private WindowManager windowManager;
     private LinearLayout linearLayout;
 
-    boolean isKilled = false; // prevent this service from killing its windows when the windows are already killed
+    private boolean isKilled = false; // prevent this service from killing its windows when the windows are already killed
 
     String word; // word receive from ClipboardService
 
@@ -50,8 +50,6 @@ public class FloatingWindowService extends Service {
         super.onStartCommand(intent, flags, startId);
         if (intent != null) {
             word = intent.getStringExtra(KEY_WORD);
-        } else {
-//            Toast.makeText(this, "Error...", Toast.LENGTH_SHORT).show();
         }
         return START_NOT_STICKY;
     }
@@ -64,7 +62,6 @@ public class FloatingWindowService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-
 
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         Display display = windowManager.getDefaultDisplay();
@@ -82,22 +79,21 @@ public class FloatingWindowService extends Service {
         linearLayout.setBackgroundColor(Color.argb(0, 200, 200, 200));
         linearLayout.setLayoutParams(layoutParams);
 
-        //display the app icon
-        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//        ImageView icon = (ImageView) layoutInflater.inflate(R.layout.popup_icon, null);
+        // display the app icon
         ImageView icon = new ImageView(this);
         icon.setImageResource(R.drawable.definit_icon);
 
+        // direct user to definition if clicked on
         icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 isKilled = true;
-//                super.onClick(view);
                 Intent displayDefIntent = new Intent(getApplicationContext(), SearchAndShowActivity.class);
                 displayDefIntent.putExtra(SearchAndShowActivity.SENT_WORD, word);
                 displayDefIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(displayDefIntent);
 
+                // disappear
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
@@ -112,23 +108,24 @@ public class FloatingWindowService extends Service {
         icon.setVisibility(View.INVISIBLE);
         linearLayout.addView(icon);
 
+        // creation animation
         final ImageView fIcon = icon;
         icon.post(new Runnable() {
             @Override
             public void run() {
-//                ViewUtility.circleReveal(fIcon);
                 ViewUtility.zoomIntoView(fIcon);
             }
         });
 
 
-        final WindowManager.LayoutParams windowParams = new WindowManager.LayoutParams(150, 150, WindowManager.LayoutParams.TYPE_PHONE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, PixelFormat.TRANSLUCENT);
+        final WindowManager.LayoutParams windowParams = new WindowManager.LayoutParams(200, 200, WindowManager.LayoutParams.TYPE_PHONE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, PixelFormat.TRANSLUCENT);
         windowParams.x = 0;
-        windowParams.y = /*900*/Math.round(ViewUtility.convertDpToPixel(320f, getApplicationContext()));
+        windowParams.y = Math.round(ViewUtility.convertDpToPixel(320f, getApplicationContext()));
         windowParams.gravity = Gravity.END | Gravity.BOTTOM;
 
         windowManager.addView(linearLayout, windowParams);
 
+        // remove self after 8 seconds
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
