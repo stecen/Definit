@@ -80,16 +80,6 @@
                         android:padding="16dp"
 
                         android:background="?attr/selectableItemBackgroundBorderless"/>
-                    <!--android:layout_marginTop="16dp"-->
-                    <!--android:layout_marginRight="16dp"-->
-
-                    <!--<android.support.v7.widget.SearchView-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-
-
-                        <!--android:textColor="#FFFFFF"-->
-                        <!--android:id="@+id/toolbar_text" />-->
 
 
 
@@ -212,7 +202,7 @@
         android:layout_gravity="bottom|end"
 
 
-            android:onClick="sendToDatabase"
+            android:onClick="saveToUserVocabDatabase"
 
 
             android:layout_margin="@dimen/fab_margin"

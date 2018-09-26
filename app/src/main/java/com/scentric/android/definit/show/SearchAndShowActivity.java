@@ -63,6 +63,10 @@ import jp.wasabeef.recyclerview.animators.FadeInRightAnimator;
 
 /**
  * Created by Steven on 8/20/2016.
+ *
+ * Activity which lets users define words but also coordinates logic relating to pulling data from the internet,
+ * displaying definitions, and inserting this information into databases. Much of the logic is processed through an incoming new intent.
+ *
  */
 public class SearchAndShowActivity extends AppCompatActivity implements PearsonResponseInterface, GlosbeResponseInterface, RecyclerViewClickListener {
 
@@ -129,7 +133,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
     // dialog activity's maximum height http://stackoverflow.com/questions/6624480/how-to-customize-the-width-and-height-when-show-an-activity-as-a-dialog
     // expanding toolbar https://github.com/chrisbanes/cheesesquare/tree/master/app/src/main/java/com/support/android/designlibdemo
 
-    public int lastIdx = -1;//for adapter to know where to add the bottom filler
+    public int lastIdx = -1; // for adapter to know where to add the bottom filler
 
     TextView searchInnerText; // for getting the text in it
 
@@ -139,8 +143,60 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 
         setContentView(R.layout.activitiy_searchandshow);
 
+        adjustSearchViews();
 
-        // region search
+        initLayout();
+
+        comingIntent = getIntent();
+        Log.e("coming", "" + (comingIntent != null));
+        if (comingIntent != null && comingIntent.getAction() != null && comingIntent.getAction().equals(Intent.ACTION_SEARCH)) {
+
+            // define word!
+            String query = comingIntent.getStringExtra(SearchManager.QUERY);
+            getDefinition(query);
+
+            lastWord = query;
+        } else if (comingIntent != null && comingIntent.hasExtra(SENT_WORD)) { //  manually sent from places
+            String query = comingIntent.getStringExtra(SENT_WORD).trim();
+            getDefinition(query);
+
+            searchView.clearFocus();
+
+            lastWord = query;
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && comingIntent != null) { // quick reply
+            Bundle remoteInput = RemoteInput.getResultsFromIntent(comingIntent);
+            if (remoteInput != null) {
+                String replyQuery = ((String) remoteInput.getCharSequence(KEY_TEXT_REPLY));
+                Log.e("quickreply", "received for " + replyQuery);
+                if (replyQuery != null) {
+                    getDefinition(replyQuery.toLowerCase());
+                    lastWord = replyQuery;
+                }
+
+                View view = this.getCurrentFocus();
+                if (view != null) {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                }
+                // HIDE 2.0
+            }
+        } else { // no one sent anything, so show the keyboard and allow the user to type
+            ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).
+                    toggleSoftInput(InputMethodManager.SHOW_FORCED,
+                            InputMethodManager.HIDE_IMPLICIT_ONLY);
+        }
+
+        ////// Hide keyboard
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+    // provide visual adjustment to Android views
+    private void adjustSearchViews() {
         searchView = (SearchView) findViewById(R.id.toolbar_text);
         SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
@@ -148,7 +204,6 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
         EditText searchText = (EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
         searchText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 21f);
 
-        // region readjust searchview margins
         LinearLayout searchLinear = (LinearLayout) searchView.findViewById(android.support.v7.appcompat.R.id.search_bar);
         int childcount = searchLinear.getChildCount();
         for (int i = 0; i < childcount; i++) {
@@ -197,9 +252,12 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
             ViewUtility.setMarginsLinear(0f, 0f, 0f, 0f, voiceButton, this);
             voiceButton.setPadding(0, 16, 16, 0);
         }
-        //endregion
+    }
 
-        //todo: change to include other things like multiple definitions, context, examples, other reminders, gifs
+    private void initLayout() {
+        // adjustviews()
+
+        // todo: change to include other things like multiple definitions, context, examples, other reminders, gifs
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setVisibility(View.GONE);
@@ -211,7 +269,6 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
         histImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 View fview = getCurrentFocus();
                 if (fview != null) {
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -227,13 +284,9 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
         defExRecycler.setLayoutManager(new LinearLayoutManager(this));
         dividerItemDecoration = new DividerItemDecoration(this);
 
-        // region oldanim
+        // have definitions swoop in
         defExRecycler.setItemAnimator(new FadeInRightAnimator());
         defExRecycler.getItemAnimator().setAddDuration(150);
-
-//        defExRecycler.setItemAnimator(new );
-//        defExRecycler.getItemAnimator().setRemoveDuration(REMOVE_DURATION);
-        //endregion
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
@@ -263,11 +316,9 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
         makeSpaceView.setVisibility(View.GONE);
         frame.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-
         // todo: remove this, and instead in the future just update the adapter
         recyclerAdapter = new PearsonAdapter(this, new ArrayList<PearsonAnswer.DefinitionExamples>(), this, "Word");
         defExRecycler.setAdapter(recyclerAdapter);
-
 
         DisplayMetrics metrics = new DisplayMetrics();
         SearchAndShowActivity.this.getWindowManager().getDefaultDisplay().getMetrics(metrics);
@@ -277,56 +328,6 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
         } //redundant
 
         selectedCount = 0;
-
-
-        comingIntent = getIntent();
-        Log.e("coming", "" + (comingIntent != null));
-        if (comingIntent != null && comingIntent.getAction() != null && comingIntent.getAction().equals(Intent.ACTION_SEARCH)) {
-            String query = comingIntent.getStringExtra(SearchManager.QUERY);
-
-            getDefinition(query);
-
-            lastWord = query;
-        } else if (comingIntent != null && comingIntent.hasExtra(SENT_WORD)) { //  manually sent from places
-            String query = comingIntent.getStringExtra(SENT_WORD).trim();
-            getDefinition(query);
-
-            searchView.clearFocus();
-
-            lastWord = query;
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && comingIntent != null) { // quick reply
-            Bundle remoteInput = RemoteInput.getResultsFromIntent(comingIntent);
-            if (remoteInput != null) {
-                String replyQuery = ((String) remoteInput.getCharSequence(KEY_TEXT_REPLY));
-                Log.e("quickreply", "received for " + replyQuery);
-                if (replyQuery != null) {
-                    getDefinition(replyQuery.toLowerCase());
-                    lastWord = replyQuery;
-                }
-
-
-                View view = this.getCurrentFocus();
-                if (view != null) {
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-                }
-                // HIDE 2.0
-            }
-        } else { // no one sent anything, so show the keyboard and allow the user to type
-            ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).
-                    toggleSoftInput(InputMethodManager.SHOW_FORCED,
-                            InputMethodManager.HIDE_IMPLICIT_ONLY);
-        }
-        //endregion search
-
-
-        ////// Hide keyboard
-        View view = this.getCurrentFocus();
-        if (view != null) {
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
 
     }
 
@@ -433,9 +434,8 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
         }
     }
 
-
+    // set frame layout's height, according to device dimensions
     public void setFrameHeight() {
-        // set frame layout height
         final WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         final FrameLayout fview = frame;
         final ViewTreeObserver vto = fview.getViewTreeObserver();
@@ -451,8 +451,8 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
                 int width = fview.getMeasuredWidth();
                 int height = fview.getHeight();
                 Log.e("viewcf", String.format("(%d, %d) vs (%f, %f)", width, height, screenWidth * .6, screenHeight * .6));
-                int widthdp = Math.round(ViewUtility.convertPixelsToDp(width, getApplicationContext()));
-                int heightdp = Math.round(ViewUtility.convertPixelsToDp(height, getApplicationContext()));
+//                int widthdp = Math.round(ViewUtility.convertPixelsToDp(width, getApplicationContext()));
+//                int heightdp = Math.round(ViewUtility.convertPixelsToDp(height, getApplicationContext()));
 
                 int newHeight = (int) Math.round(screenHeight * .64);
                 frame.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, newHeight));
@@ -468,6 +468,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
         });
     }
 
+    // visually output the disturbance
     public void interruptGetDefinition() {
         progressBar.setVisibility(View.INVISIBLE);
         didUserCancel = true;
@@ -542,7 +543,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
     }
 
 
-    public void sendToDatabase(View v) { // FAB action
+    public void saveToUserVocabDatabase(View v) { // FAB action
         if (!endingActivity) { // prevent encouragement of user-indecision
             touchHandler(TOUCH_SEND);
         }
@@ -569,21 +570,14 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-//                        if (idx == finalSorted.size()) {
-//                            addExtraElementContext(idx);
-//                            return;
-//                        }
                         recyclerAdapter.add(finalSorted.get(idx));
                         Log.e("callbackfk", idx + " " + finalSorted.size());
                         if (idx == finalSorted.size() - 1) {
-//                            Toast.makeText(getApplicationContext(), "wtf", Toast.LENGTH_SHORT).show();
                             readjustCoordHeight();
 //                            defExRecycler.addItemDecoration(dividerItemDecoration); // add the lines
                         }
                     }
                 }, 40 * idx);
-
-
             }
             // if only one element, still have to readjust
             if (finalDataSet.size() == 1) {
@@ -613,15 +607,14 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
         return true;
     }
 
+
+    // deals with logic relate to user touches in different areas of the screen, including within the frame
+    // and outside, in attempt in quit
     public void touchHandler(int source) {
         if (source == TOUCH_SEND) {
             Log.e("touch", "touched sent " + String.format(Locale.US, "%d, %d", fab.getWidth(), fab.getHeight()));
 
             recyclerAdapter.animateSlidesAndInsertUserVocab();
-
-//            if (TypeWordPopupActivity.typeWordPopupActivity != null) {
-//                TypeWordPopupActivity.typeWordPopupActivity.finishMe();
-//            }
 
             endingActivity = true; // disable clicks
             final Handler handler = new Handler();
@@ -634,9 +627,6 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 
 
         } else if (source == TOUCH_OUTSIDE) {
-//            if (TypeWordPopupActivity.typeWordPopupActivity != null) {
-//                TypeWordPopupActivity.typeWordPopupActivity.finishMe();
-//            }
             Log.e("touch", "2 touching outside");
             finish();
         } else if (source == TOUCH_FRAME && finishedGetting) {
@@ -678,6 +668,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
                     (searchInnerText.getText().toString().equals("") || searchInnerText.getText().toString().trim().equals(""))) {
                 searchInnerText.requestFocus();
 
+                // hide keyboard again
                 ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).
                         toggleSoftInput(InputMethodManager.SHOW_FORCED,
                                 InputMethodManager.HIDE_IMPLICIT_ONLY);
@@ -948,6 +939,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
             return;
         }
 
+        // keyboard surpression
         View view = getCurrentFocus();
         if (view != null) {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -967,7 +959,6 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 
         recyclerAdapter.updateMainWord(pearsonAnswer.word);
 
-        //region idk
         final ArrayList<PearsonAnswer.DefinitionExamples> finalDataSet = new ArrayList<>();
         for (int i = 0; i < pearsonAnswer.definitionExamplesList.size(); i++) {
             finalDataSet.add(pearsonAnswer.definitionExamplesList.get(i)); // duplicate the list
@@ -992,16 +983,14 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
         if (!(finalDataSet.isEmpty())) {
             finishReplyInputNotif(); // android N only
 
-            final SearchAndShowActivity searchAndShowActivity = this;
+//            final SearchAndShowActivity searchAndShowActivity = this;
 
             progressBar.setVisibility(View.INVISIBLE);
-
 
             Collections.sort(finalDataSet, new PearsonComparator(pearsonAnswer.word.trim()));
             addPearsonList(finalDataSet, true);
 
-        } else { // get the glosbe package
-
+        } else { // get the glosbe package if the Pearson dictionary fails to return anything
             glosbeAsyncTask = new GlosbeAsyncTask(this, pearsonAnswer.word, this); // fui
             glosbeAsyncTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR); // todo: change to normal .execute()?
         }

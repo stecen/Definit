@@ -146,7 +146,7 @@
             app:layout_anchor="@id/view_1"
             app:layout_anchorGravity="bottom|end"
 
-            android:onClick="sendToDatabase"
+            android:onClick="saveToUserVocabDatabase"
 
 
             android:layout_margin="@dimen/fab_margin"
