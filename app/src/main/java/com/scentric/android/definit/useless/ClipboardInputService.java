@@ -1,4 +1,4 @@
-package com.scentric.android.definit.input;
+package com.scentric.android.definit.useless;
 
 import android.app.IntentService;
 import android.content.ClipData;
@@ -8,7 +8,7 @@ import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.scentric.android.definit.useless.DisplayDefinitionPopupActivity;
+import com.scentric.android.definit.showdefinition.SearchAndShowActivity;
 
 /**
  * Created by Steven on 8/17/2016.
@@ -28,7 +28,7 @@ public class ClipboardInputService extends IntentService { // from the notificat
                 String word = cd.getItemAt(0).coerceToText(this).toString().trim();
 
                 Intent popupIntent = new Intent(ClipboardInputService.this, DisplayDefinitionPopupActivity.class);
-                popupIntent.putExtra(DisplayDefinitionPopupActivity.SENT_WORD, word);
+                popupIntent.putExtra(SearchAndShowActivity.SENT_WORD, word);
                 popupIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(popupIntent);
 

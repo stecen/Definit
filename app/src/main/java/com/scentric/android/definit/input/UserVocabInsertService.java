@@ -6,8 +6,8 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.scentric.android.definit.showuservocab.sqlite.UserVocab;
-import com.scentric.android.definit.showuservocab.sqlite.UserVocabSQLHelper;
+import com.scentric.android.definit.sqliteuservocab.UserVocab;
+import com.scentric.android.definit.sqliteuservocab.UserVocabSQLHelper;
 
 import java.util.ArrayList;
 

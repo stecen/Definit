@@ -1,7 +1,6 @@
 package com.scentric.android.definit.input;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
@@ -12,14 +11,13 @@ import android.os.IBinder;
 import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.scentric.android.definit.R;
-import com.scentric.android.definit.show.SearchAndShowActivity;
+import com.scentric.android.definit.showdefinition.SearchAndShowActivity;
 import com.scentric.android.definit.utility.ViewUtility;
 
 /**

@@ -16,8 +16,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.scentric.android.definit.R;
-import com.scentric.android.definit.showuservocab.sqlite.UserVocab;
-import com.scentric.android.definit.showuservocab.sqlite.UserVocabSQLHelper;
+import com.scentric.android.definit.sqliteuservocab.UserVocab;
+import com.scentric.android.definit.sqliteuservocab.UserVocabSQLHelper;
 import com.scentric.android.definit.utility.CustomUVStringAdapter;
 import com.scentric.android.definit.utility.DateUtility;
 import com.scentric.android.definit.utility.PearsonAnswer;

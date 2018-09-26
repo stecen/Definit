@@ -24,10 +24,10 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 
 import com.scentric.android.definit.R;
-import com.scentric.android.definit.show.SearchAndShowActivity;
-import com.scentric.android.definit.showuservocab.sqlite.GetHistoryInterface;
-import com.scentric.android.definit.showuservocab.sqlite.HistoryVocab;
-import com.scentric.android.definit.showuservocab.sqlite.UserVocabSQLHelper;
+import com.scentric.android.definit.showdefinition.SearchAndShowActivity;
+import com.scentric.android.definit.sqliteuservocab.GetHistoryInterface;
+import com.scentric.android.definit.sqliteuservocab.HistoryVocab;
+import com.scentric.android.definit.sqliteuservocab.UserVocabSQLHelper;
 import com.scentric.android.definit.utility.RecyclerViewClickListener;
 import com.scentric.android.definit.utility.ViewUtility;
 

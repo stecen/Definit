@@ -1,4 +1,4 @@
-package com.scentric.android.definit.show;
+package com.scentric.android.definit.showdefinition;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -16,8 +16,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.scentric.android.definit.R;
 import com.scentric.android.definit.input.UserVocabInsertService;
-import com.scentric.android.definit.showuservocab.sqlite.UserVocab;
-import com.scentric.android.definit.useless.DisplayDefinitionPopupActivity;
+import com.scentric.android.definit.sqliteuservocab.UserVocab;
 import com.scentric.android.definit.utility.PearsonAnswer;
 import com.scentric.android.definit.utility.PearsonComparator;
 import com.scentric.android.definit.utility.RecyclerViewClickListener;
@@ -196,7 +195,7 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
     public void slideByIdx(int idx) {
         TranslateAnimation translateAnimation = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 20.0f,
                 Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f);
-        translateAnimation.setDuration(DisplayDefinitionPopupActivity.REMOVE_DURATION + 50);
+        translateAnimation.setDuration(SearchAndShowActivity.REMOVE_DURATION + 50);
 
         View rootView = (searchAndShowActivity.defExRecycler.getLayoutManager().findViewByPosition(idx));
         if (rootView != null) {
@@ -332,7 +331,7 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
 
         if (mySelected[position] && !surpressGray) {
             Log.e("color", "setting " + Integer.toString(pos) + " pressed");
-            holder.colorView.setBackgroundColor(Color.parseColor(DisplayDefinitionPopupActivity.COLOR_PRESSED));
+            holder.colorView.setBackgroundColor(Color.parseColor(SearchAndShowActivity.COLOR_PRESSED));
 
             if (searchAndShowActivity.doChangeFont) {
                 holder.definitionText.setTextSize(searchAndShowActivity.SMALL_FONT);
@@ -348,7 +347,7 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
             }
 
         } else {
-            holder.colorView.setBackgroundColor(Color.parseColor(DisplayDefinitionPopupActivity.COLOR_NEUTRAL));
+            holder.colorView.setBackgroundColor(Color.parseColor(SearchAndShowActivity.COLOR_NEUTRAL));
             Log.e("color", "setting " + Integer.toString(pos) + " neutral");
 
             if (searchAndShowActivity.doChangeFont) {

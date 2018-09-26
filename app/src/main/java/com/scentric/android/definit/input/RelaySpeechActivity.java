@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.scentric.android.definit.R;
-import com.scentric.android.definit.show.SearchAndShowActivity;
+import com.scentric.android.definit.showdefinition.SearchAndShowActivity;
 
 import java.util.ArrayList;
 import java.util.Locale;

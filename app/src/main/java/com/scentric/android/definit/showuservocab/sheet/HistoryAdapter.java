@@ -13,8 +13,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.scentric.android.definit.R;
-import com.scentric.android.definit.showuservocab.sqlite.HistoryVocab;
-import com.scentric.android.definit.showuservocab.sqlite.UserVocabSQLHelper;
+import com.scentric.android.definit.sqliteuservocab.HistoryVocab;
+import com.scentric.android.definit.sqliteuservocab.UserVocabSQLHelper;
 import com.scentric.android.definit.utility.DateUtility;
 import com.scentric.android.definit.utility.RecyclerViewClickListener;
 

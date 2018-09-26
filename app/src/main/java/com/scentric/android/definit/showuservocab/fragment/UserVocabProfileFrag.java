@@ -18,9 +18,9 @@ import com.google.gson.Gson;
 import com.scentric.android.definit.R;
 import com.scentric.android.definit.export.ImportActivity;
 import com.scentric.android.definit.settings.PreferencesActivity;
-import com.scentric.android.definit.showuservocab.sqlite.GetAllWordsAsyncInterface;
-import com.scentric.android.definit.showuservocab.sqlite.UserVocab;
-import com.scentric.android.definit.showuservocab.sqlite.UserVocabSQLHelper;
+import com.scentric.android.definit.sqliteuservocab.GetAllWordsAsyncInterface;
+import com.scentric.android.definit.sqliteuservocab.UserVocab;
+import com.scentric.android.definit.sqliteuservocab.UserVocabSQLHelper;
 import com.scentric.android.definit.utility.PearsonAnswer;
 
 import java.util.ArrayList;

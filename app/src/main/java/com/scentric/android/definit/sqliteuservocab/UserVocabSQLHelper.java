@@ -1,4 +1,4 @@
-package com.scentric.android.definit.showuservocab.sqlite;
+package com.scentric.android.definit.sqliteuservocab;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -31,6 +31,7 @@ public class UserVocabSQLHelper extends SQLiteOpenHelper {
     private static final String KEY_ID = "_id",
             KEY_WORD = "word",
             KEY_JSON = "json",
+            KEY_CONTEXT = "context",
             KEY_DATE = "date",
             KEY_FAVE = "fave",
             KEY_FAVE_DATE = "lastFaveDate"; // last day it was faved
@@ -44,9 +45,7 @@ public class UserVocabSQLHelper extends SQLiteOpenHelper {
     }
 
     public static synchronized UserVocabSQLHelper getInstance(Context context) {
-        // Use the application context, which will ensure that you
-        // don't accidentally leak an Activity's context.
-        // article for more information: http://bit.ly/6LRzfx
+        // use app context to prevent memory leak
         if (sInstance == null) {
             sInstance = new UserVocabSQLHelper(context.getApplicationContext());
         }
@@ -57,19 +56,29 @@ public class UserVocabSQLHelper extends SQLiteOpenHelper {
     // If a database already exists on disk with the same DATABASE_NAME, this method will NOT be called.
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_WORDS_TABLE = String.format(Locale.US, "CREATE TABLE IF NOT EXISTS %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s VARCHAR, %s VARCHAR, %s UNSIGNED BIG INT, %s INTEGER, %s UNSIGNED BIG INT);",
-                TABLE_WORDS, KEY_ID, KEY_WORD, KEY_JSON, KEY_DATE, KEY_FAVE, KEY_FAVE_DATE);
-//                "CREATE TABLE IF NOT EXISTS " +TABLE_WORDS+ "(" +KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +KEY_WORD+
-//                        " VARCHAR, " +KEY_JSON+ " VARCHAR, " +KEY_DATE+ " INTEGER, " +KEY_DATETEXT+ " VARCHAR);";
+        String CREATE_WORDS_TABLE = String.format(Locale.US,
+                "CREATE TABLE IF NOT EXISTS %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s VARCHAR, %s VARCHAR, %s VARCHAR, %s UNSIGNED BIG INT, %s INTEGER, %s UNSIGNED BIG INT);",
+                TABLE_WORDS, KEY_ID, KEY_WORD, KEY_JSON, KEY_CONTEXT, KEY_DATE, KEY_FAVE, KEY_FAVE_DATE);
         Log.e("userVocab", "executing sql: " + CREATE_WORDS_TABLE);
         db.execSQL(CREATE_WORDS_TABLE); // create user saved words table
 
-//
-//
         String CREATE_HISTORY_TABLE = String.format(Locale.US, "CREATE TABLE IF NOT EXISTS %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s VARCHAR, %s UNSIGNED BIG INT);",
                 TABLE_HISTORY, KEY_ID, KEY_WORD, KEY_DATE);
         Log.e("userVocab", "executing sql: " + CREATE_HISTORY_TABLE);
         db.execSQL(CREATE_HISTORY_TABLE); // create all user searched words
+    }
+
+    // Called when the database needs to be upgraded.
+    // This method will only be called if a database already exists on disk with the same DATABASE_NAME,
+    // but the DATABASE_VERSION is different than the version of the database that exists on disk.
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if (oldVersion != newVersion) {
+            Log.e("userVocab", "new database version????");
+            // Simplest implementation is to drop all old tables and recreate them
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_WORDS);
+            onCreate(db);
+        }
     }
 
     //region history
@@ -79,12 +88,11 @@ public class UserVocabSQLHelper extends SQLiteOpenHelper {
         Log.e("addWordHist", historyVocab.word + " " + historyVocab.date);
 
 
-        // It's a good idea to wrap our insert in a transaction. This helps with performance and ensures
-        // consistency of the database.
+        // wrap our insert in a transaction to help with performance and ensuring database consistency
         db.beginTransaction();
         try {
             // The user might already exist in the database (i.e. the same user created multiple posts).
-            //long userId = addOrUpdateWord(userVocab.word); //todo: check for duplicates
+            //long userId = addOrUpdateWord(userVocab.word); // todo: check for duplicates
 
             ContentValues values = new ContentValues();
             values.put(KEY_WORD, historyVocab.word.trim());
@@ -101,7 +109,7 @@ public class UserVocabSQLHelper extends SQLiteOpenHelper {
             db.insertOrThrow(TABLE_HISTORY, null, values);
             db.setTransactionSuccessful();
         } catch (Exception e) {
-            Log.d("userVocab", "\n\n\n\n\n\n\n\n\n\n\n\nEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEError while trying to add post to database + " + e.toString() + "\n\n");
+            Log.d("userVocab", "\nError while trying to add post to database + " + e.toString() + "\n\n");
         } finally {
             db.endTransaction();
         }
@@ -357,7 +365,7 @@ public class UserVocabSQLHelper extends SQLiteOpenHelper {
 
 
     // todo: upsert SQLite
-    // Insert a post into the database
+    // Insert a post into the database, for user vocabulary
     public void addWord(UserVocab userVocab) { // todo: make favorite and addword async
         // Create and/or open the database for writing
         SQLiteDatabase db = getWritableDatabase();
@@ -396,6 +404,7 @@ public class UserVocabSQLHelper extends SQLiteOpenHelper {
 //        }
     }
 
+    // delete user vocabulary
     public void deleteWord(UserVocab userVocab) {
         // Create and/or open the database for writing
         SQLiteDatabase db = getWritableDatabase();
@@ -536,20 +545,6 @@ public class UserVocabSQLHelper extends SQLiteOpenHelper {
             Log.d("userVocab", "error deleting userVocab");
         } finally {
             db.endTransaction();
-        }
-    }
-
-
-    // Called when the database needs to be upgraded.
-    // This method will only be called if a database already exists on disk with the same DATABASE_NAME,
-    // but the DATABASE_VERSION is different than the version of the database that exists on disk.
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion != newVersion) {
-            Log.e("userVocab", "new database version????");
-            // Simplest implementation is to drop all old tables and recreate them
-            db.execSQL("DROP TABLE IF EXISTS " + TABLE_WORDS);
-            onCreate(db);
         }
     }
 }

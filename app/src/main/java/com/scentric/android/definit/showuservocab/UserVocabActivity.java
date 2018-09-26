@@ -25,7 +25,7 @@ import android.widget.Toast;
 import com.scentric.android.definit.R;
 import com.scentric.android.definit.input.ClipboardWatcherService;
 import com.scentric.android.definit.settings.PreferencesActivity;
-import com.scentric.android.definit.show.SearchAndShowActivity;
+import com.scentric.android.definit.showdefinition.SearchAndShowActivity;
 import com.scentric.android.definit.showuservocab.fragment.FragmentRefresher;
 import com.scentric.android.definit.showuservocab.fragment.FragmentReselected;
 import com.scentric.android.definit.showuservocab.fragment.Pager;

@@ -1,4 +1,4 @@
-package com.scentric.android.definit.show;
+package com.scentric.android.definit.showdefinition;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
@@ -46,8 +46,8 @@ import com.scentric.android.definit.get.glosbe.GlosbeResponseInterface;
 import com.scentric.android.definit.get.pearson.PearsonAsyncTask;
 import com.scentric.android.definit.get.pearson.PearsonResponseInterface;
 import com.scentric.android.definit.showuservocab.sheet.SheetHistorySavedActivity;
-import com.scentric.android.definit.showuservocab.sqlite.HistoryVocab;
-import com.scentric.android.definit.showuservocab.sqlite.UserVocabSQLHelper;
+import com.scentric.android.definit.sqliteuservocab.HistoryVocab;
+import com.scentric.android.definit.sqliteuservocab.UserVocabSQLHelper;
 import com.scentric.android.definit.utility.DividerItemDecoration;
 import com.scentric.android.definit.utility.NotificationUtility;
 import com.scentric.android.definit.utility.PearsonAnswer;

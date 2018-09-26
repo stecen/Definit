@@ -1,4 +1,4 @@
-package com.scentric.android.definit.showuservocab.sqlite;
+package com.scentric.android.definit.sqliteuservocab;
 
 /**
  * Created by Steven on 8/22/2016.

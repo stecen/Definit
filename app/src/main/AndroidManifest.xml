@@ -54,7 +54,7 @@
         <activity android:name="com.scentric.android.definit.export.ImportActivity"
             android:theme="@style/VocabAppTheme"/>
         
-        <activity android:name="com.scentric.android.definit.login.LoginActivity"
+        <activity android:name=".useless.login.LoginActivity"
             android:theme="@style/VocabAppTheme"/>
 
         <!--android:noHistory="true"-->
@@ -87,7 +87,7 @@
             android:windowSoftInputMode="stateHidden"
             />
 
-        <activity android:name="com.scentric.android.definit.show.SearchAndShowActivity"
+        <activity android:name="com.scentric.android.definit.showdefinition.SearchAndShowActivity"
             android:theme="@style/VocabDialogTheme"
             android:label="Definition"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -134,7 +134,7 @@
 
         <service android:name="com.scentric.android.definit.input.UserVocabInsertService"/>
 
-        <service android:name="com.scentric.android.definit.input.ClipboardInputService"/>
+        <service android:name="com.scentric.android.definit.useless.ClipboardInputService"/>
 
         <activity android:name="com.scentric.android.definit.input.RelaySpeechActivity"
             android:launchMode="singleInstance"

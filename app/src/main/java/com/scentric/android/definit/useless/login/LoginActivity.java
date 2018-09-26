@@ -1,4 +1,4 @@
-package com.scentric.android.definit.login;
+package com.scentric.android.definit.useless.login;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

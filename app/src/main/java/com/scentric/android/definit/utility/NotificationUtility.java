@@ -11,7 +11,7 @@ import android.support.v7.app.NotificationCompat;
 
 import com.scentric.android.definit.R;
 import com.scentric.android.definit.input.RelaySpeechActivity;
-import com.scentric.android.definit.show.SearchAndShowActivity;
+import com.scentric.android.definit.showdefinition.SearchAndShowActivity;
 
 /**
  * Created by Steven on 8/29/2016.

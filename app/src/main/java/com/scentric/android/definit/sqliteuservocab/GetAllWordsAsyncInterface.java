@@ -1,4 +1,4 @@
-package com.scentric.android.definit.showuservocab.sqlite;
+package com.scentric.android.definit.sqliteuservocab;
 
 import java.util.ArrayList;
 
