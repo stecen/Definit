@@ -1,4 +1,4 @@
-package com.scentric.android.definit.sqliteuservocab;
+package com.scentric.android.definit.sqlite;
 
 import com.scentric.android.definit.utility.PearsonAnswer;
 

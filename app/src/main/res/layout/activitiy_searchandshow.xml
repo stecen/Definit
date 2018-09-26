@@ -27,9 +27,6 @@
 
         tools:context=".showdefinition.SearchAndShowActivity">
 
-        <!--android:fitsSystemWindows="true"-->
-
-
         <View
             android:id="@+id/view_1"
             android:layout_width="match_parent"

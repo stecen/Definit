@@ -25,9 +25,9 @@ import android.widget.ImageView;
 
 import com.scentric.android.definit.R;
 import com.scentric.android.definit.showdefinition.SearchAndShowActivity;
-import com.scentric.android.definit.sqliteuservocab.GetHistoryInterface;
-import com.scentric.android.definit.sqliteuservocab.HistoryVocab;
-import com.scentric.android.definit.sqliteuservocab.UserVocabSQLHelper;
+import com.scentric.android.definit.sqlite.GetHistoryInterface;
+import com.scentric.android.definit.sqlite.HistoryVocab;
+import com.scentric.android.definit.sqlite.VocabSQLHelper;
 import com.scentric.android.definit.utility.RecyclerViewClickListener;
 import com.scentric.android.definit.utility.ViewUtility;
 
@@ -45,7 +45,7 @@ public class SheetHistorySavedActivity extends AppCompatActivity implements Recy
     TabLayout tabLayout;
 
     RecyclerView recyclerView;
-    UserVocabSQLHelper helper;
+    VocabSQLHelper helper;
     HistoryAdapter adapter;
     NestedScrollView nested;
 
@@ -133,7 +133,7 @@ public class SheetHistorySavedActivity extends AppCompatActivity implements Recy
         linearLayoutManager.setAutoMeasureEnabled(true);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setHasFixedSize(true);
-        helper = UserVocabSQLHelper.getInstance(this);
+        helper = VocabSQLHelper.getInstance(this);
 
         final RecyclerViewClickListener fclick = this;
         final Context activityCtx = this;
@@ -145,7 +145,7 @@ public class SheetHistorySavedActivity extends AppCompatActivity implements Recy
                                     recyclerView.setAdapter(adapter);
                                 }
                             },
-                UserVocabSQLHelper.GET_ALL);
+                VocabSQLHelper.GET_ALL);
 
 
         nested = (NestedScrollView) findViewById(R.id.bottom_sheet);

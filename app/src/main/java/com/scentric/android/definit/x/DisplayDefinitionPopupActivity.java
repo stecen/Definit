@@ -1,4 +1,4 @@
-package com.scentric.android.definit.useless;
+package com.scentric.android.definit.x;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;

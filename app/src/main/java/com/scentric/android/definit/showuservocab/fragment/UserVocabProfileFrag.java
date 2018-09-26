@@ -18,9 +18,9 @@ import com.google.gson.Gson;
 import com.scentric.android.definit.R;
 import com.scentric.android.definit.export.ImportActivity;
 import com.scentric.android.definit.settings.PreferencesActivity;
-import com.scentric.android.definit.sqliteuservocab.GetAllWordsAsyncInterface;
-import com.scentric.android.definit.sqliteuservocab.UserVocab;
-import com.scentric.android.definit.sqliteuservocab.UserVocabSQLHelper;
+import com.scentric.android.definit.sqlite.GetAllWordsAsyncInterface;
+import com.scentric.android.definit.sqlite.UserVocab;
+import com.scentric.android.definit.sqlite.VocabSQLHelper;
 import com.scentric.android.definit.utility.PearsonAnswer;
 
 import java.util.ArrayList;
@@ -138,7 +138,7 @@ public class UserVocabProfileFrag extends Fragment implements FragmentRefresher,
             sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareStr);
             startActivity(sharingIntent);
         } else {
-            UserVocabSQLHelper helper = UserVocabSQLHelper.getInstance(appContext);
+            VocabSQLHelper helper = VocabSQLHelper.getInstance(appContext);
             helper.getAllUserVocab(new GetAllWordsAsyncInterface() {
                 @Override
                 public void setWordsData(ArrayList<UserVocab> userVocabList) {
@@ -149,7 +149,7 @@ public class UserVocabProfileFrag extends Fragment implements FragmentRefresher,
                     sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareStr);
                     startActivity(sharingIntent);
                 }
-            }, UserVocabSQLHelper.GET_ALL);
+            }, VocabSQLHelper.GET_ALL);
         }
     }
 
@@ -215,7 +215,7 @@ public class UserVocabProfileFrag extends Fragment implements FragmentRefresher,
             sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareStr);
             startActivity(sharingIntent);
         } else {
-            UserVocabSQLHelper helper = UserVocabSQLHelper.getInstance(appContext);
+            VocabSQLHelper helper = VocabSQLHelper.getInstance(appContext);
             helper.getAllUserVocab(new GetAllWordsAsyncInterface() {
                 @Override
                 public void setWordsData(ArrayList<UserVocab> userVocabList) {
@@ -226,7 +226,7 @@ public class UserVocabProfileFrag extends Fragment implements FragmentRefresher,
                     sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareStr);
                     startActivity(sharingIntent);
                 }
-            }, UserVocabSQLHelper.GET_ALL);
+            }, VocabSQLHelper.GET_ALL);
         }
     }
 

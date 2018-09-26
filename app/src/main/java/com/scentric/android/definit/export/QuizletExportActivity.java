@@ -5,9 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
 import com.scentric.android.definit.R;
-import com.scentric.android.definit.sqliteuservocab.GetAllWordsAsyncInterface;
-import com.scentric.android.definit.sqliteuservocab.UserVocab;
-import com.scentric.android.definit.sqliteuservocab.UserVocabSQLHelper;
+import com.scentric.android.definit.sqlite.GetAllWordsAsyncInterface;
+import com.scentric.android.definit.sqlite.UserVocab;
+import com.scentric.android.definit.sqlite.VocabSQLHelper;
 import com.scentric.android.definit.utility.PearsonAnswer;
 
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ import java.util.ArrayList;
  * Created by Steven on 9/3/2016.
  */
 public class QuizletExportActivity extends AppCompatActivity /*implements GetAllWordsAsyncInterface*/ {
-    UserVocabSQLHelper helper;
+    VocabSQLHelper helper;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -25,7 +25,7 @@ public class QuizletExportActivity extends AppCompatActivity /*implements GetAll
 
         final TextView exportText = (TextView) findViewById(R.id.export_text);
 
-        helper = UserVocabSQLHelper.getInstance(getApplicationContext());
+        helper = VocabSQLHelper.getInstance(getApplicationContext());
         helper.getAllUserVocab(new GetAllWordsAsyncInterface() {
             @Override
             public void setWordsData(ArrayList<UserVocab> userVocabList) {
@@ -71,7 +71,7 @@ public class QuizletExportActivity extends AppCompatActivity /*implements GetAll
                 }
                 exportText.setText(sb.toString());
             }
-        }, UserVocabSQLHelper.GET_ALL);
+        }, VocabSQLHelper.GET_ALL);
 
     }
 }

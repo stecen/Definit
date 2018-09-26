@@ -40,7 +40,7 @@
             />
 
         <!--HELP:    http://stackoverflow.com/questions/32824079/launchmode-singletask-does-not-create-a-new-task-->
-        <activity android:name="com.scentric.android.definit.useless.TypeWordPopupActivity"
+        <activity android:name="com.scentric.android.definit.x.TypeWordPopupActivity"
             android:label="Define word"
 
         android:taskAffinity=""
@@ -54,7 +54,7 @@
         <activity android:name="com.scentric.android.definit.export.ImportActivity"
             android:theme="@style/VocabAppTheme"/>
         
-        <activity android:name=".useless.login.LoginActivity"
+        <activity android:name=".x.login.LoginActivity"
             android:theme="@style/VocabAppTheme"/>
 
         <!--android:noHistory="true"-->
@@ -74,7 +74,7 @@
 
         </activity>
 
-        <activity android:name="com.scentric.android.definit.useless.DisplayDefinitionPopupActivity"
+        <activity android:name="com.scentric.android.definit.x.DisplayDefinitionPopupActivity"
             android:theme="@style/VocabDialogTheme"
             android:label="Definition"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -134,7 +134,7 @@
 
         <service android:name="com.scentric.android.definit.input.UserVocabInsertService"/>
 
-        <service android:name="com.scentric.android.definit.useless.ClipboardInputService"/>
+        <service android:name="com.scentric.android.definit.x.ClipboardInputService"/>
 
         <activity android:name="com.scentric.android.definit.input.RelaySpeechActivity"
             android:launchMode="singleInstance"

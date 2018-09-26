@@ -46,8 +46,8 @@ import com.scentric.android.definit.get.glosbe.GlosbeResponseInterface;
 import com.scentric.android.definit.get.pearson.PearsonAsyncTask;
 import com.scentric.android.definit.get.pearson.PearsonResponseInterface;
 import com.scentric.android.definit.showuservocab.sheet.SheetHistorySavedActivity;
-import com.scentric.android.definit.sqliteuservocab.HistoryVocab;
-import com.scentric.android.definit.sqliteuservocab.UserVocabSQLHelper;
+import com.scentric.android.definit.sqlite.HistoryVocab;
+import com.scentric.android.definit.sqlite.VocabSQLHelper;
 import com.scentric.android.definit.utility.DividerItemDecoration;
 import com.scentric.android.definit.utility.NotificationUtility;
 import com.scentric.android.definit.utility.PearsonAnswer;
@@ -538,7 +538,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
     // add to history table for quick viewing :)
     public void addToHistory(String word) {
         Log.e("sql", "adding " + word + " to database");
-        UserVocabSQLHelper sqlHelper = UserVocabSQLHelper.getInstance(getApplicationContext());
+        VocabSQLHelper sqlHelper = VocabSQLHelper.getInstance(getApplicationContext());
         sqlHelper.addHistory(new HistoryVocab(word, System.currentTimeMillis()));
     }
 

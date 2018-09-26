@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.scentric.android.definit.R;
 import com.scentric.android.definit.input.UserVocabInsertService;
-import com.scentric.android.definit.sqliteuservocab.UserVocab;
+import com.scentric.android.definit.sqlite.UserVocab;
 import com.scentric.android.definit.utility.PearsonAnswer;
 import com.scentric.android.definit.utility.PearsonComparator;
 import com.scentric.android.definit.utility.RecyclerViewClickListener;

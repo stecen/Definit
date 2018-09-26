@@ -1,4 +1,4 @@
-package com.scentric.android.definit.sqliteuservocab;
+package com.scentric.android.definit.sqlite;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -15,9 +15,10 @@ import java.util.Locale;
 
 /**
  * Created by Steven on 8/12/2016.
+ * Deals with the database management of both history and user voca
  */
-public class UserVocabSQLHelper extends SQLiteOpenHelper {
-    private static UserVocabSQLHelper sInstance; // singleton
+public class VocabSQLHelper extends SQLiteOpenHelper {
+    private static VocabSQLHelper sInstance; // singleton
 
     // Database Info
     private static final String DATABASE_NAME = "userVocab";
@@ -40,14 +41,14 @@ public class UserVocabSQLHelper extends SQLiteOpenHelper {
     public static int IS_FAVE = 1;
     public static int NOT_FAVE = 0;
 
-    public UserVocabSQLHelper(Context context) {
+    public VocabSQLHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
-    public static synchronized UserVocabSQLHelper getInstance(Context context) {
+    public static synchronized VocabSQLHelper getInstance(Context context) {
         // use app context to prevent memory leak
         if (sInstance == null) {
-            sInstance = new UserVocabSQLHelper(context.getApplicationContext());
+            sInstance = new VocabSQLHelper(context.getApplicationContext());
         }
         return sInstance;
     }
@@ -70,7 +71,7 @@ public class UserVocabSQLHelper extends SQLiteOpenHelper {
 
     // Called when the database needs to be upgraded.
     // This method will only be called if a database already exists on disk with the same DATABASE_NAME,
-    // but the DATABASE_VERSION is different than the version of the database that exists on disk.
+    // but the DATABASE_VERSION is different than the version of the database that exists on disk
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (oldVersion != newVersion) {
@@ -81,7 +82,7 @@ public class UserVocabSQLHelper extends SQLiteOpenHelper {
         }
     }
 
-    //region history
+    // region history
     public void addHistory(HistoryVocab historyVocab) {
         SQLiteDatabase db = getWritableDatabase();
 
@@ -198,7 +199,6 @@ public class UserVocabSQLHelper extends SQLiteOpenHelper {
                 }
             }
 
-//        Collections.reverse(historyVocabs);
             return historyVocabs;
         }
 
@@ -209,13 +209,14 @@ public class UserVocabSQLHelper extends SQLiteOpenHelper {
         }
     }
 
+    // endregion
+
     public static int GET_ALL = -1;
 
     public void getAllUserVocab(GetAllWordsAsyncInterface asyncInterface, int howMany) {
         GetAllWordsAsyncTask task = new GetAllWordsAsyncTask(getReadableDatabase(), asyncInterface, howMany);
         task.execute();
     }
-
 
     private class GetAllWordsAsyncTask extends AsyncTask<Void, Void, ArrayList<UserVocab>> { // class to allow the get all query to happen on a seperate thread
         GetAllWordsAsyncInterface asyncInterface;
@@ -366,7 +367,8 @@ public class UserVocabSQLHelper extends SQLiteOpenHelper {
 
     // todo: upsert SQLite
     // Insert a post into the database, for user vocabulary
-    public void addWord(UserVocab userVocab) { // todo: make favorite and addword async
+    public void addWord(UserVocab userVocab) {
+        // todo: make favorite and addword async
         // Create and/or open the database for writing
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
@@ -450,7 +452,8 @@ public class UserVocabSQLHelper extends SQLiteOpenHelper {
         }
     }
 
-    //endregion
+    // region import
+
     public void importNative(ArrayList<UserVocab> userVocabArrayList) {
 //        ArrayList<UserVocab> userVocabArrayList = (new Gson()).fromJson(json, new TypeToken<ArrayList<UserVocab>>(){}.getType());
         SQLiteDatabase db = getWritableDatabase();
@@ -483,8 +486,10 @@ public class UserVocabSQLHelper extends SQLiteOpenHelper {
         }
     }
 
+    // endregion
+
     // region check duplicate
-// Insert or update a user in the database
+    // Insert or update a user in the database
     public long addOrUpdateWord(String word) {
         // The database connection is cached so it's not expensive to call getWriteableDatabase() multiple times.
         SQLiteDatabase db = getWritableDatabase();
@@ -531,14 +536,14 @@ public class UserVocabSQLHelper extends SQLiteOpenHelper {
         }
         return userId;
     }
-    //endregion
+
 
     public void deleteAllUserVocab() {
         SQLiteDatabase db = getWritableDatabase();
         db.beginTransaction();
         try {
             // Order of deletions is important when foreign key relationships exist.
-//            db.delete(TABLE_WORDS, null, null);
+            // // db.delete(TABLE_WORDS, null, null);
             db.execSQL(String.format("DELETE FROM %s;", TABLE_WORDS));
             db.setTransactionSuccessful();
         } catch (Exception e) {
@@ -547,4 +552,6 @@ public class UserVocabSQLHelper extends SQLiteOpenHelper {
             db.endTransaction();
         }
     }
+
+    //endregion
 }

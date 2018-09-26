@@ -6,8 +6,8 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.scentric.android.definit.sqliteuservocab.UserVocab;
-import com.scentric.android.definit.sqliteuservocab.UserVocabSQLHelper;
+import com.scentric.android.definit.sqlite.UserVocab;
+import com.scentric.android.definit.sqlite.VocabSQLHelper;
 
 import java.util.ArrayList;
 
@@ -39,7 +39,7 @@ public class UserVocabInsertService extends IntentService {
 
         Log.e("intent", "received intent for " + intent.getStringExtra(JSON_KEY));
 
-        UserVocabSQLHelper userVocabHelper = UserVocabSQLHelper.getInstance(getApplicationContext());
+        VocabSQLHelper userVocabHelper = VocabSQLHelper.getInstance(getApplicationContext());
 
 
         String lastWord = userVocabList.get(0).word.trim();

@@ -16,8 +16,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.scentric.android.definit.R;
-import com.scentric.android.definit.sqliteuservocab.UserVocab;
-import com.scentric.android.definit.sqliteuservocab.UserVocabSQLHelper;
+import com.scentric.android.definit.sqlite.UserVocab;
+import com.scentric.android.definit.sqlite.VocabSQLHelper;
 import com.scentric.android.definit.utility.CustomUVStringAdapter;
 import com.scentric.android.definit.utility.DateUtility;
 import com.scentric.android.definit.utility.PearsonAnswer;
@@ -93,7 +93,7 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
                                     Log.e("popup", "delete");
 
 
-                                    UserVocabSQLHelper helper = UserVocabSQLHelper.getInstance(context);
+                                    VocabSQLHelper helper = VocabSQLHelper.getInstance(context);
                                     helper.deleteWord(sortedDataSet.get(position));
 
                                     sortedDataSet.remove(position);
@@ -102,7 +102,7 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
                                     break;
                                 case R.id.popup_menu_favorite:
                                     Log.e("popup", "favorite");
-                                    helper = UserVocabSQLHelper.getInstance(context.getApplicationContext());
+                                    helper = VocabSQLHelper.getInstance(context.getApplicationContext());
 
                                     if (sortedDataSet.get(position).fave) {
                                         // toggle to false, and send to database. regardless of whether the sqlite succeeds, update the ui. responsive :)
@@ -300,7 +300,7 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
                     ((ImageView) faveImage).setImageDrawable(notFaveDrawable);
                     ViewUtility.boing(faveImage);
 
-                    UserVocabSQLHelper helper = UserVocabSQLHelper.getInstance(context.getApplicationContext());
+                    VocabSQLHelper helper = VocabSQLHelper.getInstance(context.getApplicationContext());
                     helper.toggleFavorite(userVocab);
                     sortedDataSet.get(pos).fave = false; // todo: once the sql becomes async, this can't be here
                 } else {
@@ -308,7 +308,7 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
                     ((ImageView) faveImage).setImageDrawable(faveDrawable);
                     ViewUtility.boing(faveImage);
 
-                    UserVocabSQLHelper helper = UserVocabSQLHelper.getInstance(context.getApplicationContext());
+                    VocabSQLHelper helper = VocabSQLHelper.getInstance(context.getApplicationContext());
                     helper.toggleFavorite(userVocab);
                     sortedDataSet.get(pos).fave = true;
                 }

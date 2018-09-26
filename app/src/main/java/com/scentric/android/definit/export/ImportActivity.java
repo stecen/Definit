@@ -15,8 +15,8 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.scentric.android.definit.R;
-import com.scentric.android.definit.sqliteuservocab.UserVocab;
-import com.scentric.android.definit.sqliteuservocab.UserVocabSQLHelper;
+import com.scentric.android.definit.sqlite.UserVocab;
+import com.scentric.android.definit.sqlite.VocabSQLHelper;
 
 import java.util.ArrayList;
 
@@ -53,7 +53,7 @@ public class ImportActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                UserVocabSQLHelper helper = UserVocabSQLHelper.getInstance(ctx);
+                VocabSQLHelper helper = VocabSQLHelper.getInstance(ctx);
                 ArrayList<UserVocab> userVocabList;
                 try {
                     userVocabList = (new Gson()).fromJson(importEdit.getText().toString().trim(), new TypeToken<ArrayList<UserVocab>>() {
