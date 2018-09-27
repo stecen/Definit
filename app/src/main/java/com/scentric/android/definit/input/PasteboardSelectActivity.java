@@ -13,6 +13,7 @@ import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.StyleSpan;
+import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -43,26 +44,35 @@ public class PasteboardSelectActivity extends AppCompatActivity {
     public static final int TOUCH_FRAME = 3;
 
 
-    private void initializeText(TextView pasteText, CharSequence pasteCharSeq) {
+    private void initializeText(TextView pasteText, String pasteStr) {
         pasteText.setMovementMethod(LinkMovementMethod.getInstance());
-        pasteText.setText(pasteCharSeq,
+        pasteText.setText(pasteStr,
                 TextView.BufferType.SPANNABLE);
-
-        String pastStr = pasteCharSeq.toString();
 
         SpannableString pasteSpan = (SpannableString) pasteText.getText();
         BreakIterator tokenIterator = BreakIterator.getWordInstance(Locale.US); // finds word blocks in the textbox
-        tokenIterator.setText(pastStr);
+        tokenIterator.setText(pasteStr);
 
 //        int startIdx = tokenIterator.first();
         for (int beginIdx = tokenIterator.first(), endIdx = tokenIterator.next();
-                endIdx != BreakIterator.DONE;
+                endIdx != pasteStr.length();
                 beginIdx = endIdx, endIdx = tokenIterator.next()) {
-            Log.e("paste", String.format("%d, %d -- %d", beginIdx, endIdx, pastStr.length()));
-            String clickedWord = pastStr.substring(beginIdx, endIdx);
-            pasteSpan.setSpan(getClicktokenSpan(clickedWord), beginIdx, endIdx, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            if (isWordStart(pasteStr.charAt(beginIdx))) {
+                Log.e("paste", String.format("%d, %d -- %d", beginIdx, endIdx, pasteStr.length()));
+                Log.e("paste", String.format("%c, %c\n", pasteStr.charAt(beginIdx), pasteStr.charAt(endIdx), pasteStr.length()));
+                String clickedWord = pasteStr.substring(beginIdx, endIdx);
+                pasteSpan.setSpan(getClicktokenSpan(clickedWord), beginIdx, endIdx, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
+                pasteSpan.setSpan(new UnderlineSpan(), beginIdx, endIdx, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
         }
 
+
+
+    }
+
+    private boolean isWordStart(char c) {
+        return Character.isLetterOrDigit(c);
     }
 
     private ClickableSpan getClicktokenSpan(final String pasteToken) {
