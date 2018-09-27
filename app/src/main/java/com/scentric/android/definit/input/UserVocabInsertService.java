@@ -45,6 +45,7 @@ public class UserVocabInsertService extends IntentService {
 
         UserVocab toSend = new UserVocab();
         toSend.word = lastWord;
+        toSend.tag = userVocabList.get(0).tag;
         toSend.date = userVocabList.get(0).date;
         toSend.dateText = userVocabList.get(0).dateText;// these should be the same anyway... they're combined so just choose the first time to display and save :)
         toSend.listOfDefEx = new ArrayList<>(); // redundant
@@ -59,6 +60,7 @@ public class UserVocabInsertService extends IntentService {
                 Log.e("service", "new word " + lastWord);
                 toSend = new UserVocab(); // the old toSend thrown away by the garbage collector
                 toSend.word = lastWord;
+                toSend.tag = userVocabList.get(i).tag;
                 toSend.date = userVocabList.get(i).date;
                 toSend.dateText = userVocabList.get(i).dateText;
                 toSend.listOfDefEx = (new ArrayList<>());

@@ -69,7 +69,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView wordText, def1Text/*, def2Text, def3Text*/, toolbarText;
+        TextView wordText, def1Text/*, def2Text, def3Text*/, toolbarText, tagText;
         ImageView faveImage;
         CardView cardView;
         RecyclerView recyclerView;
@@ -85,6 +85,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
             cardRelative = (RelativeLayout) v.findViewById(R.id.card_relative);
             faveImage = (ImageView) v.findViewById(R.id.card_fave_image);
             toolbarView = (View) v.findViewById(R.id.toolbar_view);
+            tagText = (TextView) v.findViewById(R.id.tag_text);
             dateText = (TextView) v.findViewById(R.id.card_date_text);
 
             cardRelative.setOnClickListener(new View.OnClickListener() {
@@ -138,6 +139,8 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
         holder.recyclerView.setLayoutManager(new LinearLayoutManager(context));
         cardDefExAdapter = new CardDefExAdapter(sortedDataSet.get(pos).listOfDefEx);
         holder.recyclerView.setAdapter(cardDefExAdapter);
+
+        holder.tagText.setText(sortedDataSet.get(pos).tag);
 
         // toggle fave image
         if (sortedDataSet.get(position).fave) {

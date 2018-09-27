@@ -42,6 +42,7 @@ import com.scentric.android.definit.utility.DividerItemDecoration;
 import com.scentric.android.definit.utility.PearsonAnswer;
 import com.scentric.android.definit.utility.PearsonComparator;
 import com.scentric.android.definit.utility.RecyclerViewClickListener;
+import com.scentric.android.definit.utility.UserVocab;
 import com.scentric.android.definit.utility.ViewUtility;
 
 import java.util.ArrayList;
@@ -309,7 +310,7 @@ public class DisplayDefinitionPopupActivity extends AppCompatActivity implements
         if (source == TOUCH_SEND) {
             Log.e("touch", "touched sent " + String.format(Locale.US, "%d, %d", fab.getWidth(), fab.getHeight()));
 
-            recyclerAdapter.animateSlidesAndInsertUserVocab(); // removetemp lol
+            recyclerAdapter.animateSlidesAndInsertUserVocab(UserVocab.TAG_FOR_NOW); // removetemp lol
 
 
 //            DisplayDefinitionPopupActivity.shouldShowPreviousTypeWordPopup = false;

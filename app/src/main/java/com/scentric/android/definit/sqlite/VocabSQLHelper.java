@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.scentric.android.definit.utility.CustomUVStringAdapter;
 import com.scentric.android.definit.utility.HistoryVocab;
@@ -387,9 +388,10 @@ public class VocabSQLHelper extends SQLiteOpenHelper {
 //                String json = (new Gson()).toJson(userVocab.listOfDefEx);
             String json = CustomUVStringAdapter.toString(userVocab.listOfDefEx);
             values.put(KEY_JSON, json);
-            Log.e("adding word json", json);
+            Log.e("addingjson", json);
 
-            values.put(KEY_TAG, UserVocab.TAG_FOR_NOW);
+            values.put(KEY_TAG, userVocab.tag);
+            Log.e("sqltag", userVocab.tag);
 
             values.put(KEY_DATE, userVocab.date/* + (long)i*/);
             values.put(KEY_FAVE, (userVocab.fave) ? IS_FAVE : NOT_FAVE);

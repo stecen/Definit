@@ -44,8 +44,8 @@ public class PasteboardSelectActivity extends AppCompatActivity {
     public static final int TOUCH_FRAME = 3;
 
 
-    private void initializeText(TextView pasteText, String pasteStr) {
-        pasteStr = pasteStr.replace(" ", "  "); // pad to make lines more clickable
+    private void initializeText(TextView pasteText, String origPasteStr) {
+        String pasteStr = origPasteStr.replace(" ", "  "); // pad to make lines more clickable
         pasteText.setMovementMethod(LinkMovementMethod.getInstance());
         pasteText.setText(pasteStr,
                 TextView.BufferType.SPANNABLE);
@@ -63,7 +63,7 @@ public class PasteboardSelectActivity extends AppCompatActivity {
                 Log.e("paste", String.format("%d, %d -- %d", beginIdx, endIdx, pasteStr.length()));
 //                Log.e("paste", String.format("%c, %c\n", pasteStr.charAt(beginIdx), pasteStr.charAt(endIdx), pasteStr.length()));
                 String clickedWord = pasteStr.substring(beginIdx, endIdx);
-                pasteSpan.setSpan(getClicktokenSpan(clickedWord), beginIdx, endIdx, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
+                pasteSpan.setSpan(getClicktokenSpan(clickedWord, origPasteStr), beginIdx, endIdx, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
                 pasteSpan.setSpan(new UnderlineSpan(), beginIdx, endIdx, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }
@@ -76,14 +76,16 @@ public class PasteboardSelectActivity extends AppCompatActivity {
         return Character.isLetterOrDigit(c);
     }
 
-    private ClickableSpan getClicktokenSpan(final String pasteToken) {
+    private ClickableSpan getClicktokenSpan(final String pasteToken, final String originalPasteStr) {
         return new ClickableSpan() {
             private String token = pasteToken;
+            private String tag = originalPasteStr;
 
             @Override
             public void onClick(View view) {
                     Intent displayDefIntent = new Intent(getApplicationContext(), SearchAndShowActivity.class);
                     displayDefIntent.putExtra(SearchAndShowActivity.SENT_TEXT, token);
+                    displayDefIntent.putExtra(SearchAndShowActivity.SENT_TAG, tag); // TODO: include original formatting, and include indexing to allow highlighting of tag
                     startActivity(displayDefIntent);
             }
 

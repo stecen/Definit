@@ -157,7 +157,7 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
     }
 
     //important!!! main purpose of the app
-    public void animateSlidesAndInsertUserVocab() {
+    public void animateSlidesAndInsertUserVocab(String tag) {
         ArrayList<UserVocab> listToSend = new ArrayList<>();
 
         for (int i = 0; i < sortedPearsonDataSet.size(); i++) {
@@ -168,7 +168,7 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
 
                 ArrayList<PearsonAnswer.DefinitionExamples> defExSend = new ArrayList<>();
                 defExSend.add(sortedPearsonDataSet.get(i));
-                listToSend.add(new UserVocab(sortedPearsonDataSet.get(i).wordForm, defExSend, UserVocab.TAG_FOR_NOW, System.currentTimeMillis(), "August 13th")); // main word
+                listToSend.add(new UserVocab(sortedPearsonDataSet.get(i).wordForm, defExSend, tag, System.currentTimeMillis(), "August 13th")); // main word
 
                 // TODO: attach contexts for all of the different word forms
 //                    // if they equal the main word, they must all equal eachother:)
