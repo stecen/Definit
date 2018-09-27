@@ -161,7 +161,7 @@ public class SheetHistorySavedActivity extends AppCompatActivity implements Recy
         Log.e("sheet", "clicked " + position + ". " + query);
 
         Intent defineIntent = new Intent(this, SearchAndShowActivity.class);
-        defineIntent.putExtra(SearchAndShowActivity.SENT_WORD, query);
+        defineIntent.putExtra(SearchAndShowActivity.SENT_TEXT, query);
         defineIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(defineIntent);
     }

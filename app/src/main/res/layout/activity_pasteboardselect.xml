@@ -9,7 +9,7 @@
 
     <TextView
         android:text="LOL"
-        android:id="@+id/make_space_view"
+        android:id="@+id/paste_text"
         android:layout_width="match_parent"
         android:layout_height="224dp"
         android:background="#ffffff"/>

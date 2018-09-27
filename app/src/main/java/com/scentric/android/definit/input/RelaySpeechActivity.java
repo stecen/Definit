@@ -82,7 +82,7 @@ public class RelaySpeechActivity extends Activity {
                             .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 
                     Intent intent = new Intent(this, SearchAndShowActivity.class);
-                    intent.putExtra(SearchAndShowActivity.SENT_WORD, result.get(0).trim());
+                    intent.putExtra(SearchAndShowActivity.SENT_TEXT, result.get(0).trim());
                     Log.e("relay", "sending... " + result.get(0).trim());
                     startActivity(intent);
                     finish();

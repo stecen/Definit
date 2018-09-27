@@ -1,17 +1,16 @@
 package com.scentric.android.definit.input;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.scentric.android.definit.R;
-
-import java.util.Locale;
+import com.scentric.android.definit.showdefinition.SearchAndShowActivity;
 
 /**
  * Created by stevecen on 9/27/18.
@@ -21,9 +20,11 @@ import java.util.Locale;
  */
 
 public class PasteboardSelectActivity extends AppCompatActivity {
-    public static final String SENT_WORD = "sent_word";
 
-    FrameLayout frame;
+    private FrameLayout frame;
+    private TextView pasteText;
+
+    private Intent comingIntent;
 
     public static final int TOUCH_OUTSIDE = 1; // for out-of-window clicks
     public static final int TOUCH_SEND = 2;
@@ -37,7 +38,7 @@ public class PasteboardSelectActivity extends AppCompatActivity {
 
         frame = (FrameLayout) findViewById(R.id.frame);
         if (frame != null) {
-//            frame.setBackgroundColor(Color.TRANSPARENT);
+            frame.setBackgroundColor(Color.TRANSPARENT);
             frame.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -47,7 +48,9 @@ public class PasteboardSelectActivity extends AppCompatActivity {
             });
         }
 
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        pasteText = (TextView) findViewById(R.id.paste_text);
+
+        //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        if (toolbar != null) {
 //            Log.e("tool", "Setting support toolbar...");
 //            setSupportActionBar(toolbar);
@@ -57,6 +60,32 @@ public class PasteboardSelectActivity extends AppCompatActivity {
 //            }
 //            toolbar.setTitle(null);
 //        }
+
+        // deal with copied texts
+
+        comingIntent = getIntent();
+
+        Log.e("coming", "" + (comingIntent != null));
+        if (comingIntent != null && comingIntent.hasExtra(SearchAndShowActivity.SENT_TEXT)) { //  manually sent from places
+            final String copiedText = comingIntent.getStringExtra(SearchAndShowActivity.SENT_TEXT).trim();
+
+            pasteText.setText(copiedText);
+
+            // TODO RN: after viewing the text that the user copied, let them touch individual words to define
+            // todo: redefine singletask, singletop -- connect the two activities together
+
+            pasteText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent displayDefIntent = new Intent(getApplicationContext(), SearchAndShowActivity.class);
+                    displayDefIntent.putExtra(SearchAndShowActivity.SENT_TEXT, copiedText);
+//                    displayDefIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(displayDefIntent);
+                }
+            });
+        }
+
+
     }
 
     // deals with logic relate to user touches in different areas of the screen, including within the frame
@@ -77,12 +106,6 @@ public class PasteboardSelectActivity extends AppCompatActivity {
 //            }, REMOVE_DURATION + 50);
 
 
-        } else if (source == TOUCH_OUTSIDE) {
-            Log.e("touch", "2 touching outside");
-            finish();
-        } else if (source == TOUCH_FRAME) {
-            Log.e("touch", "2 frame");
-            finish();
         }
 
     }

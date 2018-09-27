@@ -39,7 +39,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.scentric.android.definit.R;
 import com.scentric.android.definit.get.glosbe.GlosbeAsyncTask;
@@ -94,7 +93,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 
     public static boolean shouldShowPreviousTypeWordPopup = true; // self explanatory. but the only time this activity finishes when this is true is when the user presses the system back button
 
-    public static final String SENT_WORD = "sent_word";
+    public static final String SENT_TEXT = "sent_word";
     //    public static final String SENT_DEF = "send_def";
     public static final String SENT_PACKAGE_JSON = "send_package_json";
     //    public static final String KEY_RECOG_NOW = "recognow";
@@ -150,6 +149,8 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 
         comingIntent = getIntent();
         Log.e("coming", "" + (comingIntent != null));
+
+        // comes from system search
         if (comingIntent != null && comingIntent.getAction() != null && comingIntent.getAction().equals(Intent.ACTION_SEARCH)) {
 
             // define word!
@@ -157,8 +158,10 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
             getDefinition(query);
 
             lastWord = query;
-        } else if (comingIntent != null && comingIntent.hasExtra(SENT_WORD)) { //  manually sent from places
-            String query = comingIntent.getStringExtra(SENT_WORD).trim();
+        }
+        // comes from pasteboard/searchbox
+        else if (comingIntent != null && comingIntent.hasExtra(SENT_TEXT)) { //  manually sent from places
+            String query = comingIntent.getStringExtra(SENT_TEXT).trim();
             getDefinition(query);
 
             searchView.clearFocus();
@@ -362,9 +365,9 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
 
-        } else if (intent.hasExtra(SENT_WORD)) {
+        } else if (intent.hasExtra(SENT_TEXT)) {
 
-            String word = intent.getStringExtra(SENT_WORD).trim();
+            String word = intent.getStringExtra(SENT_TEXT).trim();
 
             Log.e("searchandshow", "wow u sent " + word);
 

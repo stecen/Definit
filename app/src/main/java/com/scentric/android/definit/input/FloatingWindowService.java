@@ -87,13 +87,13 @@ public class FloatingWindowService extends Service {
                 isKilled = true;
 
 //                Intent displayDefIntent = new Intent(getApplicationContext(), SearchAndShowActivity.class);
-//                displayDefIntent.putExtra(SearchAndShowActivity.SENT_WORD, copiedText);
+//                displayDefIntent.putExtra(SearchAndShowActivity.SENT_TEXT, copiedText);
 //                displayDefIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //                startActivity(displayDefIntent);
 
 //                // todo: if single copiedText, send to normal track
                 Intent displayDefIntent = new Intent(getApplicationContext(), PasteboardSelectActivity.class);
-                displayDefIntent.putExtra(PasteboardSelectActivity.SENT_WORD, copiedText);
+                displayDefIntent.putExtra(SearchAndShowActivity.SENT_TEXT, copiedText);
                 displayDefIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(displayDefIntent);
 

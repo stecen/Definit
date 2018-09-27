@@ -137,7 +137,7 @@ public class UserVocabHistFrag extends Fragment implements RecyclerViewClickList
         Log.e("sheet", "clicked " + position + ". " + query);
 
         Intent defineIntent = new Intent(appContext, SearchAndShowActivity.class);
-        defineIntent.putExtra(SearchAndShowActivity.SENT_WORD, query);
+        defineIntent.putExtra(SearchAndShowActivity.SENT_TEXT, query);
         defineIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(defineIntent);
     }
