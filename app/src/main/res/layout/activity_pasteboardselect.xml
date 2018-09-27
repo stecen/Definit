@@ -9,6 +9,7 @@
 
     <TextView
         android:text="LOL"
+        android:bufferType="spannable"
         android:id="@+id/paste_text"
         android:layout_width="match_parent"
         android:layout_height="224dp"

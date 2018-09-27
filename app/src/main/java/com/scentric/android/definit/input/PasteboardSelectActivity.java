@@ -2,8 +2,17 @@ package com.scentric.android.definit.input;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -30,6 +39,15 @@ public class PasteboardSelectActivity extends AppCompatActivity {
     public static final int TOUCH_SEND = 2;
     public static final int TOUCH_FRAME = 3;
 
+
+    private void initializeText(TextView pasteText) {
+        pasteText.setMovementMethod(LinkMovementMethod.getInstance());
+        pasteText.setText("My serendipity depends on the ephemeral disillusionment of the set of floral arrangements.",
+                TextView.BufferType.SPANNABLE);
+
+        
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +68,56 @@ public class PasteboardSelectActivity extends AppCompatActivity {
 
         pasteText = (TextView) findViewById(R.id.paste_text);
 
-        //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        initializeText(pasteText);
+
+        //region modify reference (try 2)
+
+//        pasteText.setText("My serendipity depends on the ephemeral disillusionment of the set of floral arrangements.");
+////        pasteText.setMovementMethod(LinkMovementMethod.getInstance());
+//        Spannable spannable = (Spannable) pasteText.getText();
+////        SpannableString ss = new SpannableString("My serendipity depends on the ephemeral disillusionment of the set of floral arrangements.");
+//        ClickableSpan clickableSpan = new ClickableSpan() {
+//            @Override
+//            public void onClick(View textView) {
+//                Log.e("spannable", "clicked:");
+//                Intent displayDefIntent = new Intent(getApplicationContext(), SearchAndShowActivity.class);
+//                displayDefIntent.putExtra(SearchAndShowActivity.SENT_TEXT, "My awesome serendipity depends on the ephemeral disillusionment of the set of floral arrangements.");
+//                startActivity(displayDefIntent);
+//            }
+//            @Override
+//            public void updateDrawState(TextPaint ds) {
+//                super.updateDrawState(ds);
+//                ds.setUnderlineText(false);
+//            }
+//        };
+//        spannable.setSpan(clickableSpan, 0, 28, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+        // endregion
+
+        //region set text (try 1)
+
+//        SpannableString ss = new SpannableString("My serendipity depends on the ephemeral disillusionment of the set of floral arrangements.");
+//        ClickableSpan clickableSpan = new ClickableSpan() {
+//            @Override
+//            public void onClick(View textView) {
+//                Log.e("spannable", "clicked:");
+//                Intent displayDefIntent = new Intent(getApplicationContext(), SearchAndShowActivity.class);
+//                displayDefIntent.putExtra(SearchAndShowActivity.SENT_TEXT, "My serendipity depends on the ephemeral disillusionment of the set of floral arrangements.");
+//                startActivity(displayDefIntent);
+//            }
+//            @Override
+//            public void updateDrawState(TextPaint ds) {
+//                super.updateDrawState(ds);
+//                ds.setUnderlineText(false);
+//            }
+//        };
+//        ss.setSpan(clickableSpan, 2, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//
+//        pasteText.setText(ss);
+//        pasteText.setMovementMethod(LinkMovementMethod.getInstance());
+//        pasteText.setHighlightColor(Color.TRANSPARENT);
+
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        if (toolbar != null) {
 //            Log.e("tool", "Setting support toolbar...");
 //            setSupportActionBar(toolbar);
@@ -61,29 +128,35 @@ public class PasteboardSelectActivity extends AppCompatActivity {
 //            toolbar.setTitle(null);
 //        }
 
+        // endregion
+
         // deal with copied texts
 
         comingIntent = getIntent();
 
-        Log.e("coming", "" + (comingIntent != null));
-        if (comingIntent != null && comingIntent.hasExtra(SearchAndShowActivity.SENT_TEXT)) { //  manually sent from places
-            final String copiedText = comingIntent.getStringExtra(SearchAndShowActivity.SENT_TEXT).trim();
-
-            pasteText.setText(copiedText);
-
-            // TODO RN: after viewing the text that the user copied, let them touch individual words to define
-            // todo: redefine singletask, singletop -- connect the two activities together
-
-            pasteText.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent displayDefIntent = new Intent(getApplicationContext(), SearchAndShowActivity.class);
-                    displayDefIntent.putExtra(SearchAndShowActivity.SENT_TEXT, copiedText);
-//                    displayDefIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(displayDefIntent);
-                }
-            });
-        }
+//        Log.e("coming", "" + (comingIntent != null));
+//        if (comingIntent != null && comingIntent.hasExtra(SearchAndShowActivity.SENT_TEXT)) { //  manually sent from places
+//            final String copiedText = comingIntent.getStringExtra(SearchAndShowActivity.SENT_TEXT).trim();
+//
+//            pasteText.setText(copiedText);
+//
+//            Spannable spannable = (Spannable) pasteText.getText();
+//            StyleSpan boldSpan = new StyleSpan( Typeface.BOLD );
+//            spannable.setSpan( boldSpan, 0, 2, Spannable.SPAN_INCLUSIVE_INCLUSIVE );
+//
+//            // TODO RN: after viewing the text that the user copied, let them touch individual words to define
+//            // todo: redefine singletask, singletop -- connect the two activities together
+//
+//            pasteText.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    Intent displayDefIntent = new Intent(getApplicationContext(), SearchAndShowActivity.class);
+//                    displayDefIntent.putExtra(SearchAndShowActivity.SENT_TEXT, copiedText);
+////                    displayDefIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                    startActivity(displayDefIntent);
+//                }
+//            });
+//        }
 
 
     }
@@ -106,7 +179,12 @@ public class PasteboardSelectActivity extends AppCompatActivity {
 //            }, REMOVE_DURATION + 50);
 
 
-        }
+        } /*else {
+//            else if (source == TOUCH_OUTSIDE) {
+                Log.e("touch", "2 touching outside");
+                finish();
+//            }
+        }*/
 
     }
 }
