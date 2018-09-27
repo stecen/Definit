@@ -45,6 +45,7 @@ public class PasteboardSelectActivity extends AppCompatActivity {
 
 
     private void initializeText(TextView pasteText, String pasteStr) {
+        pasteStr = pasteStr.replace(" ", "  "); // pad to make lines more clickable
         pasteText.setMovementMethod(LinkMovementMethod.getInstance());
         pasteText.setText(pasteStr,
                 TextView.BufferType.SPANNABLE);
@@ -55,12 +56,12 @@ public class PasteboardSelectActivity extends AppCompatActivity {
 
 //        int startIdx = tokenIterator.first();
         for (int beginIdx = tokenIterator.first(), endIdx = tokenIterator.next();
-                endIdx != pasteStr.length();
+                beginIdx != pasteStr.length();
                 beginIdx = endIdx, endIdx = tokenIterator.next()) {
 
             if (isWordStart(pasteStr.charAt(beginIdx))) {
                 Log.e("paste", String.format("%d, %d -- %d", beginIdx, endIdx, pasteStr.length()));
-                Log.e("paste", String.format("%c, %c\n", pasteStr.charAt(beginIdx), pasteStr.charAt(endIdx), pasteStr.length()));
+//                Log.e("paste", String.format("%c, %c\n", pasteStr.charAt(beginIdx), pasteStr.charAt(endIdx), pasteStr.length()));
                 String clickedWord = pasteStr.substring(beginIdx, endIdx);
                 pasteSpan.setSpan(getClicktokenSpan(clickedWord), beginIdx, endIdx, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
                 pasteSpan.setSpan(new UnderlineSpan(), beginIdx, endIdx, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -101,21 +102,46 @@ public class PasteboardSelectActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_pasteboardselect);
 
-        frame = (FrameLayout) findViewById(R.id.frame);
-        if (frame != null) {
-            frame.setBackgroundColor(Color.TRANSPARENT);
-            frame.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Log.e("frame", "clicked");
-                    touchHandler(TOUCH_FRAME);
-                }
-            });
-        }
+//        frame = (FrameLayout) findViewById(R.id.frame);
+//        if (frame != null) {
+//            frame.setBackgroundColor(Color.TRANSPARENT);
+//            frame.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    Log.e("frame", "clicked");
+//                    touchHandler(TOUCH_FRAME);
+//                }
+//            });
+//        }
 
         pasteText = (TextView) findViewById(R.id.paste_text);
 
         initializeText(pasteText, "My serendipity depends on the ephemeral disillusionment of the set of floral arrangements.");
+
+        // deal with copied texts
+
+        comingIntent = getIntent();
+
+        if (comingIntent != null && comingIntent.hasExtra(SearchAndShowActivity.SENT_TEXT)) { //  manually sent from places
+            final String copiedText = comingIntent.getStringExtra(SearchAndShowActivity.SENT_TEXT).trim();
+
+//            pasteText.setText(copiedText);
+
+            initializeText(pasteText, copiedText);
+
+            // TODO RN: after viewing the text that the user copied, let them touch individual words to define
+            // todo: redefine singletask, singletop -- connect the two activities together
+
+//            pasteText.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View view) {
+//                    Intent displayDefIntent = new Intent(getApplicationContext(), SearchAndShowActivity.class);
+//                    displayDefIntent.putExtra(SearchAndShowActivity.SENT_TEXT, copiedText);
+////                    displayDefIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                    startActivity(displayDefIntent);
+//                }
+//            });
+        }
 
         //region modify reference (try 2)
 
@@ -176,36 +202,6 @@ public class PasteboardSelectActivity extends AppCompatActivity {
 //        }
 
         // endregion
-
-        // deal with copied texts
-
-        comingIntent = getIntent();
-
-//        Log.e("coming", "" + (comingIntent != null));
-//        if (comingIntent != null && comingIntent.hasExtra(SearchAndShowActivity.SENT_TEXT)) { //  manually sent from places
-//            final String copiedText = comingIntent.getStringExtra(SearchAndShowActivity.SENT_TEXT).trim();
-//
-//            pasteText.setText(copiedText);
-//
-//            Spannable spannable = (Spannable) pasteText.getText();
-//            StyleSpan boldSpan = new StyleSpan( Typeface.BOLD );
-//            spannable.setSpan( boldSpan, 0, 2, Spannable.SPAN_INCLUSIVE_INCLUSIVE );
-//
-//            // TODO RN: after viewing the text that the user copied, let them touch individual words to define
-//            // todo: redefine singletask, singletop -- connect the two activities together
-//
-//            pasteText.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    Intent displayDefIntent = new Intent(getApplicationContext(), SearchAndShowActivity.class);
-//                    displayDefIntent.putExtra(SearchAndShowActivity.SENT_TEXT, copiedText);
-////                    displayDefIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                    startActivity(displayDefIntent);
-//                }
-//            });
-//        }
-
-
     }
 
     // deals with logic relate to user touches in different areas of the screen, including within the frame

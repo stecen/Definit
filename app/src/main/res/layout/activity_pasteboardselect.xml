@@ -7,15 +7,26 @@
 
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <TextView
-        android:text="LOL"
-        android:bufferType="spannable"
-        android:id="@+id/paste_text"
 
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="224dp"
+        android:layout_height="wrap_content"
 
-        android:background="#ffffff" />
+        android:background="#ffffff">
+        <TextView
+            android:text="LOL"
+            android:bufferType="spannable"
+            android:id="@+id/paste_text"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:lineSpacingExtra="4dp"
+
+            />
+
+    </ScrollView>
+
 
     <!--<android.support.design.widget.CoordinatorLayout-->
         <!--android:id="@+id/coordinator_layout"-->
