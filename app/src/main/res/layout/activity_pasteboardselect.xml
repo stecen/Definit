@@ -4,166 +4,167 @@
     android:id="@+id/frame"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:background="@android:color/transparent"
+
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <View
+    <TextView
+        android:text="LOL"
         android:id="@+id/make_space_view"
         android:layout_width="match_parent"
         android:layout_height="224dp"
         android:background="#ffffff"/>
 
-    <android.support.design.widget.CoordinatorLayout
-        android:id="@+id/coordinator_layout"
+    <!--<android.support.design.widget.CoordinatorLayout-->
+        <!--android:id="@+id/coordinator_layout"-->
 
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+        <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+        <!--xmlns:tools="http://schemas.android.com/tools"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
 
-        android:visibility="invisible"
+        <!--android:visibility="invisible"-->
 
-        tools:context=".input.PasteboardSelectActivity">
+        <!--tools:context=".input.PasteboardSelectActivity">-->
 
-        <View
-            android:id="@+id/view_1"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/detail_backdrop_height"/>
-
-        <!--region appbar-->
-        <!--<android.support.design.widget.AppBarLayout-->
-            <!--android:id="@+id/appbar"-->
+        <!--<View-->
+            <!--android:id="@+id/view_1"-->
             <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="@dimen/detail_backdrop_height"-->
+            <!--android:layout_height="@dimen/detail_backdrop_height"/>-->
 
-            <!--android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"-->
+        <!--&lt;!&ndash;region appbar&ndash;&gt;-->
+        <!--&lt;!&ndash;<android.support.design.widget.AppBarLayout&ndash;&gt;-->
+            <!--&lt;!&ndash;android:id="@+id/appbar"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_height="@dimen/detail_backdrop_height"&ndash;&gt;-->
 
-            <!--android:layout_margin="0dp"-->
-            <!--android:padding="0dp">-->
+            <!--&lt;!&ndash;android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"&ndash;&gt;-->
 
-            <!--<android.support.v7.widget.Toolbar-->
-                <!--android:id="@+id/toolbar"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="@dimen/detail_backdrop_height"-->
-                <!--android:layout_margin="0dp"-->
-                <!--android:padding="0dp"-->
-                <!--&gt;-->
+            <!--&lt;!&ndash;android:layout_margin="0dp"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:padding="0dp">&ndash;&gt;-->
 
-                <!--<RelativeLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="match_parent"-->
-                    <!--android:padding="0dp"-->
-                    <!--android:layout_margin="0dp">-->
+            <!--&lt;!&ndash;<android.support.v7.widget.Toolbar&ndash;&gt;-->
+                <!--&lt;!&ndash;android:id="@+id/toolbar"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_height="@dimen/detail_backdrop_height"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_margin="0dp"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:padding="0dp"&ndash;&gt;-->
+                <!--&lt;!&ndash;&gt;&ndash;&gt;-->
+
+                <!--&lt;!&ndash;<RelativeLayout&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:layout_height="match_parent"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:padding="0dp"&ndash;&gt;-->
+                    <!--&lt;!&ndash;android:layout_margin="0dp">&ndash;&gt;-->
+
+                    <!--&lt;!&ndash;&lt;!&ndash;<ImageView&ndash;&gt;&ndash;&gt;-->
+                    <!--&lt;!&ndash;&lt;!&ndash;android:id="@+id/nav_image"&ndash;&gt;&ndash;&gt;-->
+                    <!--&lt;!&ndash;&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;&ndash;&gt;-->
+                    <!--&lt;!&ndash;&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;&ndash;&gt;-->
+                    <!--&lt;!&ndash;&lt;!&ndash;android:src="@drawable/ic_arrow_back_white_24dp"&ndash;&gt;&ndash;&gt;-->
+                    <!--&lt;!&ndash;&lt;!&ndash;android:layout_marginTop="16dp"&ndash;&gt;&ndash;&gt;-->
+                    <!--&lt;!&ndash;&lt;!&ndash;android:background="?attr/selectableItemBackgroundBorderless"/>&ndash;&gt;&ndash;&gt;-->
 
                     <!--&lt;!&ndash;<ImageView&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:id="@+id/nav_image"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:src="@drawable/ic_arrow_back_white_24dp"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:layout_marginTop="16dp"&ndash;&gt;-->
-                    <!--&lt;!&ndash;android:background="?attr/selectableItemBackgroundBorderless"/>&ndash;&gt;-->
+                        <!--&lt;!&ndash;android:id="@+id/history_image"&ndash;&gt;-->
+                        <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+                        <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+                        <!--&lt;!&ndash;android:src="@drawable/ic_history_white_24dp"&ndash;&gt;-->
+                        <!--&lt;!&ndash;android:layout_alignParentEnd="true"&ndash;&gt;-->
 
-                    <!--<ImageView-->
-                        <!--android:id="@+id/history_image"-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:src="@drawable/ic_history_white_24dp"-->
-                        <!--android:layout_alignParentEnd="true"-->
+                        <!--&lt;!&ndash;android:alpha=".85"&ndash;&gt;-->
 
-                        <!--android:alpha=".85"-->
+                        <!--&lt;!&ndash;android:padding="16dp"&ndash;&gt;-->
 
-                        <!--android:padding="16dp"-->
-
-                        <!--android:background="?attr/selectableItemBackgroundBorderless"/>-->
+                        <!--&lt;!&ndash;android:background="?attr/selectableItemBackgroundBorderless"/>&ndash;&gt;-->
 
 
 
-                    <!--<android.support.v7.widget.SearchView-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:text="Toolbar Title"-->
-                        <!--android:layout_alignParentLeft="true"-->
-                        <!--android:layout_alignParentBottom="true"-->
+                    <!--&lt;!&ndash;<android.support.v7.widget.SearchView&ndash;&gt;-->
+                        <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+                        <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+                        <!--&lt;!&ndash;android:text="Toolbar Title"&ndash;&gt;-->
+                        <!--&lt;!&ndash;android:layout_alignParentLeft="true"&ndash;&gt;-->
+                        <!--&lt;!&ndash;android:layout_alignParentBottom="true"&ndash;&gt;-->
 
-                        <!--android:focusable="true"-->
+                        <!--&lt;!&ndash;android:focusable="true"&ndash;&gt;-->
 
-                        <!--android:maxLines="1"-->
-                        <!--android:ellipsize="end"-->
+                        <!--&lt;!&ndash;android:maxLines="1"&ndash;&gt;-->
+                        <!--&lt;!&ndash;android:ellipsize="end"&ndash;&gt;-->
 
-                        <!--app:searchIcon="@null"-->
+                        <!--&lt;!&ndash;app:searchIcon="@null"&ndash;&gt;-->
 
-                        <!--android:layout_marginBottom="0dp"-->
+                        <!--&lt;!&ndash;android:layout_marginBottom="0dp"&ndash;&gt;-->
 
-                        <!--android:textSize="24sp"-->
-                        <!--android:layout_marginLeft="0dp"-->
-                        <!--android:layout_marginRight="12dp"-->
-                        <!--android:padding="0dp"-->
+                        <!--&lt;!&ndash;android:textSize="24sp"&ndash;&gt;-->
+                        <!--&lt;!&ndash;android:layout_marginLeft="0dp"&ndash;&gt;-->
+                        <!--&lt;!&ndash;android:layout_marginRight="12dp"&ndash;&gt;-->
+                        <!--&lt;!&ndash;android:padding="0dp"&ndash;&gt;-->
 
-                        <!--android:textColor="#FFFFFF"-->
-                        <!--android:id="@+id/toolbar_text" >-->
+                        <!--&lt;!&ndash;android:textColor="#FFFFFF"&ndash;&gt;-->
+                        <!--&lt;!&ndash;android:id="@+id/toolbar_text" >&ndash;&gt;-->
 
-                    <!--</android.support.v7.widget.SearchView>-->
-                    <!--&lt;!&ndash;android:layout_marginRight="48dp"&ndash;&gt;-->
+                    <!--&lt;!&ndash;</android.support.v7.widget.SearchView>&ndash;&gt;-->
+                    <!--&lt;!&ndash;&lt;!&ndash;android:layout_marginRight="48dp"&ndash;&gt;&ndash;&gt;-->
 
-                    <!--<ProgressBar android:id="@+id/progress_bar"-->
-                        <!--android:layout_marginTop="148dp"-->
-                        <!--style="?android:attr/progressBarStyleSmall"-->
-                        <!--android:theme="@style/CircularProgress"-->
-                        <!--android:alpha="1"-->
+                    <!--&lt;!&ndash;<ProgressBar android:id="@+id/progress_bar"&ndash;&gt;-->
+                        <!--&lt;!&ndash;android:layout_marginTop="148dp"&ndash;&gt;-->
+                        <!--&lt;!&ndash;style="?android:attr/progressBarStyleSmall"&ndash;&gt;-->
+                        <!--&lt;!&ndash;android:theme="@style/CircularProgress"&ndash;&gt;-->
+                        <!--&lt;!&ndash;android:alpha="1"&ndash;&gt;-->
 
-                        <!--android:layout_alignParentRight="true"-->
-                        <!--android:layout_alignParentBottom="true"-->
+                        <!--&lt;!&ndash;android:layout_alignParentRight="true"&ndash;&gt;-->
+                        <!--&lt;!&ndash;android:layout_alignParentBottom="true"&ndash;&gt;-->
 
-                        <!--android:layout_marginBottom="22dp"-->
-                        <!--android:layout_marginRight="50dp"-->
-
-
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"/>-->
-                    <!--&lt;!&ndash;android:layout_marginRight="48dp"&ndash;&gt;-->
-                    <!--&lt;!&ndash;style="@style/Widget.AppCompat.ProgressBar"&ndash;&gt;-->
+                        <!--&lt;!&ndash;android:layout_marginBottom="22dp"&ndash;&gt;-->
+                        <!--&lt;!&ndash;android:layout_marginRight="50dp"&ndash;&gt;-->
 
 
-
-                <!--</RelativeLayout>-->
-            <!--</android.support.v7.widget.Toolbar>-->
-            <!---->
-        <!--</android.support.design.widget.AppBarLayout>-->
-        <!--endregion-->
-
-        <!--region recycler and FAB-->
-        <android.support.v7.widget.RecyclerView android:id="@+id/definition_example_recycler"
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:tools="http://schemas.android.com/tools"
-
-            android:alpha="1"
-
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-
-            android:layout_marginTop="112dp"
-            />
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
-
-            android:alpha="1"
+                        <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+                        <!--&lt;!&ndash;android:layout_height="wrap_content"/>&ndash;&gt;-->
+                    <!--&lt;!&ndash;&lt;!&ndash;android:layout_marginRight="48dp"&ndash;&gt;&ndash;&gt;-->
+                    <!--&lt;!&ndash;&lt;!&ndash;style="@style/Widget.AppCompat.ProgressBar"&ndash;&gt;&ndash;&gt;-->
 
 
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:visibility="visible"
 
-            android:layout_gravity="bottom|end"
+                <!--&lt;!&ndash;</RelativeLayout>&ndash;&gt;-->
+            <!--&lt;!&ndash;</android.support.v7.widget.Toolbar>&ndash;&gt;-->
+            <!--&lt;!&ndash;&ndash;&gt;-->
+        <!--&lt;!&ndash;</android.support.design.widget.AppBarLayout>&ndash;&gt;-->
+        <!--&lt;!&ndash;endregion&ndash;&gt;-->
+
+        <!--&lt;!&ndash;region recycler and FAB&ndash;&gt;-->
+        <!--<android.support.v7.widget.RecyclerView android:id="@+id/definition_example_recycler"-->
+            <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
+            <!--xmlns:tools="http://schemas.android.com/tools"-->
+
+            <!--android:alpha="1"-->
+
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+
+            <!--android:layout_marginTop="112dp"-->
+            <!--/>-->
+
+        <!--<android.support.design.widget.FloatingActionButton-->
+            <!--android:id="@+id/fab"-->
+
+            <!--android:alpha="1"-->
 
 
-            android:onClick="saveToUserVocabDatabase"
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:visibility="visible"-->
+
+            <!--android:layout_gravity="bottom|end"-->
 
 
-            android:layout_margin="@dimen/fab_margin"
-            android:src="@drawable/ic_save_white_24dp" />
-        <!--endregion-->
+            <!--android:onClick="saveToUserVocabDatabase"-->
 
-    </android.support.design.widget.CoordinatorLayout>
+
+            <!--android:layout_margin="@dimen/fab_margin"-->
+            <!--android:src="@drawable/ic_save_white_24dp" />-->
+        <!--&lt;!&ndash;endregion&ndash;&gt;-->
+
+    <!--</android.support.design.widget.CoordinatorLayout>-->
 </FrameLayout>

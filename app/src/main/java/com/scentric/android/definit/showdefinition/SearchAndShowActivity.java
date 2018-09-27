@@ -39,6 +39,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.scentric.android.definit.R;
 import com.scentric.android.definit.get.glosbe.GlosbeAsyncTask;
@@ -549,6 +550,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
         }
     }
 
+    // animate definition entry into UI
     public void addPearsonList(ArrayList<PearsonAnswer.DefinitionExamples> finalDataSet, boolean showExtraElement) {
         progressBar.setVisibility(View.INVISIBLE);
         if (makeSpaceView != null) {
@@ -571,7 +573,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
                     @Override
                     public void run() {
                         recyclerAdapter.add(finalSorted.get(idx));
-                        Log.e("callbackfk", idx + " " + finalSorted.size());
+                        Log.e("callback", idx + " " + finalSorted.size());
                         if (idx == finalSorted.size() - 1) {
                             readjustCoordHeight();
 //                            defExRecycler.addItemDecoration(dividerItemDecoration); // add the lines
@@ -610,6 +612,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 
     // deals with logic relate to user touches in different areas of the screen, including within the frame
     // and outside, in attempt in quit
+    // TODO: only TOUCH_SEND is relatively useful here
     public void touchHandler(int source) {
         if (source == TOUCH_SEND) {
             Log.e("touch", "touched sent " + String.format(Locale.US, "%d, %d", fab.getWidth(), fab.getHeight()));
@@ -720,12 +723,9 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 //        DisplayDefinitionPopupActivity.shouldShowPreviousTypeWordPopup = true; // reset to true, in case
     }
 
+    // pass this into adapter to use. TODO: why is this separate from the adapter
     @Override
     public void recyclerViewListClicked(View v, int position) {
-//        if (position == recyclerAdapter.contextIdx) { // can't select this!
-//            return;
-//        }
-
         if (!endingActivity) { // if not already animating the finishing of activity
             final View outerView = v;
             final TextView defText = (TextView) v.findViewById(R.id.definition_text);
