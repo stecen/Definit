@@ -27,6 +27,10 @@ import java.util.ArrayList;
 
 /**
  * Created by Steven on 9/2/2016.
+ *
+ * Flashcards in main frag and fave frag.
+ * Each flashcard also contains a list of definition of examples.
+ *
  */
 public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> {
     public ArrayList<UserVocab> sortedDataSet;
@@ -144,6 +148,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
             holder.faveImage.setImageDrawable(notFaveDrawable);
         }
 
+        // TODO: what is this warning?
         holder.dateText.setText(DateUtility.getFullDate(sortedDataSet.get(pos).date, "MM/dd") + ", " + DateUtility.getTime(sortedDataSet.get(pos).date));
 
         final UserVocab userVocab = sortedDataSet.get(pos);
@@ -184,7 +189,8 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
         return sortedDataSet.size();
     }
 
-
+    // A RecyclerView inside of a RecyclerView
+    // This one is just for definition + examples
     public class CardDefExAdapter extends RecyclerView.Adapter<CardDefExAdapter.ViewHolder> {
         public ArrayList<PearsonAnswer.DefinitionExamples> defExDataSet;
 
@@ -222,7 +228,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
         public ViewHolder onCreateViewHolder(ViewGroup parent,
                                              int viewType) {
             // create a new view
-            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_card_recycler_uservocab, parent, false);
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_card_recycler_defex, parent, false);
             // set the view's size, margins, paddings and layout parameters
             ViewHolder vh = new ViewHolder(v);
             return vh;

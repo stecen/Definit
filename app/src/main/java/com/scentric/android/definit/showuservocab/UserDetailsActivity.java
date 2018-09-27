@@ -94,12 +94,12 @@ public class UserDetailsActivity extends AppCompatActivity implements RecyclerVi
         relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                bye();
+                finishCards();
             }
         });
     }
 
-    public void bye() {
+    public void finishCards() {
         ViewUtility.zoomOut(recyclerView);
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
@@ -113,7 +113,7 @@ public class UserDetailsActivity extends AppCompatActivity implements RecyclerVi
 
     @Override
     public void onBackPressed() {
-        bye();
+        finishCards();
     }
 
     @Override
