@@ -9,6 +9,8 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.scentric.android.definit.utility.CustomUVStringAdapter;
+import com.scentric.android.definit.utility.HistoryVocab;
+import com.scentric.android.definit.utility.UserVocab;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -32,7 +34,7 @@ public class VocabSQLHelper extends SQLiteOpenHelper {
     private static final String KEY_ID = "_id",
             KEY_WORD = "word",
             KEY_JSON = "json",
-            KEY_CONTEXT = "context",
+            KEY_TAG = "tag",
             KEY_DATE = "date",
             KEY_FAVE = "fave",
             KEY_FAVE_DATE = "lastFaveDate"; // last day it was faved
@@ -40,6 +42,8 @@ public class VocabSQLHelper extends SQLiteOpenHelper {
 
     public static int IS_FAVE = 1;
     public static int NOT_FAVE = 0;
+
+    public static int GET_ALL = -1; // "amount" of words to retrieve to retrieve all of them
 
     public VocabSQLHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -59,7 +63,7 @@ public class VocabSQLHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String CREATE_WORDS_TABLE = String.format(Locale.US,
                 "CREATE TABLE IF NOT EXISTS %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s VARCHAR, %s VARCHAR, %s VARCHAR, %s UNSIGNED BIG INT, %s INTEGER, %s UNSIGNED BIG INT);",
-                TABLE_WORDS, KEY_ID, KEY_WORD, KEY_JSON, KEY_CONTEXT, KEY_DATE, KEY_FAVE, KEY_FAVE_DATE);
+                TABLE_WORDS, KEY_ID, KEY_WORD, KEY_JSON, KEY_TAG, KEY_DATE, KEY_FAVE, KEY_FAVE_DATE);
         Log.e("userVocab", "executing sql: " + CREATE_WORDS_TABLE);
         db.execSQL(CREATE_WORDS_TABLE); // create user saved words table
 
@@ -211,13 +215,12 @@ public class VocabSQLHelper extends SQLiteOpenHelper {
 
     // endregion
 
-    public static int GET_ALL = -1;
-
     public void getAllUserVocab(GetAllWordsAsyncInterface asyncInterface, int howMany) {
         GetAllWordsAsyncTask task = new GetAllWordsAsyncTask(getReadableDatabase(), asyncInterface, howMany);
         task.execute();
     }
 
+    // database retrieval
     private class GetAllWordsAsyncTask extends AsyncTask<Void, Void, ArrayList<UserVocab>> { // class to allow the get all query to happen on a seperate thread
         GetAllWordsAsyncInterface asyncInterface;
         SQLiteDatabase db;
@@ -258,6 +261,7 @@ public class VocabSQLHelper extends SQLiteOpenHelper {
                         userVocab.word = cursor.getString(cursor.getColumnIndex(KEY_WORD));
                         String json = cursor.getString(cursor.getColumnIndex(KEY_JSON));
                         userVocab.listOfDefEx = CustomUVStringAdapter.fromString(json);
+                        userVocab.tag = cursor.getString(cursor.getColumnIndex(KEY_TAG));
                         userVocab.date = cursor.getLong(cursor.getColumnIndex(KEY_DATE));
 
                         int faveInt = cursor.getInt(cursor.getColumnIndex(KEY_FAVE));
@@ -269,7 +273,7 @@ public class VocabSQLHelper extends SQLiteOpenHelper {
 
 
                 }
-            } catch (Exception e) {
+            } catch  (RuntimeException e) {
                 Log.d("userVocab", "error getting user vocab " + "");
                 e.printStackTrace();
             } finally {
@@ -286,7 +290,6 @@ public class VocabSQLHelper extends SQLiteOpenHelper {
             asyncInterface.setWordsData(userVocabArrayList);
         }
     }
-
 
     public void getFaveVocabList(GetAllWordsAsyncInterface asyncInterface, int howMany) {
         GetFaveAsyncTask task = new GetFaveAsyncTask(getReadableDatabase(), asyncInterface, howMany);
@@ -365,6 +368,8 @@ public class VocabSQLHelper extends SQLiteOpenHelper {
     }
 
 
+    // database update
+
     // todo: upsert SQLite
     // Insert a post into the database, for user vocabulary
     public void addWord(UserVocab userVocab) {
@@ -374,7 +379,7 @@ public class VocabSQLHelper extends SQLiteOpenHelper {
         db.beginTransaction();
         try {
             // The user might already exist in the database (i.e. the same user created multiple posts).
-            //long userId = addOrUpdateWord(userVocab.word); //todo: check for duplicates
+            //long userId = addOrUpdateWord(userVocab.word); // todo: check for duplicates
 
             ContentValues values = new ContentValues();
             values.put(KEY_WORD, userVocab.word.trim());
@@ -384,16 +389,18 @@ public class VocabSQLHelper extends SQLiteOpenHelper {
             values.put(KEY_JSON, json);
             Log.e("adding word json", json);
 
+            values.put(KEY_TAG, UserVocab.TAG_FOR_NOW);
+
             values.put(KEY_DATE, userVocab.date/* + (long)i*/);
             values.put(KEY_FAVE, (userVocab.fave) ? IS_FAVE : NOT_FAVE);
 
-            String queryString = String.format(Locale.US, "INSERT INTO %s VALUES (%s, %s, %s, %s, %s) VALUES (\"%s\", \"%s\", \"%d\", \"%d\");",
-                    TABLE_WORDS,
-                    KEY_WORD, KEY_JSON, KEY_DATE, KEY_FAVE, KEY_FAVE_DATE,
-                    userVocab.word.trim(), json, userVocab.date, (userVocab.fave) ? IS_FAVE : NOT_FAVE, 1 + "");
+//            String queryString = String.format(Locale.US, "INSERT INTO %s VALUES (%s, %s, %s, %s, %s) VALUES (\"%s\", \"%s\", \"%d\", \"%d\");",
+//                    TABLE_WORDS,
+//                    KEY_WORD, KEY_JSON, KEY_DATE, KEY_FAVE, KEY_FAVE_DATE,
+//                    userVocab.word.trim(), json, userVocab.date, (userVocab.fave) ? IS_FAVE : NOT_FAVE, 1 + "");
 
 
-            Log.e("userVocab", "adding: " + queryString);
+//            Log.e("userVocab", "adding: " + queryString);
 
             // Notice how we haven't specified the primary key. SQLite auto increments the primary key column.
             db.insertOrThrow(TABLE_WORDS, null, values);

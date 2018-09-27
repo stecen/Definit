@@ -16,7 +16,7 @@ import com.scentric.android.definit.showdefinition.SearchAndShowActivity;
 import com.scentric.android.definit.showuservocab.UserVocabActivity;
 import com.scentric.android.definit.showuservocab.sheet.HistoryAdapter;
 import com.scentric.android.definit.sqlite.GetHistoryInterface;
-import com.scentric.android.definit.sqlite.HistoryVocab;
+import com.scentric.android.definit.utility.HistoryVocab;
 import com.scentric.android.definit.sqlite.VocabSQLHelper;
 import com.scentric.android.definit.utility.RecyclerViewClickListener;
 

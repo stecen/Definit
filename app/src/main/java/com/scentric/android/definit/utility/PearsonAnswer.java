@@ -17,7 +17,7 @@ public class PearsonAnswer {
     public String word;
 
     public PearsonAnswer() {
-        definitionExamplesList = new ArrayList<>(); //todo. while displaying, prioritize those with matching headword forms. doubt=doubt. doubt<doubtfulness
+        definitionExamplesList = new ArrayList<>();
     }
 
     public static class DefinitionExamples {

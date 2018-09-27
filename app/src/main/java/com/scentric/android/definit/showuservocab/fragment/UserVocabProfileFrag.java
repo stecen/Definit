@@ -19,7 +19,7 @@ import com.scentric.android.definit.R;
 import com.scentric.android.definit.export.ImportActivity;
 import com.scentric.android.definit.settings.PreferencesActivity;
 import com.scentric.android.definit.sqlite.GetAllWordsAsyncInterface;
-import com.scentric.android.definit.sqlite.UserVocab;
+import com.scentric.android.definit.utility.UserVocab;
 import com.scentric.android.definit.sqlite.VocabSQLHelper;
 import com.scentric.android.definit.utility.PearsonAnswer;
 

@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 /**
  * Created by Steven on 8/31/2016.
+ *
+ * Representing UserVocab in a custom way in SQL
+ *
  */
 public class CustomUVStringAdapter {
     public static final String EXAMPLE_BREAK = "EXAMPLE_BREAK_DEFINIT_SPLIT_HERE_GIRAFFES";

@@ -17,7 +17,7 @@ import com.scentric.android.definit.showuservocab.UserDetailsActivity;
 import com.scentric.android.definit.showuservocab.UserVocabActivity;
 import com.scentric.android.definit.showuservocab.UserVocabAdapter;
 import com.scentric.android.definit.sqlite.GetAllWordsAsyncInterface;
-import com.scentric.android.definit.sqlite.UserVocab;
+import com.scentric.android.definit.utility.UserVocab;
 import com.scentric.android.definit.sqlite.VocabSQLHelper;
 import com.scentric.android.definit.utility.DividerItemDecoration;
 import com.scentric.android.definit.utility.RecyclerViewClickListener;
@@ -28,6 +28,9 @@ import java.util.ArrayList;
 
 /**
  * Created by Steven on 8/30/2016.
+ *
+ * Fragment that displays all user vocabulary
+ *
  */
 public class UserVocabMainFrag extends Fragment implements RecyclerViewClickListener, FragmentRefresher, FragmentReselected/*, View.OnLongClickListener*/ {
     public RecyclerView recyclerView;
@@ -65,8 +68,7 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
 
         helper = VocabSQLHelper.getInstance(appContext);
         final RecyclerViewClickListener listener = this;
-//        final View.OnLongClickListener flong = this;
-        helper.getAllUserVocab(new GetAllWordsAsyncInterface() {
+        helper.getAllUserVocab(new GetAllWordsAsyncInterface() { // send callback to be called after list is filled with SQL data
                                    @Override
                                    public void setWordsData(ArrayList<UserVocab> userVocabList) {
                                        Log.e("userVocab", "" + userVocabList.size());
@@ -104,6 +106,7 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
         });
     }
 
+    // reselected this tab while on this tab
     @Override
     public void reselect() {
 //        if (linearLayoutManager != null) {
@@ -120,6 +123,7 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
         super.onResume();
     }
 
+    @Override // note: overrides FragmentRefresher
     public void refreshViews() {
         Log.e("refresh", "main");
         refreshRecycler();
@@ -152,8 +156,6 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
 
         UserDetailsActivity.isActive = true;
 
-
-//        detailIntent.putExtra(UserDetailsActivity.KEY_JSON, userVocabString);
         detailIntent.putExtra(UserDetailsActivity.KEY_POS, position);
 
         startActivity(detailIntent);

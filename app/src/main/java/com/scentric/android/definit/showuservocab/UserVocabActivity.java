@@ -78,6 +78,7 @@ public class UserVocabActivity extends AppCompatActivity {
         // start clipboard watcher service
         startService(new Intent(getBaseContext(), ClipboardWatcherService.class));
 
+        // deal with permissions
         doFirstTimeIntro();
 
         // set default preferences
@@ -188,7 +189,6 @@ public class UserVocabActivity extends AppCompatActivity {
                 Log.e("viewpager", "scroll state changed");
             }
         });
-//        tabLayout.addOnTabSelectedListener(this); // for view swiping
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override

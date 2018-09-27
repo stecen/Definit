@@ -16,7 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.scentric.android.definit.R;
-import com.scentric.android.definit.sqlite.UserVocab;
+import com.scentric.android.definit.utility.UserVocab;
 import com.scentric.android.definit.sqlite.VocabSQLHelper;
 import com.scentric.android.definit.utility.CustomUVStringAdapter;
 import com.scentric.android.definit.utility.DateUtility;
@@ -28,9 +28,12 @@ import java.util.ArrayList;
 
 /**
  * Created by Steven on 8/13/2016.
+ *
+ * RecyclerView adapter for both user vocabulary and favorite tabs
+ *
  */
 public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.ViewHolder> {
-    public ArrayList<UserVocab> sortedDataSet;
+    public ArrayList<UserVocab> sortedDataSet; // local copy of database information
     private RecyclerViewClickListener itemListener;
     private boolean mySelected[] = new boolean[500]; //todo: increase
     public boolean surpressGray; // when finishing activiting only.
@@ -51,7 +54,6 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
         this.isFaveList = isFaveList; // depends on the source of the caller. If the caller is looking to display a favorites list, display a yellow background
 
         Log.e("constructor", sortedDataSet.size() + "  vs " + myDataset.size());
-
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -74,7 +76,7 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
             faveColorView = (TextView) v.findViewById(R.id.fave_color_view);
             mainRelative.setOnClickListener(this);
 
-            //delete words through a popup menu
+            // delete words through a popup menu
             final RelativeLayout frel = mainRelative;
             mainRelative.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
@@ -91,7 +93,6 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
                             switch (item.getItemId()) {
                                 case R.id.popup_menu_delete:
                                     Log.e("popup", "delete");
-
 
                                     VocabSQLHelper helper = VocabSQLHelper.getInstance(context);
                                     helper.deleteWord(sortedDataSet.get(position));
@@ -203,7 +204,7 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
         }
     }
 
-    public void slideByIdx(int idx) { // todo: proper slidingss
+    public void slideByIdx(int idx) { // todo: proper slidings
 
     }
 
@@ -230,6 +231,8 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
         final UserVocab userVocab = sortedDataSet.get(position);
 
         final ViewHolder fholder = holder;
+
+        // set to yellow background if favorite list
         if (isFaveList) {
 //            holder.faveColorView.setVisibility(View.VISIBLE);
             final TextView fview = holder.faveColorView;
@@ -289,7 +292,7 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
             holder.faveImage.setImageDrawable(notFaveDrawable);
         }
 
-        // Update ui and send to database
+        // Update ui and send to database for fave info
         holder.faveImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View faveImage) {
@@ -315,19 +318,22 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
             }
         });
 
+        // set word, definition and examples
         String s = CustomUVStringAdapter.toString(userVocab.listOfDefEx);
         Log.e("testUV", "\n" + s);
         ArrayList<PearsonAnswer.DefinitionExamples> list = CustomUVStringAdapter.fromString(s);
+
         holder.wordText.setText(userVocab.word);
 
         Log.e("deftext", userVocab.word + " len: " + userVocab.listOfDefEx.size());
 
+        // TODO: fix that for now, I'm just displaying the first definitions
         if (userVocab.listOfDefEx.size() > 0) {
             if (userVocab.listOfDefEx.size() > 1) {
                 String text = userVocab.listOfDefEx.get(0).definition + "\n...";
                 holder.def1Text.setText(text);
             } else {
-                //otherwise no number
+                // otherwise no number
                 String text = userVocab.listOfDefEx.get(0).definition;
                 holder.def1Text.setText(text);
             }

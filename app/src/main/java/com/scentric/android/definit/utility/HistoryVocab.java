@@ -1,4 +1,4 @@
-package com.scentric.android.definit.sqlite;
+package com.scentric.android.definit.utility;
 
 /**
  * Created by Steven on 8/22/2016.

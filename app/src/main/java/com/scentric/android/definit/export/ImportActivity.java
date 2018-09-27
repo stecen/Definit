@@ -15,7 +15,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.scentric.android.definit.R;
-import com.scentric.android.definit.sqlite.UserVocab;
+import com.scentric.android.definit.utility.UserVocab;
 import com.scentric.android.definit.sqlite.VocabSQLHelper;
 
 import java.util.ArrayList;

@@ -17,7 +17,7 @@ import com.scentric.android.definit.showuservocab.UserDetailsActivity;
 import com.scentric.android.definit.showuservocab.UserVocabActivity;
 import com.scentric.android.definit.showuservocab.UserVocabAdapter;
 import com.scentric.android.definit.sqlite.GetAllWordsAsyncInterface;
-import com.scentric.android.definit.sqlite.UserVocab;
+import com.scentric.android.definit.utility.UserVocab;
 import com.scentric.android.definit.sqlite.VocabSQLHelper;
 import com.scentric.android.definit.utility.DividerItemDecoration;
 import com.scentric.android.definit.utility.RecyclerViewClickListener;

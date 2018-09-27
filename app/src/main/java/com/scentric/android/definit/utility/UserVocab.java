@@ -1,4 +1,4 @@
-package com.scentric.android.definit.sqlite;
+package com.scentric.android.definit.utility;
 
 import com.scentric.android.definit.utility.PearsonAnswer;
 
@@ -10,13 +10,17 @@ import java.util.ArrayList;
 public class UserVocab { // for sqlite database easiness
     public String word;
     public ArrayList<PearsonAnswer.DefinitionExamples> listOfDefEx;
+    public String tag; // for context. not named context to not be confused with Context in Android
     public long date, lastFaveDate;
     public String dateText;
     public boolean fave = false;
 
-    public UserVocab(String word, ArrayList<PearsonAnswer.DefinitionExamples> list, long date, String dateText) {
+    public final static String TAG_FOR_NOW = "HI I AM CONTEXT HOW R U";
+
+    public UserVocab(String word, ArrayList<PearsonAnswer.DefinitionExamples> list, String tag, long date, String dateText) {
         this.word = word; // should be same as PearsonAnswer.DefinitionExampleslist#wordForm
         this.listOfDefEx = list;
+        this.tag = tag;
         this.date = date;
         this.dateText = dateText;
     }
@@ -25,6 +29,7 @@ public class UserVocab { // for sqlite database easiness
         word = "";
         listOfDefEx = new ArrayList<>();
         dateText = "";
+        tag = TAG_FOR_NOW;
     }
 
 }

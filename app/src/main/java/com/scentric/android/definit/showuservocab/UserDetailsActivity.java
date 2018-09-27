@@ -14,7 +14,7 @@ import android.widget.RelativeLayout;
 import com.scentric.android.definit.R;
 import com.scentric.android.definit.showuservocab.fragment.UserVocabFaveFrag;
 import com.scentric.android.definit.showuservocab.fragment.UserVocabMainFrag;
-import com.scentric.android.definit.sqlite.UserVocab;
+import com.scentric.android.definit.utility.UserVocab;
 import com.scentric.android.definit.sqlite.VocabSQLHelper;
 import com.scentric.android.definit.utility.RecyclerViewClickListener;
 import com.scentric.android.definit.utility.SnappyRecyclerView;
@@ -22,6 +22,9 @@ import com.scentric.android.definit.utility.ViewUtility;
 
 /**
  * Created by Steven on 8/15/2016.
+ *
+ * Flashcards
+ *
  */
 public class UserDetailsActivity extends AppCompatActivity implements RecyclerViewClickListener {
     LinearLayout linearLayout;

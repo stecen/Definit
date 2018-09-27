@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.scentric.android.definit.R;
 import com.scentric.android.definit.input.UserVocabInsertService;
-import com.scentric.android.definit.sqlite.UserVocab;
+import com.scentric.android.definit.utility.UserVocab;
 import com.scentric.android.definit.utility.PearsonAnswer;
 import com.scentric.android.definit.utility.PearsonComparator;
 import com.scentric.android.definit.utility.RecyclerViewClickListener;
@@ -156,7 +156,8 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
         }
     }
 
-    public void animateSlidesAndInsertUserVocab() {//important!!! main purpose of the app
+    //important!!! main purpose of the app
+    public void animateSlidesAndInsertUserVocab() {
         ArrayList<UserVocab> listToSend = new ArrayList<>();
 
         for (int i = 0; i < sortedPearsonDataSet.size(); i++) {
@@ -167,8 +168,9 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
 
                 ArrayList<PearsonAnswer.DefinitionExamples> defExSend = new ArrayList<>();
                 defExSend.add(sortedPearsonDataSet.get(i));
-                listToSend.add(new UserVocab(/*mainWord*/sortedPearsonDataSet.get(i).wordForm, defExSend, System.currentTimeMillis(), "August 13th"));
+                listToSend.add(new UserVocab(sortedPearsonDataSet.get(i).wordForm, defExSend, UserVocab.TAG_FOR_NOW, System.currentTimeMillis(), "August 13th")); // main word
 
+                // TODO: attach contexts for all of the different word forms
 //                    // if they equal the main word, they must all equal eachother:)
 //                    if (sortedPearsonDataSet.get(i).wordForm.trim().toLowerCase().equals(mainWord.toLowerCase())) {
 //                        Log.e("insertingSQLite", sortedPearsonDataSet.get(i).definition);
@@ -176,16 +178,17 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
 //                        UserVocab userVocab = new UserVocab(mainWord)
 //                    }
             }
-            mySelected[i] = false; //surpress turning gray
+            mySelected[i] = false; // suppress turning gray
         }
 
 
-        //this list should never be empty but just in case it is...
+        // this list should never be empty, but just in case it is
         if (listToSend.isEmpty()) {
             Log.e("wat", "listToSend is empty");
         } else {
+            // insert into SQL user vocab table! by deferring action to the intent service, UserVocabInsertService
+
             Intent insertIntent = new Intent(searchAndShowActivity.getApplicationContext(), UserVocabInsertService.class);
-//            Log.e("listToSend", (new Gson()).toJson(listToSend));
             insertIntent.putExtra(UserVocabInsertService.JSON_KEY, (new Gson()).toJson(listToSend));
             searchAndShowActivity.startService(insertIntent);
         }

@@ -26,7 +26,7 @@ import android.widget.ImageView;
 import com.scentric.android.definit.R;
 import com.scentric.android.definit.showdefinition.SearchAndShowActivity;
 import com.scentric.android.definit.sqlite.GetHistoryInterface;
-import com.scentric.android.definit.sqlite.HistoryVocab;
+import com.scentric.android.definit.utility.HistoryVocab;
 import com.scentric.android.definit.sqlite.VocabSQLHelper;
 import com.scentric.android.definit.utility.RecyclerViewClickListener;
 import com.scentric.android.definit.utility.ViewUtility;
