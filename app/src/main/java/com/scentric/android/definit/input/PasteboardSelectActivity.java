@@ -21,6 +21,9 @@ import android.widget.TextView;
 import com.scentric.android.definit.R;
 import com.scentric.android.definit.showdefinition.SearchAndShowActivity;
 
+import java.text.BreakIterator;
+import java.util.Locale;
+
 /**
  * Created by stevecen on 9/27/18.
  *
@@ -40,12 +43,46 @@ public class PasteboardSelectActivity extends AppCompatActivity {
     public static final int TOUCH_FRAME = 3;
 
 
-    private void initializeText(TextView pasteText) {
+    private void initializeText(TextView pasteText, CharSequence pasteCharSeq) {
         pasteText.setMovementMethod(LinkMovementMethod.getInstance());
-        pasteText.setText("My serendipity depends on the ephemeral disillusionment of the set of floral arrangements.",
+        pasteText.setText(pasteCharSeq,
                 TextView.BufferType.SPANNABLE);
 
-        
+        String pastStr = pasteCharSeq.toString();
+
+        SpannableString pasteSpan = (SpannableString) pasteText.getText();
+        BreakIterator tokenIterator = BreakIterator.getWordInstance(Locale.US); // finds word blocks in the textbox
+        tokenIterator.setText(pastStr);
+
+//        int startIdx = tokenIterator.first();
+        for (int beginIdx = tokenIterator.first(), endIdx = tokenIterator.next();
+                endIdx != BreakIterator.DONE;
+                beginIdx = endIdx, endIdx = tokenIterator.next()) {
+            Log.e("paste", String.format("%d, %d -- %d", beginIdx, endIdx, pastStr.length()));
+            String clickedWord = pastStr.substring(beginIdx, endIdx);
+            pasteSpan.setSpan(getClicktokenSpan(clickedWord), beginIdx, endIdx, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
+        }
+
+    }
+
+    private ClickableSpan getClicktokenSpan(final String pasteToken) {
+        return new ClickableSpan() {
+            private String token = pasteToken;
+
+            @Override
+            public void onClick(View view) {
+                    Intent displayDefIntent = new Intent(getApplicationContext(), SearchAndShowActivity.class);
+                    displayDefIntent.putExtra(SearchAndShowActivity.SENT_TEXT, token);
+                    startActivity(displayDefIntent);
+            }
+
+            @Override
+            public void updateDrawState(TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setUnderlineText(false);
+                ds.setColor(Color.BLACK);
+            }
+        };
     }
 
     @Override
@@ -68,7 +105,7 @@ public class PasteboardSelectActivity extends AppCompatActivity {
 
         pasteText = (TextView) findViewById(R.id.paste_text);
 
-        initializeText(pasteText);
+        initializeText(pasteText, "My serendipity depends on the ephemeral disillusionment of the set of floral arrangements.");
 
         //region modify reference (try 2)
 
@@ -179,12 +216,12 @@ public class PasteboardSelectActivity extends AppCompatActivity {
 //            }, REMOVE_DURATION + 50);
 
 
-        } /*else {
+        } else {
 //            else if (source == TOUCH_OUTSIDE) {
                 Log.e("touch", "2 touching outside");
                 finish();
 //            }
-        }*/
+        }
 
     }
 }
