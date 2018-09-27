@@ -141,7 +141,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activitiy_searchandshow);
+        setContentView(R.layout.activity_searchandshow);
 
         adjustSearchViews();
 

@@ -24,7 +24,6 @@
 
         android:visibility="invisible"
 
-
         tools:context=".showdefinition.SearchAndShowActivity">
 
         <View
