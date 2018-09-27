@@ -1,5 +1,7 @@
 package com.scentric.android.definit.input;
 
+import android.support.v7.app.AppCompatActivity;
+
 /**
  * Created by stevecen on 9/27/18.
  *
@@ -7,5 +9,6 @@ package com.scentric.android.definit.input;
  * as context/tag, and pick words to define
  */
 
-public class PasteboardSelectActivity {
+public class PasteboardSelectActivity extends AppCompatActivity {
+    public static final String SENT_WORD = "sent_word";
 }

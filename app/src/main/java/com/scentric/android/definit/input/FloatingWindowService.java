@@ -35,11 +35,10 @@ public class FloatingWindowService extends Service {
 
     private boolean isKilled = false; // prevent this service from killing its windows when the windows are already killed
 
-    String word; // word receive from ClipboardService
+    private String copiedText; // copiedText receive from ClipboardService
 
     @Override
     public IBinder onBind(Intent intent) {
-
         return null;
     }
 
@@ -47,7 +46,7 @@ public class FloatingWindowService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
         if (intent != null) {
-            word = intent.getStringExtra(KEY_WORD);
+            copiedText = intent.getStringExtra(KEY_WORD);
         }
         return START_NOT_STICKY;
     }
@@ -86,8 +85,14 @@ public class FloatingWindowService extends Service {
             @Override
             public void onClick(View view) {
                 isKilled = true;
-                Intent displayDefIntent = new Intent(getApplicationContext(), SearchAndShowActivity.class);
-                displayDefIntent.putExtra(SearchAndShowActivity.SENT_WORD, word);
+//                Intent displayDefIntent = new Intent(getApplicationContext(), SearchAndShowActivity.class);
+//                displayDefIntent.putExtra(SearchAndShowActivity.SENT_WORD, copiedText);
+//                displayDefIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                startActivity(displayDefIntent);
+
+                // todo: if single copiedText, send to normal track
+                Intent displayDefIntent = new Intent(getApplicationContext(), PasteboardSelectActivity.class);
+                displayDefIntent.putExtra(PasteboardSelectActivity.SENT_WORD, copiedText);
                 displayDefIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(displayDefIntent);
 

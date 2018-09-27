@@ -87,6 +87,18 @@
             android:windowSoftInputMode="stateHidden"
             />
 
+
+        <activity android:name="com.scentric.android.definit.input.PasteboardSelectActivity"
+            android:theme="@style/VocabDialogTheme"
+            android:label="Definition"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+
+            android:taskAffinity=""
+            android:launchMode="singleTop"
+            >
+
+        </activity>
+
         <activity android:name="com.scentric.android.definit.showdefinition.SearchAndShowActivity"
             android:theme="@style/VocabDialogTheme"
             android:label="Definition"
