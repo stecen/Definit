@@ -1,26 +1,29 @@
 package com.scentric.android.definit.input;
 
+import android.animation.ValueAnimator;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
-import android.text.style.StyleSpan;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.scentric.android.definit.R;
 import com.scentric.android.definit.showdefinition.SearchAndShowActivity;
+import com.scentric.android.definit.utility.ViewUtility;
 
 import java.text.BreakIterator;
 import java.util.Locale;
@@ -43,6 +46,9 @@ public class PasteboardSelectActivity extends AppCompatActivity {
     public static final int TOUCH_SEND = 2;
     public static final int TOUCH_FRAME = 3;
 
+    private static final int BEFORE_DRAWN = -1;
+    private static int origFrameHeight = BEFORE_DRAWN; // value to be overwritten by actual value in onCreate
+    private static int EXPANDED_FRAME_HEIGHT = 500; // 500 is a delta -- different from the top value. Ideally it would be set my screenheight/2
 
     private void initializeText(TextView pasteText, String origPasteStr) {
         String pasteStr = origPasteStr.replace(" ", "  "); // pad to make lines more clickable
@@ -63,7 +69,7 @@ public class PasteboardSelectActivity extends AppCompatActivity {
                 Log.e("paste", String.format("%d, %d -- %d", beginIdx, endIdx, pasteStr.length()));
 //                Log.e("paste", String.format("%c, %c\n", pasteStr.charAt(beginIdx), pasteStr.charAt(endIdx), pasteStr.length()));
                 String clickedWord = pasteStr.substring(beginIdx, endIdx);
-                pasteSpan.setSpan(getClicktokenSpan(clickedWord, origPasteStr), beginIdx, endIdx, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
+                pasteSpan.setSpan(getClickTokenSpan(clickedWord, origPasteStr), beginIdx, endIdx, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
                 pasteSpan.setSpan(new UnderlineSpan(), beginIdx, endIdx, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }
@@ -76,17 +82,23 @@ public class PasteboardSelectActivity extends AppCompatActivity {
         return Character.isLetterOrDigit(c);
     }
 
-    private ClickableSpan getClicktokenSpan(final String pasteToken, final String originalPasteStr) {
+    private ClickableSpan getClickTokenSpan(final String pasteToken, final String originalPasteStr) {
         return new ClickableSpan() {
             private String token = pasteToken;
             private String tag = originalPasteStr;
 
+
+            // Called when a user clicks on a word in the pasteboard text that is displayed
             @Override
             public void onClick(View view) {
-                    Intent displayDefIntent = new Intent(getApplicationContext(), SearchAndShowActivity.class);
-                    displayDefIntent.putExtra(SearchAndShowActivity.SENT_TEXT, token);
-                    displayDefIntent.putExtra(SearchAndShowActivity.SENT_TAG, tag); // TODO: include original formatting, and include indexing to allow highlighting of tag
-                    startActivity(displayDefIntent);
+
+                moveDialog(0, EXPANDED_FRAME_HEIGHT); // animate dialog upwards
+
+                // Display the definition!
+                Intent displayDefIntent = new Intent(getApplicationContext(), SearchAndShowActivity.class);
+                displayDefIntent.putExtra(SearchAndShowActivity.SENT_TEXT, token);
+                displayDefIntent.putExtra(SearchAndShowActivity.SENT_TAG, tag); // TODO: include original formatting, and include indexing to allow highlighting of tag
+                startActivity(displayDefIntent);
             }
 
             @Override
@@ -104,17 +116,31 @@ public class PasteboardSelectActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_pasteboardselect);
 
-//        frame = (FrameLayout) findViewById(R.id.frame);
-//        if (frame != null) {
-//            frame.setBackgroundColor(Color.TRANSPARENT);
-//            frame.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    Log.e("frame", "clicked");
-//                    touchHandler(TOUCH_FRAME);
-//                }
-//            });
-//        }
+        frame = (FrameLayout) findViewById(R.id.frame);
+        if (frame != null) {
+            frame.setBackgroundColor(Color.TRANSPARENT);
+            frame.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.e("frame", "clicked");
+                    touchHandler(TOUCH_FRAME);
+                }
+            });
+
+            Log.e("measuredHeightStatic", "" + this.origFrameHeight);
+
+            // set original frame height for animation reference
+            final FrameLayout finalFrame = frame;
+            ViewTreeObserver vto = finalFrame.getViewTreeObserver();
+            vto.addOnGlobalLayoutListener (new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    finalFrame.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    origFrameHeight = finalFrame.getMeasuredHeight();
+                    Log.e("measuredHeightVto", "" + origFrameHeight);
+                }
+            });
+        }
 
         pasteText = (TextView) findViewById(R.id.paste_text);
 
@@ -204,6 +230,31 @@ public class PasteboardSelectActivity extends AppCompatActivity {
 //        }
 
         // endregion
+
+        final WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+        final ScrollView fview = (ScrollView) findViewById(R.id.pasteboard_scroll);
+        final ViewTreeObserver vto = fview.getViewTreeObserver();
+        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+                public void onGlobalLayout() {
+                    ViewUtility.circleRevealExtra(fview);
+                    Log.e("vto", "circle revealing");
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                        fview.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    } else {
+                        fview.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                    }
+                }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        Log.e("measuredHeight", "onResume called " + this.origFrameHeight);
+        super.onResume(); // if not, this dialog will not move, which is okay
+        if (this.origFrameHeight != BEFORE_DRAWN) {
+            moveDialog(EXPANDED_FRAME_HEIGHT, 0); // animate dialog back into place (assuming this is resuming from the showdefinition activity)
+        }
     }
 
     // deals with logic relate to user touches in different areas of the screen, including within the frame
@@ -231,5 +282,24 @@ public class PasteboardSelectActivity extends AppCompatActivity {
 //            }
         }
 
+    }
+
+    // adjusting the height of the frame moves the dialog vertically
+    private void moveDialog(int from, int to) {
+        final View finalFrame = frame;
+        int testHeight = finalFrame.getMeasuredHeight();
+        Log.e("measuredHeightMove", "" + testHeight);
+        ValueAnimator anim = ValueAnimator.ofInt(this.origFrameHeight + from, this.origFrameHeight + to); // todo: make sure singleTop and singleTask make sense with this static variable
+        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                int val = (Integer) valueAnimator.getAnimatedValue();
+                ViewGroup.LayoutParams layoutParams = finalFrame.getLayoutParams();
+                layoutParams.height = val;
+                finalFrame.setLayoutParams(layoutParams);
+            }
+        });
+        anim.setDuration(150);
+        anim.start();
     }
 }

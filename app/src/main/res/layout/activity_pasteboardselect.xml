@@ -9,12 +9,13 @@
 
 
     <ScrollView
+        android:id="@+id/pasteboard_scroll"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
         android:background="#ffffff">
         <TextView
-            android:text="LOL"
+            android:text="Pasteboard select"
             android:bufferType="spannable"
             android:id="@+id/paste_text"
 
@@ -23,6 +24,7 @@
 
             android:lineSpacingExtra="4dp"
 
+            android:padding="12dp"
             />
 
     </ScrollView>

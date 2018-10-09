@@ -50,7 +50,7 @@ public class ClipboardWatcherService extends Service {
 
                 previousText = word;
 
-                Log.e("tag", "Kyle Landry just copied " + word);
+                Log.e("tag", "Just copied " + word);
 
                 if (word.contains(" ")) {
                     Log.e("tag", "This word + '" + word + "' contains space(s).");
