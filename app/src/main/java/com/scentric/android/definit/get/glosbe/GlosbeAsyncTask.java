@@ -16,6 +16,7 @@ import com.scentric.android.definit.utility.GlosbePackage;
 import com.scentric.android.definit.utility.PearsonAnswer;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -217,6 +218,7 @@ public class GlosbeAsyncTask extends AsyncTask<String, Void, PearsonAnswer> {
                                     JSONObject phrase = phraseMeaning.getJSONObject("phrase");
                                     if (phrase.has("text")) {
                                         String retVal = phrase.getString("text").trim().replace("\"", "").replace("'", "").replace("\\", "");
+                                        retVal = retVal.replaceAll("\\[(.*?)\\]", ""); // todo: modularize
                                         Log.d("lol", "returning (phrase) " + retVal + " for definition of " + wordText);
                                         return retVal;
                                     }
@@ -227,7 +229,8 @@ public class GlosbeAsyncTask extends AsyncTask<String, Void, PearsonAnswer> {
                                             JSONObject mObj = meanings.getJSONObject(m);
                                             if (mObj.has("text") && !mObj.isNull("text")) { // FOUND A DEFINITION IN THE "MEANINGS" ARRAY UNDER "TEXT"
                                                 String retVal = mObj.getString("text").trim().replace("\"", "").replace("'", "").replace("\\", "");
-                                                Log.d("lol", "returning (meaning text) " + retVal + " for definition of " + wordText);
+                                                retVal = retVal.replaceAll("\\[(.*?)\\]", "");
+                                                Log.d("glosbe", "returning (meaning text) " + retVal + " for definition of " + wordText);
                                                 return retVal;
                                             } else {
                                                 return DEFAULT_NO_DEFINITION;
@@ -262,11 +265,15 @@ public class GlosbeAsyncTask extends AsyncTask<String, Void, PearsonAnswer> {
 
                 Log.d("lol", "error stream: \n" + sb.toString());
 
-                throw new Exception();
+                throw new IOException();
             }
 
 
-        } catch (Exception e) {
+        } catch (JSONException e) {
+            Log.d("lol", e.toString());
+
+            didFail = true;
+        } catch (IOException e) {
             Log.d("lol", e.toString());
 
             didFail = true;

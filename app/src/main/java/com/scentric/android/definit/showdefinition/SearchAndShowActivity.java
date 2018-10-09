@@ -734,7 +734,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 //                ld.setLayerInset(1, 0, tv.getHeight() / 2, 0, 0);
 //                ViewTreeObserver obs = tv.getViewTreeObserver();
 
-                    ViewUtility.circleRevealExtra(coordinatorLayout); // lmfao
+                    ViewUtility.circleRevealExtra(coordinatorLayout, 500);
 //                    ViewUtility.zoomIntoView(coordinatorLayout);
                     Log.e("vto", "circle revealing");
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {

@@ -130,7 +130,7 @@ public class ViewUtility {
         }
     }
 
-    public static void circleRevealExtra(View view) {
+    public static void circleRevealExtra(View view, int extraTime) {
         // previously invisible view
         final View myView = view;
 
@@ -153,7 +153,7 @@ public class ViewUtility {
                     ViewAnimationUtils.createCircularReveal(myView, cx, cy, 0, finalRadius + 500);
 
 
-            anim.setDuration(CIRCLE_ANIM_DURATION + 500);
+            anim.setDuration(CIRCLE_ANIM_DURATION + extraTime);
 
 
             anim.start();

@@ -245,7 +245,7 @@ public class PasteboardSelectActivity extends AppCompatActivity {
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
                 public void onGlobalLayout() {
-                    ViewUtility.circleRevealExtra(fview);
+                    ViewUtility.circleRevealExtra(fview, 300);
                     Log.e("vto", "circle revealing");
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                         fview.getViewTreeObserver().removeOnGlobalLayoutListener(this);
