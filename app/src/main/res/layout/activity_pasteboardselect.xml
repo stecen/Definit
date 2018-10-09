@@ -7,6 +7,8 @@
 
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!--padding might be able to help here...-->
+
 
     <ScrollView
         android:id="@+id/pasteboard_scroll"

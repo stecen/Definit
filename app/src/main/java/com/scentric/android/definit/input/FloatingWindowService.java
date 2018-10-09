@@ -94,7 +94,7 @@ public class FloatingWindowService extends Service {
 //                // todo: if single copiedText, send to normal track
                 Intent displayDefIntent = new Intent(getApplicationContext(), PasteboardSelectActivity.class);
                 displayDefIntent.putExtra(SearchAndShowActivity.SENT_TEXT, copiedText);
-                displayDefIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                displayDefIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(displayDefIntent);
 
                 // disappear

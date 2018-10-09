@@ -12,11 +12,11 @@ import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.UnderlineSpan;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -47,8 +47,8 @@ public class PasteboardSelectActivity extends AppCompatActivity {
     public static final int TOUCH_FRAME = 3;
 
     private static final int BEFORE_DRAWN = -1;
-    private static int origFrameHeight = BEFORE_DRAWN; // value to be overwritten by actual value in onCreate
-    private static int EXPANDED_FRAME_HEIGHT = 500; // 500 is a delta -- different from the top value. Ideally it would be set my screenheight/2
+    private int origFrameHeight = BEFORE_DRAWN; // value to be overwritten by actual value in onCreate
+    private int frameHeightDelta = 500; // 500 is a delta -- different from the top value. Ideally it would be set my screenheight/2
 
     private void initializeText(TextView pasteText, String origPasteStr) {
         String pasteStr = origPasteStr.replace(" ", "  "); // pad to make lines more clickable
@@ -92,7 +92,7 @@ public class PasteboardSelectActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                moveDialog(0, EXPANDED_FRAME_HEIGHT); // animate dialog upwards
+                moveDialog(0, frameHeightDelta); // animate dialog upwards
 
                 // Display the definition!
                 Intent displayDefIntent = new Intent(getApplicationContext(), SearchAndShowActivity.class);
@@ -116,6 +116,8 @@ public class PasteboardSelectActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_pasteboardselect);
 
+        Log.e("measuredHeight", "ONCREATE CALLED");
+
         frame = (FrameLayout) findViewById(R.id.frame);
         if (frame != null) {
             frame.setBackgroundColor(Color.TRANSPARENT);
@@ -130,6 +132,7 @@ public class PasteboardSelectActivity extends AppCompatActivity {
             Log.e("measuredHeightStatic", "" + this.origFrameHeight);
 
             // set original frame height for animation reference
+            frame.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
             final FrameLayout finalFrame = frame;
             ViewTreeObserver vto = finalFrame.getViewTreeObserver();
             vto.addOnGlobalLayoutListener (new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -140,6 +143,10 @@ public class PasteboardSelectActivity extends AppCompatActivity {
                     Log.e("measuredHeightVto", "" + origFrameHeight);
                 }
             });
+
+            DisplayMetrics displayMetrics = new DisplayMetrics();
+            getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+            frameHeightDelta = displayMetrics.heightPixels / 2; // move the frame half of the screen upwards
         }
 
         pasteText = (TextView) findViewById(R.id.paste_text);
@@ -157,7 +164,7 @@ public class PasteboardSelectActivity extends AppCompatActivity {
 
             initializeText(pasteText, copiedText);
 
-            // TODO RN: after viewing the text that the user copied, let them touch individual words to define
+            // todo: after viewing the text that the user copied, let them touch individual words to define
             // todo: redefine singletask, singletop -- connect the two activities together
 
 //            pasteText.setOnClickListener(new View.OnClickListener() {
@@ -231,7 +238,8 @@ public class PasteboardSelectActivity extends AppCompatActivity {
 
         // endregion
 
-        final WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+//        circle animation, to be consistent
+//        final WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         final ScrollView fview = (ScrollView) findViewById(R.id.pasteboard_scroll);
         final ViewTreeObserver vto = fview.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -249,12 +257,19 @@ public class PasteboardSelectActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onNewIntent(Intent comingIntent) {
+        Log.e("measuredHeight", "ONEWINTENT");
+    }
+
+    @Override
     protected void onResume() {
         Log.e("measuredHeight", "onResume called " + this.origFrameHeight);
         super.onResume(); // if not, this dialog will not move, which is okay
-        if (this.origFrameHeight != BEFORE_DRAWN) {
-            moveDialog(EXPANDED_FRAME_HEIGHT, 0); // animate dialog back into place (assuming this is resuming from the showdefinition activity)
-        }
+        frame.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        // NOTE: instead of moveDialog downwords, I just set to wrap content. voila!
+//        if (this.origFrameHeight != BEFORE_DRAWN) {
+//            moveDialog(frameHeightDelta, 0); // animate dialog back into place (assuming this is resuming from the showdefinition activity)
+//        }
     }
 
     // deals with logic relate to user touches in different areas of the screen, including within the frame
@@ -285,10 +300,12 @@ public class PasteboardSelectActivity extends AppCompatActivity {
     }
 
     // adjusting the height of the frame moves the dialog vertically
+    // note: I do not need this to reset the frame's height, as I just reset it to wrap_content for now
     private void moveDialog(int from, int to) {
         final View finalFrame = frame;
         int testHeight = finalFrame.getMeasuredHeight();
         Log.e("measuredHeightMove", "" + testHeight);
+        Log.e("measuredHeightMove", "moving from " + (this.origFrameHeight + from) + " to " + (this.origFrameHeight + to));
         ValueAnimator anim = ValueAnimator.ofInt(this.origFrameHeight + from, this.origFrameHeight + to); // todo: make sure singleTop and singleTask make sense with this static variable
         anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override

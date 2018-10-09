@@ -94,7 +94,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
 
             android:taskAffinity=""
-            android:launchMode="singleTop"
+            android:launchMode="singleTask"
             >
 
         </activity>
