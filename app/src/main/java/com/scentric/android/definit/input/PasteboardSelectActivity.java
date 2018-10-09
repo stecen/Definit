@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
@@ -118,6 +119,17 @@ public class PasteboardSelectActivity extends AppCompatActivity {
 
         Log.e("measuredHeight", "ONCREATE CALLED");
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            Log.e("pasteboard", "Setting support toolbar...");
+            setSupportActionBar(toolbar);
+            if (getSupportActionBar() != null) {
+                getSupportActionBar().setDisplayShowTitleEnabled(false);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            }
+            toolbar.setTitle("Select word");
+        }
+
         frame = (FrameLayout) findViewById(R.id.frame);
         if (frame != null) {
             frame.setBackgroundColor(Color.TRANSPARENT);
@@ -146,7 +158,7 @@ public class PasteboardSelectActivity extends AppCompatActivity {
 
             DisplayMetrics displayMetrics = new DisplayMetrics();
             getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-            frameHeightDelta = displayMetrics.heightPixels / 2; // move the frame half of the screen upwards
+            frameHeightDelta = 2 * displayMetrics.heightPixels / 5; // move the frame half of the screen upwards
         }
 
         pasteText = (TextView) findViewById(R.id.paste_text);
@@ -306,8 +318,9 @@ public class PasteboardSelectActivity extends AppCompatActivity {
         int testHeight = finalFrame.getMeasuredHeight();
         Log.e("measuredHeightMove", "" + testHeight);
         Log.e("measuredHeightMove", "moving from " + (this.origFrameHeight + from) + " to " + (this.origFrameHeight + to));
-        ValueAnimator anim = ValueAnimator.ofInt(this.origFrameHeight + from, this.origFrameHeight + to); // todo: make sure singleTop and singleTask make sense with this static variable
-        anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+        ValueAnimator heightAnim = ValueAnimator.ofInt(this.origFrameHeight + from, this.origFrameHeight + to); // todo: make sure singleTop and singleTask make sense with this static variable
+        heightAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
                 int val = (Integer) valueAnimator.getAnimatedValue();
@@ -316,7 +329,20 @@ public class PasteboardSelectActivity extends AppCompatActivity {
                 finalFrame.setLayoutParams(layoutParams);
             }
         });
-        anim.setDuration(150);
-        anim.start();
+        heightAnim.setDuration(150);
+        heightAnim.start();
+
+//        ValueAnimator widthAnim = ValueAnimator.ofInt(finalFrame.getMeasuredWidth(), finalFrame.getMeasuredWidth() - 40); // todo: make sure singleTop and singleTask make sense with this static variable
+//        widthAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+//            @Override
+//            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+//                int val = (Integer) valueAnimator.getAnimatedValue();
+//                ViewGroup.LayoutParams layoutParams = finalFrame.getLayoutParams();
+//                layoutParams.width = val;
+//                finalFrame.setLayoutParams(layoutParams);
+//            }
+//        });
+//        widthAnim.setDuration(150);
+//        widthAnim.start();
     }
 }
