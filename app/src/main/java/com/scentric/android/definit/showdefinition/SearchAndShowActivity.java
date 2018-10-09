@@ -213,7 +213,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 
     // TODO: deal with repeated code like this for query too
     private String getTag() {
-        Log.e("tag", "getting TAG from intent" + (comingIntent.hasExtra(SENT_TAG)) + " " + comingIntent.getStringExtra(SENT_TAG).trim());
+//        Log.e("tag", "getting TAG from intent" + (comingIntent.hasExtra(SENT_TAG)) + " " + comingIntent.getStringExtra(SENT_TAG).trim());
         return (comingIntent.hasExtra(SENT_TAG)) ? comingIntent.getStringExtra(SENT_TAG).trim() : UserVocab.TAG_FOR_NOW;
     }
 

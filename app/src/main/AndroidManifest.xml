@@ -90,7 +90,7 @@
 
         <activity android:name="com.scentric.android.definit.input.PasteboardSelectActivity"
             android:theme="@style/VocabDialogTheme"
-            android:label="Definition"
+            android:label="Select word"
             android:configChanges="orientation|keyboardHidden|screenSize"
 
             android:taskAffinity=""
@@ -105,7 +105,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
 
             android:taskAffinity=""
-            android:launchMode="singleTop"
+            android:launchMode="singleTask"
             >
             <!--android:windowSoftInputMode="stateVisible"-->
             <!--android:windowSoftInputMode="adjustPan"-->

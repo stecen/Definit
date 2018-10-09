@@ -61,7 +61,7 @@ public class FloatingWindowService extends Service {
         super.onCreate();
 
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-        Display display = windowManager.getDefaultDisplay();
+        final Display display = windowManager.getDefaultDisplay();
         Point size = new Point(); // for positioning
         display.getSize(size);
         int screenWidth = size.x;
@@ -92,12 +92,21 @@ public class FloatingWindowService extends Service {
 //                startActivity(displayDefIntent);
 
 //                // todo: if single copiedText, send to normal track
-                Intent displayDefIntent = new Intent(getApplicationContext(), PasteboardSelectActivity.class);
-                displayDefIntent.putExtra(SearchAndShowActivity.SENT_TEXT, copiedText);
+                // determine if the copied text is a word (no context selected) or a word in context
+                if (copiedText.trim().split("\\s+").length > 1) {
+                    Intent displayDefIntent = new Intent(getApplicationContext(), PasteboardSelectActivity.class);
+                    displayDefIntent.putExtra(SearchAndShowActivity.SENT_TEXT, copiedText.toLowerCase());
 //                displayDefIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(displayDefIntent);
+                    startActivity(displayDefIntent);
+                } else { // go straight to defining the word, rather than letting the user choose a word to define
+                    Intent displayDefIntent = new Intent(getApplicationContext(), SearchAndShowActivity.class);
+                    displayDefIntent.putExtra(SearchAndShowActivity.SENT_TEXT, copiedText.toLowerCase());
+//                    displayDefIntent.s
+//                    displayDefIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(displayDefIntent);
+                }
 
-                // disappear
+                // disappear!
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override

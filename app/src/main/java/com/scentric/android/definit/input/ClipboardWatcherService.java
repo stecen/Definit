@@ -60,7 +60,7 @@ public class ClipboardWatcherService extends Service {
 
                 // call the Messenger-like popup
                 Intent popupIntent = new Intent(ClipboardWatcherService.this, FloatingWindowService.class);
-                popupIntent.putExtra(FloatingWindowService.KEY_WORD, word.toLowerCase());
+                popupIntent.putExtra(FloatingWindowService.KEY_WORD, word);
                 startService(popupIntent);
 
             }
