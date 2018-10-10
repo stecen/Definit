@@ -39,6 +39,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.scentric.android.definit.R;
 import com.scentric.android.definit.get.glosbe.GlosbeAsyncTask;
@@ -82,6 +83,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
     FloatingActionButton fab;
     FrameLayout frame;
     ProgressBar progressBar;
+    TextView tagText;
     ImageView histImage;
     //    BottomSheetBehavior bottomSheetBehavior;
     View makeSpaceView;
@@ -168,6 +170,8 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
             getDefinition(query);
 
             lastWord = query;
+
+            setTagText("", 0);
         }
         // comes from pasteboard/searchbox
         else if (comingIntent != null && comingIntent.hasExtra(SENT_TEXT)) { //  manually sent from places
@@ -181,6 +185,8 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 
             this.tag = getTag(); // for us to remember when sending to adapter
             this.wordIdx = getWordIdx();
+
+            setTagText(tag, this.wordIdx);
 
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && comingIntent != null) { // quick reply
             Bundle remoteInput = RemoteInput.getResultsFromIntent(comingIntent);
@@ -198,6 +204,8 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                     imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
                 }
+
+                setTagText("", 0); // todo: clean cases like these up
                 // HIDE 2.0
             }
         } else { // no one sent anything, so show the keyboard and allow the user to type
@@ -212,6 +220,26 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
+    }
+
+    private void setTagText(String s, int idx) {
+        if (s.length() < 1 || s.equals(UserVocab.TAG_FOR_NOW)) { // blank when no tag
+            tag = UserVocab.TAG_FOR_NOW; // guarantee and squash this value: Todo: determine invariants
+            tagText.setText("");
+            return;
+        }
+        // first 20 characters
+//        Toast.makeText(this, String.valueOf(s.length()), Toast.LENGTH_SHORT).show();
+        int start = 0;
+        if (idx >= 1) {
+            start = s.substring(0, idx - 1).lastIndexOf(" "); // give some left room before tag display
+        }
+//        s = s.substring(0, Math.min(25, s.length()));
+//        StringBuilder sb = new StringBuilder();
+//        sb.append("from: \"");
+//        sb.append(s);
+//        sb.append("...\"");
+        tagText.setText("from \"..." + s.substring(start, start + 40) + "...\"");
     }
 
     // TODO: deal with repeated code like this for query too
@@ -248,6 +276,8 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
                 // TODO: context here
 
                 lastWord = query;
+
+                setTagText("", 0); // todo: clean
             }
 
             // hide keyboard
@@ -278,6 +308,8 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 
                 this.tag = getTag(); // todo: modularize
                 this.wordIdx = getWordIdx();
+
+                setTagText(this.tag, wordIdx);
 
                 final Handler handler1 = new Handler();
                 handler1.postDelayed(new Runnable() {
@@ -325,6 +357,8 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
             if (view != null) {
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             }
+
+            setTagText("", 0);
 
         } else { // show keyboard, when no one sent anything
             ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).
@@ -396,6 +430,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
         // adjustviews()
 
         // todo: change to include other things like multiple definitions, context, examples, other reminders, gifs
+        tagText = (TextView) findViewById(R.id.tag_text);
         progressBar = (ProgressBar) findViewById(R.id.progress_bar);
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setVisibility(View.GONE);
