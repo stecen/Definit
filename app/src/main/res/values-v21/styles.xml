@@ -1,19 +1,29 @@
 <resources>
 
+    <!-- have to change color because of splotch in upper corner -->
     <style name="VocabAppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/primary</item>
-        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorPrimaryDark">@color/dark</item>
+        <!--because of broken screen. sad -->
         <item name="colorAccent">@color/accent</item>
 
-        <!--<item name="android:colorPrimaryDark">#42A5F5</item>-->
-        <!--<item name="android:colorAccent">#FF4081</item>-->
-        <!--<item name="android/colorPrimary">@color/primary</item>-->
-        <item name="android:colorPrimaryDark">@color/primary_dark</item>
-        <item name="android:colorAccent">@color/accent</item>
-
         <item name="android:windowContentTransitions">true</item>
-
     </style>
+
+    <!--<style name="VocabAppTheme" parent="Theme.AppCompat.Light.NoActionBar">-->
+        <!--<item name="colorPrimary">@color/primary</item>-->
+        <!--<item name="colorPrimaryDark">@color/primary_dark</item>-->
+        <!--<item name="colorAccent">@color/accent</item>-->
+
+        <!--&lt;!&ndash;<item name="android:colorPrimaryDark">#42A5F5</item>&ndash;&gt;-->
+        <!--&lt;!&ndash;<item name="android:colorAccent">#FF4081</item>&ndash;&gt;-->
+        <!--&lt;!&ndash;<item name="android/colorPrimary">@color/primary</item>&ndash;&gt;-->
+        <!--<item name="android:colorPrimaryDark">@color/primary_dark</item>-->
+        <!--<item name="android:colorAccent">@color/accent</item>-->
+
+        <!--<item name="android:windowContentTransitions">true</item>-->
+
+    <!--</style>-->
 
     <!--same but with action bar-->
     <style name="PreferencesTheme" parent="Theme.AppCompat.Light.DarkActionBar">
