@@ -12,6 +12,7 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.scentric.android.definit.R;
@@ -39,7 +40,7 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
     public HashMap<String, String> abbr;
     public boolean surpressGray; // when finishing activity only.
     public static String EXTRA_CONTEXT = "PutExtraContextHerePleaseLmao";
-    public int contextIdx = -1;
+    public int contextIdx = -1; // todo: make use of this
 
     // Provide a suitable constructor (depends on the kind of dataset)
     public PearsonAdapter(SearchAndShowActivity searchAndShowActivity, ArrayList<PearsonAnswer.DefinitionExamples> myDataset, RecyclerViewClickListener listener, String word) {
@@ -157,18 +158,20 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
     }
 
     //important!!! main purpose of the app
-    public void animateSlidesAndInsertUserVocab(String tag) {
+    public void animateSlidesAndInsertUserVocab(String tag, int wordIdx) { // todo: update how tag and wordidx are sent to the database
         ArrayList<UserVocab> listToSend = new ArrayList<>();
 
         for (int i = 0; i < sortedPearsonDataSet.size(); i++) {
             if (mySelected[i]) {
-                Log.e("sliding", i + "");
+                Log.e("sliding", i + "" + String.valueOf(wordIdx));
 //                    remove(sortedPearsonDataSet.get(i));
                 slideByIdx(i);
 
                 ArrayList<PearsonAnswer.DefinitionExamples> defExSend = new ArrayList<>();
                 defExSend.add(sortedPearsonDataSet.get(i));
-                listToSend.add(new UserVocab(sortedPearsonDataSet.get(i).wordForm, defExSend, tag, System.currentTimeMillis(), "August 13th")); // main word
+                listToSend.add(
+                        new UserVocab(sortedPearsonDataSet.get(i).wordForm, defExSend,
+                                tag, wordIdx, System.currentTimeMillis(), "August 13th")); // main word
 
                 // TODO: attach contexts for all of the different word forms
 //                    // if they equal the main word, they must all equal eachother:)

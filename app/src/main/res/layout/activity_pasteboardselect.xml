@@ -9,25 +9,31 @@
 
     <!--padding might be able to help here...-->
 
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
-        android:text="Select text..."
-        android:layout_margin="36px"
+        android:text="Define a word"
+        android:paddingTop="18dp"
+        android:paddingLeft="48dp"
 
         android:elevation="32dp"
 
         android:src="@drawable/definit_icon"/>
 
-    <!--<ImageView-->
-        <!--android:layout_width="@dimen/toolbar_height"-->
-        <!--android:layout_height="@dimen/toolbar_height"-->
+    <ImageView
+        android:layout_width="36dp"
+        android:layout_height="36dp"
 
-        <!--android:elevation="32dp"-->
+        android:elevation="32dp"
 
-        <!--android:src="@drawable/definit_icon"/>-->
+        android:paddingLeft="18dp"
+        android:paddingTop="18dp"
+
+
+
+        android:src="@drawable/definit_icon"/>
+
 
     <ScrollView
         android:id="@+id/pasteboard_scroll"
@@ -36,8 +42,6 @@
 
         android:paddingTop="36dp"
         android:paddingBottom="24dp"
-
-
 
         android:background="@drawable/tag_shape">
 
@@ -50,6 +54,9 @@
             android:layout_height="wrap_content"
 
             android:lineSpacingExtra="4dp"
+
+            android:textColor="#606060"
+            android:alpha=".87"
 
             android:padding="12dp"
             />

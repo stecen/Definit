@@ -102,7 +102,7 @@ public class FloatingWindowService extends Service {
                     Intent displayDefIntent = new Intent(getApplicationContext(), SearchAndShowActivity.class);
                     displayDefIntent.putExtra(SearchAndShowActivity.SENT_TEXT, copiedText.toLowerCase());
 //                    displayDefIntent.s
-//                    displayDefIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    displayDefIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(displayDefIntent);
                 }
 

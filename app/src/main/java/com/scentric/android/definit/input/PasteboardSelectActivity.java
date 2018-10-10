@@ -52,7 +52,7 @@ public class PasteboardSelectActivity extends AppCompatActivity {
     private int frameHeightDelta = 500; // 500 is a delta -- different from the top value. Ideally it would be set my screenheight/2
 
     private void initializeText(TextView pasteText, String origPasteStr) {
-        String pasteStr = origPasteStr.replace(" ", "  "); // pad to make lines more clickable
+        String pasteStr = origPasteStr;//origPasteStr.replace(" ", "  "); // pad to make lines more clickable
         pasteText.setMovementMethod(LinkMovementMethod.getInstance());
         pasteText.setText(pasteStr,
                 TextView.BufferType.SPANNABLE);
@@ -70,7 +70,8 @@ public class PasteboardSelectActivity extends AppCompatActivity {
                 Log.e("paste", String.format("%d, %d -- %d", beginIdx, endIdx, pasteStr.length()));
 //                Log.e("paste", String.format("%c, %c\n", pasteStr.charAt(beginIdx), pasteStr.charAt(endIdx), pasteStr.length()));
                 String clickedWord = pasteStr.substring(beginIdx, endIdx);
-                pasteSpan.setSpan(getClickTokenSpan(clickedWord, origPasteStr), beginIdx, endIdx, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
+                pasteSpan.setSpan(getClickTokenSpan(clickedWord, origPasteStr, beginIdx), // todo: include endIdx?
+                        beginIdx, endIdx, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
                 pasteSpan.setSpan(new UnderlineSpan(), beginIdx, endIdx, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }
@@ -83,11 +84,10 @@ public class PasteboardSelectActivity extends AppCompatActivity {
         return Character.isLetterOrDigit(c);
     }
 
-    private ClickableSpan getClickTokenSpan(final String pasteToken, final String originalPasteStr) {
+    private ClickableSpan getClickTokenSpan(final String pasteToken, final String originalPasteStr, final int wordIdx) {
         return new ClickableSpan() {
-            private String token = pasteToken;
+            private String token = pasteToken; // for clarity
             private String tag = originalPasteStr;
-
 
             // Called when a user clicks on a word in the pasteboard text that is displayed
             @Override
@@ -99,6 +99,7 @@ public class PasteboardSelectActivity extends AppCompatActivity {
                 Intent displayDefIntent = new Intent(getApplicationContext(), SearchAndShowActivity.class);
                 displayDefIntent.putExtra(SearchAndShowActivity.SENT_TEXT, token);
                 displayDefIntent.putExtra(SearchAndShowActivity.SENT_TAG, tag); // TODO: include original formatting, and include indexing to allow highlighting of tag
+                displayDefIntent.putExtra(SearchAndShowActivity.SENT_WORD_IDX, wordIdx);
                 startActivity(displayDefIntent);
             }
 

@@ -36,6 +36,7 @@ public class VocabSQLHelper extends SQLiteOpenHelper {
             KEY_WORD = "word",
             KEY_JSON = "json",
             KEY_TAG = "tag",
+            KEY_WORD_IDX = "idx",
             KEY_DATE = "date",
             KEY_FAVE = "fave",
             KEY_FAVE_DATE = "lastFaveDate"; // last day it was faved
@@ -63,8 +64,8 @@ public class VocabSQLHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_WORDS_TABLE = String.format(Locale.US,
-                "CREATE TABLE IF NOT EXISTS %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s VARCHAR, %s VARCHAR, %s VARCHAR, %s UNSIGNED BIG INT, %s INTEGER, %s UNSIGNED BIG INT);",
-                TABLE_WORDS, KEY_ID, KEY_WORD, KEY_JSON, KEY_TAG, KEY_DATE, KEY_FAVE, KEY_FAVE_DATE);
+                "CREATE TABLE IF NOT EXISTS %s (%s INTEGER PRIMARY KEY AUTOINCREMENT, %s VARCHAR, %s VARCHAR, %s VARCHAR, %s INTEGER, %s UNSIGNED BIG INT, %s INTEGER, %s UNSIGNED BIG INT);",
+                TABLE_WORDS, KEY_ID, KEY_WORD, KEY_JSON, KEY_TAG, KEY_WORD_IDX, KEY_DATE, KEY_FAVE, KEY_FAVE_DATE);
         Log.e("userVocab", "executing sql: " + CREATE_WORDS_TABLE);
         db.execSQL(CREATE_WORDS_TABLE); // create user saved words table
 
@@ -263,6 +264,7 @@ public class VocabSQLHelper extends SQLiteOpenHelper {
                         String json = cursor.getString(cursor.getColumnIndex(KEY_JSON));
                         userVocab.listOfDefEx = CustomUVStringAdapter.fromString(json);
                         userVocab.tag = cursor.getString(cursor.getColumnIndex(KEY_TAG));
+                        userVocab.wordIdx = cursor.getInt(cursor.getColumnIndex(KEY_WORD_IDX));
                         userVocab.date = cursor.getLong(cursor.getColumnIndex(KEY_DATE));
 
                         int faveInt = cursor.getInt(cursor.getColumnIndex(KEY_FAVE));
@@ -391,7 +393,8 @@ public class VocabSQLHelper extends SQLiteOpenHelper {
             Log.e("addingjson", json);
 
             values.put(KEY_TAG, userVocab.tag);
-            Log.e("sqltag", userVocab.tag);
+            Log.e("sqltag", ""+userVocab.wordIdx);
+            values.put(KEY_WORD_IDX, userVocab.wordIdx);
 
             values.put(KEY_DATE, userVocab.date/* + (long)i*/);
             values.put(KEY_FAVE, (userVocab.fave) ? IS_FAVE : NOT_FAVE);

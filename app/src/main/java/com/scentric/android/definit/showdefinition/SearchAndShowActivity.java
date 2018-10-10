@@ -76,6 +76,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 
     String tag; // for incoming intents to save context -- supply to adapter later to send to uservocab database
                 // TODO: attach to each instance of ssactivity like now? or attach to adapter
+    int wordIdx = -1; // where the tag should appear in context
 
     //    ListView defExListView;
     FloatingActionButton fab;
@@ -99,6 +100,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 
     public static final String SENT_TEXT = "sent_word";
     public static final String SENT_TAG = "sent_tag";
+    public static final String SENT_WORD_IDX = "word+idx";
     //    public static final String SENT_DEF = "send_def";
     public static final String SENT_PACKAGE_JSON = "send_package_json";
     //    public static final String KEY_RECOG_NOW = "recognow";
@@ -178,6 +180,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
             lastWord = query;
 
             this.tag = getTag(); // for us to remember when sending to adapter
+            this.wordIdx = getWordIdx();
 
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N && comingIntent != null) { // quick reply
             Bundle remoteInput = RemoteInput.getResultsFromIntent(comingIntent);
@@ -215,6 +218,9 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
     private String getTag() {
 //        Log.e("tag", "getting TAG from intent" + (comingIntent.hasExtra(SENT_TAG)) + " " + comingIntent.getStringExtra(SENT_TAG).trim());
         return (comingIntent.hasExtra(SENT_TAG)) ? comingIntent.getStringExtra(SENT_TAG).trim() : UserVocab.TAG_FOR_NOW;
+    }
+    private int getWordIdx() { // extra bug proof
+        return (comingIntent.hasExtra(SENT_WORD_IDX)) ? comingIntent.getIntExtra(SENT_WORD_IDX, -1) : -1;
     }
 
     @Override
@@ -270,7 +276,8 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 
                 getDefinition(word);
 
-                this.tag = getTag();
+                this.tag = getTag(); // todo: modularize
+                this.wordIdx = getWordIdx();
 
                 final Handler handler1 = new Handler();
                 handler1.postDelayed(new Runnable() {
@@ -642,9 +649,10 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
     // TODO: only TOUCH_SEND is relatively useful here
     public void touchHandler(int source) {
         if (source == TOUCH_SEND) {
-            Log.e("touch", "touched sent " + String.format(Locale.US, "%d, %d", fab.getWidth(), fab.getHeight()));
+//            Log.e("touch", "touched sent " + String.format(Locale.US, "%d, %d", fab.getWidth(), fab.getHeight()));
+            Log.e("wordIdx", "  " + String.valueOf(wordIdx));
 
-            recyclerAdapter.animateSlidesAndInsertUserVocab(this.tag);
+            recyclerAdapter.animateSlidesAndInsertUserVocab(this.tag, this.wordIdx);
 
             endingActivity = true; // disable clicks
             final Handler handler = new Handler();

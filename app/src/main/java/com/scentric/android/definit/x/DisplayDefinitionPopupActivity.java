@@ -310,7 +310,7 @@ public class DisplayDefinitionPopupActivity extends AppCompatActivity implements
         if (source == TOUCH_SEND) {
             Log.e("touch", "touched sent " + String.format(Locale.US, "%d, %d", fab.getWidth(), fab.getHeight()));
 
-            recyclerAdapter.animateSlidesAndInsertUserVocab(UserVocab.TAG_FOR_NOW); // removetemp lol
+            recyclerAdapter.animateSlidesAndInsertUserVocab(UserVocab.TAG_FOR_NOW, -1); // removetemp lol
 
 
 //            DisplayDefinitionPopupActivity.shouldShowPreviousTypeWordPopup = false;

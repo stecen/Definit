@@ -7,6 +7,9 @@ import android.os.Build;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -123,6 +126,16 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
         return vh;
     }
 
+    private int getNextWhitespace(String s, int idx) {
+        while (idx < s.length()) {
+            if (Character.isWhitespace(s.charAt(idx))) {
+                return idx+ 1;
+            }
+            idx += 1;
+        }
+        return s.length() - 1;
+    }
+
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
@@ -140,7 +153,22 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
         cardDefExAdapter = new CardDefExAdapter(sortedDataSet.get(pos).listOfDefEx);
         holder.recyclerView.setAdapter(cardDefExAdapter);
 
-        holder.tagText.setText(sortedDataSet.get(pos).tag);
+//        holder.tagText.setText(String.valueOf(sortedDataSet.get(pos).wordIdx) + sortedDataSet.get(pos).tag);
+
+        if (sortedDataSet.get(pos).hasContext()) { // if we should even display the context/tag
+            String intro = "\"...";
+            String tag = intro + sortedDataSet.get(pos).tag + "\""; // todo: make StringBuilder/Buffer
+            SpannableStringBuilder boldSpan = new SpannableStringBuilder(tag);
+            int startBold = sortedDataSet.get(pos).wordIdx + intro.length(); // include the quotation marks
+            if (startBold > 0) {
+                int endBold = getNextWhitespace(tag, startBold);
+                boldSpan.setSpan(new StyleSpan(android.graphics.Typeface.BOLD), startBold, endBold, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+            holder.tagText.setText(boldSpan);
+            holder.tagText.setVisibility(View.VISIBLE);
+        } else { // no context so don't display
+            holder.tagText.setVisibility(View.INVISIBLE);
+        }
 
         // toggle fave image
         if (sortedDataSet.get(position).fave) {
@@ -191,6 +219,7 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
     public int getItemCount() {
         return sortedDataSet.size();
     }
+
 
     // A RecyclerView inside of a RecyclerView
     // This one is just for definition + examples
@@ -256,6 +285,9 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
         public int getItemCount() {
             return defExDataSet.size();
         }
+
+
     }
+
 
 }
