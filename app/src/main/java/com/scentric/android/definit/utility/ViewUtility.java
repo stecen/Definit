@@ -19,6 +19,9 @@ import android.widget.RelativeLayout;
 
 /**
  * Created by Steven on 8/15/2016.
+ *
+ * Utility class for animations and view-related actions
+ *
  */
 public class ViewUtility {
     public static final int CIRCLE_ANIM_DURATION = 100;

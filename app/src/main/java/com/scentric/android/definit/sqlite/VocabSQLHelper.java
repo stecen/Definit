@@ -399,15 +399,6 @@ public class VocabSQLHelper extends SQLiteOpenHelper {
             values.put(KEY_DATE, userVocab.date/* + (long)i*/);
             values.put(KEY_FAVE, (userVocab.fave) ? IS_FAVE : NOT_FAVE);
 
-//            String queryString = String.format(Locale.US, "INSERT INTO %s VALUES (%s, %s, %s, %s, %s) VALUES (\"%s\", \"%s\", \"%d\", \"%d\");",
-//                    TABLE_WORDS,
-//                    KEY_WORD, KEY_JSON, KEY_DATE, KEY_FAVE, KEY_FAVE_DATE,
-//                    userVocab.word.trim(), json, userVocab.date, (userVocab.fave) ? IS_FAVE : NOT_FAVE, 1 + "");
-
-
-//            Log.e("userVocab", "adding: " + queryString);
-
-            // Notice how we haven't specified the primary key. SQLite auto increments the primary key column.
             db.insertOrThrow(TABLE_WORDS, null, values);
             db.setTransactionSuccessful();
         } catch (Exception e) {

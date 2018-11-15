@@ -27,9 +27,9 @@ import java.util.ArrayList;
 //import android.support.v7.widget.PopupMenu;
 
 /**
- * Created by Steven on 8/30/2016.
  *
  * Fragment that displays all user vocabulary
+ * Created by Steven on 8/30/2016.
  *
  */
 public class UserVocabMainFrag extends Fragment implements RecyclerViewClickListener, FragmentRefresher, FragmentReselected/*, View.OnLongClickListener*/ {
@@ -109,9 +109,6 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
     // reselected this tab while on this tab
     @Override
     public void reselect() {
-//        if (linearLayoutManager != null) {
-//            linearLayoutManager.scrollToPosition(0);
-//        }
         if (recyclerView != null) {
             recyclerView.smoothScrollToPosition(0);
         }
@@ -160,7 +157,6 @@ public class UserVocabMainFrag extends Fragment implements RecyclerViewClickList
 
         startActivity(detailIntent);
         if (getActivity() != null) {
-//            getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             getActivity().overridePendingTransition(0, 0);
         }
     }

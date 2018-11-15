@@ -4,6 +4,8 @@ import java.util.Comparator;
 
 /**
  * Created by Steven on 8/15/2016.
+ *
+ * Helper function for ordering the words and examples that come from the Pearson dictionary API
  */
 public class PearsonComparator implements Comparator<PearsonAnswer.DefinitionExamples> {
     String mainWord;

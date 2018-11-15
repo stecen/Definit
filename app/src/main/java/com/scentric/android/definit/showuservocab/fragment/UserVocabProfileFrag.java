@@ -26,6 +26,7 @@ import com.scentric.android.definit.utility.PearsonAnswer;
 import java.util.ArrayList;
 
 /**
+ * Main tab that displays the words the user saved and defined
  * Created by Steven on 8/30/2016.
  */
 public class UserVocabProfileFrag extends Fragment implements FragmentRefresher, FragmentReselected {
@@ -40,12 +41,8 @@ public class UserVocabProfileFrag extends Fragment implements FragmentRefresher,
 
     }
 
-    //Overriden method onCreateView
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        //Returning the layout file after inflating
-        //Change R.layout.tab1 in you classes
         return inflater.inflate(R.layout.fragment_uservocab_profile, container, false);
     }
 

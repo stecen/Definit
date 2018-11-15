@@ -16,6 +16,9 @@ import com.scentric.android.definit.showdefinition.SearchAndShowActivity;
 
 /**
  * Created by Steven on 8/29/2016.
+ *
+ * Used to create persistent notification for convenient lookups
+ *
  */
 public class NotificationUtility {
     public static final int NOTIF_ID = 101; // for vocab tracking
@@ -36,11 +39,7 @@ public class NotificationUtility {
                     .setContentTitle("Define a word...")
                     .setSubText("Definit")
                     .setAutoCancel(false)
-//                .addAction(pasteAction)
-//                .addAction(android.R.drawable.arrow_up_float, "Custom", typeWordPendingIntent) // use stop action
                     .setContentIntent(typeWordPendingIntent) // use add pending intent
-//                    .setSmallIcon(R.drawable.definit_icon_bs)
-//                    .setSmallIcon(R.drawable.definit_icon)
                     .setSmallIcon(R.drawable.notif)
 //                    .setColor(ContextCompat.getColor(context, R.color.primary)) // todo: fix deprecation
                     .setPriority(Notification.PRIORITY_LOW);
@@ -95,19 +94,13 @@ public class NotificationUtility {
                     .setContentTitle("Define a word")
                     .setSubText("Definit")
                     .setAutoCancel(false)
-//                .addAction(pasteAction)
-//                .addAction(android.R.drawable.arrow_up_float, "Custom", typeWordPendingIntent) // use stop action
                     .setContentIntent(typeWordPendingIntent) // use add pending intent
-//                    .setSmallIcon(R.drawable.definit_icon_bs)
-//                    .setSmallIcon(R.drawable.definit_icon)
                     .setSmallIcon(R.drawable.notif)
-//                    .setColor(R.color.primary)
                     .setPriority(Notification.PRIORITY_LOW);
 
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
                 Intent speechIntent = new Intent(context.getApplicationContext(), RelaySpeechActivity.class);
                 speechIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); //todo: revise flags
-//        speechIntent.putExtra(SearchAndShowActivity.KEY_RECOG_NOW, true);
                 speechIntent.setFlags(/*Intent.FLAG_ACTIVITY_NEW_TASK | */Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 PendingIntent pendingSpeechIntent = PendingIntent.getActivity(context, 2, speechIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                 int speechIconInt;

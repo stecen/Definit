@@ -8,6 +8,9 @@ import java.util.ArrayList;
 
 /**
  * Created by Steven on 8/13/2016.
+ *
+ * Object representing a word that the user defines
+ *
  */
 public class UserVocab { // for sqlite database easiness
     public String word;

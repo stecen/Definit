@@ -114,7 +114,6 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
 
     }
 
-
     // Create new views (invoked by the layout manager)
     @Override
     public CardsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
@@ -152,8 +151,6 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
         holder.recyclerView.setLayoutManager(new LinearLayoutManager(context));
         cardDefExAdapter = new CardDefExAdapter(sortedDataSet.get(pos).listOfDefEx);
         holder.recyclerView.setAdapter(cardDefExAdapter);
-
-//        holder.tagText.setText(String.valueOf(sortedDataSet.get(pos).wordIdx) + sortedDataSet.get(pos).tag);
 
         if (sortedDataSet.get(pos).hasContext()) { // if we should even display the context/tag
             String intro = "\"...";
@@ -226,7 +223,6 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
     public class CardDefExAdapter extends RecyclerView.Adapter<CardDefExAdapter.ViewHolder> {
         public ArrayList<PearsonAnswer.DefinitionExamples> defExDataSet;
 
-
         // Provide a suitable constructor (depends on the kind of dataset)
         public CardDefExAdapter(ArrayList<PearsonAnswer.DefinitionExamples> myDataset) {
             defExDataSet = myDataset;
@@ -243,14 +239,12 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
                 definitionText = (TextView) v.findViewById(R.id.card_definition_text);
                 exampleText = (TextView) v.findViewById(R.id.card_example_text);
 
-
                 v.setOnClickListener(this);
             }
 
             @Override
             public void onClick(View v) {
 //            itemListener.recyclerViewListClicked(v, this.getLayoutPosition());
-
             }
         }
 

@@ -2,6 +2,8 @@ package com.scentric.android.definit.utility;
 
 /**
  * Created by Steven on 8/22/2016.
+ *
+ * Object to store the user's search history
  */
 public class HistoryVocab {
     public String word;

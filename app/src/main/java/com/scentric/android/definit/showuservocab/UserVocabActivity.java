@@ -35,6 +35,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Locale;
 
+/**
+ *
+ * Main activity that displays the user's history and definitions
+ *
+ */
 
 public class UserVocabActivity extends AppCompatActivity {
 

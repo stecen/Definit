@@ -36,7 +36,6 @@ public class UserVocabAdapter extends RecyclerView.Adapter<UserVocabAdapter.View
     public ArrayList<UserVocab> sortedDataSet; // local copy of database information
     private RecyclerViewClickListener itemListener;
     private boolean mySelected[] = new boolean[500]; //todo: increase
-    public boolean surpressGray; // when finishing activiting only.
     private Context context;
 
     public static int IS_FAVE_DRAWABLE = R.drawable.ic_star_black_24dp;

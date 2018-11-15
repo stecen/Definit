@@ -27,7 +27,6 @@ import com.scentric.android.definit.utility.ViewUtility;
  *
  */
 public class UserDetailsActivity extends AppCompatActivity implements RecyclerViewClickListener {
-    LinearLayout linearLayout;
     VocabSQLHelper helper;
     CardsAdapter adapter;
     SnappyRecyclerView recyclerView;
@@ -43,8 +42,6 @@ public class UserDetailsActivity extends AppCompatActivity implements RecyclerVi
     public static final String KEY_FAVE = "keyFave";
 
     boolean isFave; // is favorite ; display only favorites and use the favefrag static data
-
-    UserVocab userVocab;
 
     @Override
     protected void onCreate(Bundle onSavedInstance) {

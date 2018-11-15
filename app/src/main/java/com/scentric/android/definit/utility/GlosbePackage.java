@@ -10,15 +10,15 @@ import java.util.ArrayList;
 
 /**
  * Created by Steven on 7/16/2016.
+ *
+ * Glosbe-returned definition and example representation
+ *
  */
 public class GlosbePackage {
     public String word;
     public ArrayList<String> localDef, onlineDef, examples;
 
     public GlosbePackage() {
-        Log.e("y tho", "constructor called");
-        // make sure the strings and array lists are nwewed..
-
         word = "";
         localDef = new ArrayList<>();
         onlineDef = new ArrayList<>();
