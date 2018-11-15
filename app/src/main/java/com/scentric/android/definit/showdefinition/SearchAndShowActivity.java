@@ -688,7 +688,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
                 }
             }, REMOVE_DURATION + 50);
 
-            finish(); // todo: just finish?
+//            finish(); // todo: just finish?
         } else if (source == TOUCH_OUTSIDE) {
             Log.e("touch", "2 touching outside");
             finish();

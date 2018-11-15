@@ -157,14 +157,13 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
         }
     }
 
-    //important!!! main purpose of the app
+    // Main functionality of the app
     public void animateSlidesAndInsertUserVocab(String tag, int wordIdx) { // todo: update how tag and wordidx are sent to the database
         ArrayList<UserVocab> listToSend = new ArrayList<>();
 
         for (int i = 0; i < sortedPearsonDataSet.size(); i++) {
             if (mySelected[i]) {
                 Log.e("sliding", i + "" + String.valueOf(wordIdx));
-//                    remove(sortedPearsonDataSet.get(i));
                 slideByIdx(i);
 
                 ArrayList<PearsonAnswer.DefinitionExamples> defExSend = new ArrayList<>();
@@ -174,23 +173,15 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
                                 tag, wordIdx, System.currentTimeMillis(), "August 13th")); // main word
 
                 // TODO: attach contexts for all of the different word forms
-//                    // if they equal the main word, they must all equal eachother:)
-//                    if (sortedPearsonDataSet.get(i).wordForm.trim().toLowerCase().equals(mainWord.toLowerCase())) {
-//                        Log.e("insertingSQLite", sortedPearsonDataSet.get(i).definition);
-//
-//                        UserVocab userVocab = new UserVocab(mainWord)
-//                    }
             }
             mySelected[i] = false; // suppress turning gray
         }
-
 
         // this list should never be empty, but just in case it is
         if (listToSend.isEmpty()) {
             Log.e("wat", "listToSend is empty");
         } else {
             // insert into SQL user vocab table! by deferring action to the intent service, UserVocabInsertService
-
             Intent insertIntent = new Intent(searchAndShowActivity.getApplicationContext(), UserVocabInsertService.class);
             insertIntent.putExtra(UserVocabInsertService.JSON_KEY, (new Gson()).toJson(listToSend));
             searchAndShowActivity.startService(insertIntent);
