@@ -8,7 +8,7 @@ Flashcards are a secondary feature in this app. The main idea I was going for wa
 this app allows you to define words from any screen, using a persistent notification (with speech and text input), and a convenient automatic pop-up that activates when a words are copied to the pasteboard (similar to Messenger chatheads). 
 Another key feature that separates it from dictionaries I had previously used was the ability to do the above as well as save the words and context for later viewing, so that I could actually look back at all the words I had encountered, searched up and learned.
 
-<img src="imgs/gif/temp_context.gif" height="30%" width="30%">
+<img src="imgs/gif/temp_context1.gif" height="30%" width="30%">
 <img src="imgs/gif/context1.gif" height="30%" width="30%">
 Convenient context/pasteboard word lookup<br/><br/>
 
