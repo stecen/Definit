@@ -5,6 +5,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 /**
+ * For tracking the tabs on the main page of the app
+ *
  * Created by Steven on 8/30/2016.
  */
 

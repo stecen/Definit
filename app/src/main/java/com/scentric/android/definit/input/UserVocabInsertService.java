@@ -24,7 +24,7 @@ public class UserVocabInsertService extends IntentService {
         super("UserVocabInsertService");
     }
 
-    // todo: option for user to enter their own definitions
+    // TODO: option for user to enter their own definitions
 
     // the UserVocab sent by DisplayDefinitionPopupActivity/PearsonAdapter are "malformed". All of their defExLists should have > 1 length if the user selects multiple definitions
     // of the same wordForm, but they don't so it is up to this class to combine these defExLists if their words are the same

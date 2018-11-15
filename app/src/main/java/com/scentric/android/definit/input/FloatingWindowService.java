@@ -69,7 +69,6 @@ public class FloatingWindowService extends Service {
 
         Log.e(LOG_FLOATINGWINDOW, "width: " + screenWidth + ", height: " + screenHeight);
 
-
         linearLayout = new LinearLayout(this);
 
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
@@ -86,11 +85,6 @@ public class FloatingWindowService extends Service {
             public void onClick(View view) {
                 isKilled = true;
 
-//                Intent displayDefIntent = new Intent(getApplicationContext(), SearchAndShowActivity.class);
-//                displayDefIntent.putExtra(SearchAndShowActivity.SENT_TEXT, copiedText);
-//                displayDefIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                startActivity(displayDefIntent);
-
 //                // todo: if single copiedText, send to normal track
                 // determine if the copied text is a word (no context selected) or a word in context
                 if (copiedText.trim().split("\\s+").length > 1) {
@@ -101,12 +95,11 @@ public class FloatingWindowService extends Service {
                 } else { // go straight to defining the word, rather than letting the user choose a word to define
                     Intent displayDefIntent = new Intent(getApplicationContext(), SearchAndShowActivity.class);
                     displayDefIntent.putExtra(SearchAndShowActivity.SENT_TEXT, copiedText.toLowerCase());
-//                    displayDefIntent.s
                     displayDefIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(displayDefIntent);
                 }
 
-                // disappear!
+                // disappear
                 final Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override

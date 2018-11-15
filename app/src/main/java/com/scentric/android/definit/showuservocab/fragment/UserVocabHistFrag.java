@@ -23,6 +23,8 @@ import com.scentric.android.definit.utility.RecyclerViewClickListener;
 import java.util.ArrayList;
 
 /**
+ * Tab showing words that the user searched
+ *
  * Created by Steven on 8/30/2016.
  */
 public class UserVocabHistFrag extends Fragment implements RecyclerViewClickListener, FragmentRefresher, FragmentReselected {
@@ -38,12 +40,8 @@ public class UserVocabHistFrag extends Fragment implements RecyclerViewClickList
         appContext = getActivity().getApplicationContext();
     }
 
-    //Overriden method onCreateView
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        //Returning the layout file after inflating
-        //Change R.layout.tab1 in you classes
         return inflater.inflate(R.layout.fragment_uservocab_history, container, false);
     }
 
@@ -86,17 +84,6 @@ public class UserVocabHistFrag extends Fragment implements RecyclerViewClickList
 
     @Override
     public void reselect() {
-////        if (linearLayoutManager != null) {
-////            linearLayoutManager.scrollToPosition(0);
-////        }
-//        View firstView = recyclerView.getChildAt(0);
-//        int toY = firstView.getTop();
-//        int firstPosition = recyclerView.getChildAdapterPosition(firstView);
-//        int toScrollTo = 0;
-//        View thisView = recyclerView.getChildAt(toScrollTo - firstPosition);
-//        int fromY = thisView.getTop();
-//
-//        recyclerView.smoothScrollBy(0, fromY - toY);
         if (recyclerView != null) {
             recyclerView.smoothScrollToPosition(0);
         }
@@ -117,10 +104,6 @@ public class UserVocabHistFrag extends Fragment implements RecyclerViewClickList
     public void refreshRecycler() {
         // todo variable to keep track if there are changes so this activity doesnt have to keep reloading the entire sqlite
         helper = VocabSQLHelper.getInstance(appContext);
-//        ArrayList<HistoryVocab> historyVocabs = helper.getHistory50();
-//        Log.e("historyVocab", "" + historyVocabs.size());
-//        Log.e("hist adapter count",""+ adapter.getItemCount());
-//        adapter.replaceData(historyVocabs);
         helper.getHistory50(new GetHistoryInterface() {
             @Override
             public void setHistoryData(ArrayList<HistoryVocab> historyVocabList) {

@@ -13,7 +13,7 @@ import com.scentric.android.definit.input.ClipboardWatcherService;
 import com.scentric.android.definit.utility.NotificationUtility;
 
 /**
- * Created by Steven on 8/29/2016.
+ * Created by Steven on 8/29/2016
  */
 public class PreferencesActivity extends AppCompatActivity {
     public static int ENGLISH_KEY = 1;
@@ -35,7 +35,7 @@ public class PreferencesActivity extends AppCompatActivity {
     public void onPause() { // commit settings changes
         super.onPause();
 
-        // commit changes made in settings...
+        // commit changes made in settings
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 //        String strUserName = SP.getString("username", "NA");
         boolean doPaste = SP.getBoolean("paste", false);

@@ -79,7 +79,6 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
                 // TODO: attach to each instance of ssactivity like now? or attach to adapter
     int wordIdx = -1; // where the tag should appear in context
 
-    //    ListView defExListView;
     FloatingActionButton fab;
     FrameLayout frame;
     ProgressBar progressBar;
@@ -88,17 +87,12 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
     //    BottomSheetBehavior bottomSheetBehavior;
     View makeSpaceView;
     CoordinatorLayout coordinatorLayout;
-    int coordHeight;
 
     RecyclerView defExRecycler;
     PearsonAdapter recyclerAdapter;
     DividerItemDecoration dividerItemDecoration;
 
-    CollapsingToolbarLayout collapsingToolbarLayout = null;
-
     boolean iAlreadyExist = false; // solely for the sake of not displaying the circular reveal animation when it's onNewIntent
-
-    public static boolean shouldShowPreviousTypeWordPopup = true; // self explanatory. but the only time this activity finishes when this is true is when the user presses the system back button
 
     public static final String SENT_TEXT = "sent_word";
     public static final String SENT_TAG = "sent_tag";
@@ -226,20 +220,17 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
         if (s.length() < 1 || s.equals(UserVocab.TAG_FOR_NOW)) { // blank when no tag
             tag = UserVocab.TAG_FOR_NOW; // guarantee and squash this value: Todo: determine invariants
             tagText.setText("");
+
             return;
         }
         // first 20 characters
-//        Toast.makeText(this, String.valueOf(s.length()), Toast.LENGTH_SHORT).show();
+
         int start = 0;
-        if (idx >= 1) {
-            start = s.substring(0, idx - 1).lastIndexOf(" "); // give some left room before tag display
-        }
-//        s = s.substring(0, Math.min(25, s.length()));
-//        StringBuilder sb = new StringBuilder();
-//        sb.append("from: \"");
-//        sb.append(s);
-//        sb.append("...\"");
-        tagText.setText("from \"..." + s.substring(start, start + 40) + "...\"");
+//        if (idx >= 1) {
+//            start = s.substring(0, idx - 1).lastIndexOf(" "); // give some left room before tag display
+//        }
+
+        tagText.setText("from \"..." + s.substring(start, Math.min(start + 40, s.length())) + "...\"");
     }
 
     // TODO: deal with repeated code like this for query too
@@ -256,11 +247,11 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
         Log.e("coming", "onNewIntent");
 
         if (intent.getAction() != null && intent.getAction().equals(Intent.ACTION_SEARCH)) {
-            //hide keyboard
+            // hide keyboard
 
             String query = intent.getStringExtra(SearchManager.QUERY);
 
-            if (true/*!lastWord.equals(query)*/) { // if not defining the same word
+            if (true/*!lastWord.equals(query)*/) { // if not defining the same word TODO: fix condition for same query
 
                 progressBar.setVisibility(View.VISIBLE); // clear the progress bar
 
@@ -298,7 +289,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
                 progressBar.setVisibility(View.VISIBLE); // clear the progress bar
 
                 recyclerAdapter.clearAll(); // clear the list
-                for (int i = 0; i < selected.length; i++) { // clear selections. 500.
+                for (int i = 0; i < selected.length; i++) { // clear selections. 500
                     selected[i] = false;
                     truthSelect(i, false);
                     selectedCount = 0;
@@ -648,7 +639,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 //                            defExRecycler.addItemDecoration(dividerItemDecoration); // add the lines
                         }
                     }
-                }, 40 * idx);
+                }, 80 * idx);//used to be 40
             }
             // if only one element, still have to readjust
             if (finalDataSet.size() == 1) {
@@ -678,7 +669,6 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
         return true;
     }
 
-
     // deals with logic relate to user touches in different areas of the screen, including within the frame
     // and outside, in attempt in quit
     // TODO: only TOUCH_SEND is relatively useful here
@@ -698,7 +688,7 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
                 }
             }, REMOVE_DURATION + 50);
 
-
+            finish(); // todo: just finish?
         } else if (source == TOUCH_OUTSIDE) {
             Log.e("touch", "2 touching outside");
             finish();
@@ -769,14 +759,13 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 
             final WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
             final CoordinatorLayout fview = coordinatorLayout;
+
+
+            // todo: readd circle
             final ViewTreeObserver vto = fview.getViewTreeObserver();
             vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
                 @Override
                 public void onGlobalLayout() {
-//                LayerDrawable ld = (LayerDrawable)tv.getBackground();
-//                ld.setLayerInset(1, 0, tv.getHeight() / 2, 0, 0);
-//                ViewTreeObserver obs = tv.getViewTreeObserver();
-
                     ViewUtility.circleRevealExtra(coordinatorLayout, 500);
 //                    ViewUtility.zoomIntoView(coordinatorLayout);
                     Log.e("vto", "circle revealing");
@@ -789,8 +778,6 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 
             });
         }
-
-//        DisplayDefinitionPopupActivity.shouldShowPreviousTypeWordPopup = true; // reset to true, in case
     }
 
     // pass this into adapter to use. TODO: why is this separate from the adapter
@@ -818,7 +805,6 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
 
                     //enable fab
                     fab.requestLayout();
-//                fab.setVisibility(View.VISIBLE);
                     Log.e("selected", "" + selectedCount);
                     if (selectedCount == 1) {
 //                        ViewUtility.circleReveal(fab);
@@ -826,7 +812,6 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
                     }
 
                     Log.e("click", "click @ " + Integer.toString(position));
-
 
                     //animate shading
                     int colorFrom = Color.parseColor(COLOR_NEUTRAL);
@@ -1086,13 +1071,11 @@ public class SearchAndShowActivity extends AppCompatActivity implements PearsonR
         }, 5000);
     }
 
-
     // should only happen after onCreate is called, so recyclerview should not be null
     private void truthSelect(int idx, boolean sel) {
         selected[idx] = sel;
         recyclerAdapter.updateSelect(idx, sel);
     }
-
 
     // android N exclusive
     public void finishReplyInputNotif() { // todo: make centralized with the notification creation in UserVocabActivity

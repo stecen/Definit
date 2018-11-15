@@ -10,11 +10,14 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
+/**
+ * Listens for user to update the clipboard notifying the floating window service to display the app icon
+ **/
 public class ClipboardWatcherService extends Service {
     static boolean isServiceActive = false;
 
     private final String tag = "[[ClipboardWatcherService]] ";
-    private String previousText = ""; // to prevent multiple events listened to :-\
+    private String previousText = ""; // to prevent multiple events listened to :-\ // TODO: use previousText to update UI
     private OnPrimaryClipChangedListener listener = new OnPrimaryClipChangedListener() {
         public void onPrimaryClipChanged() {
             performClipboardCheck();
@@ -56,7 +59,7 @@ public class ClipboardWatcherService extends Service {
                     Log.e("tag", "This word + '" + word + "' contains space(s).");
                 }
 
-                // todo: make sure only has 1 word, make sure actually exists in dict.
+                // TODO: make sure only has 1 word, make sure actually exists in dict
 
                 // call the Messenger-like popup
                 Intent popupIntent = new Intent(ClipboardWatcherService.this, FloatingWindowService.class);

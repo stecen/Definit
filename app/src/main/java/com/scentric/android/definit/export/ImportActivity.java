@@ -21,6 +21,8 @@ import com.scentric.android.definit.sqlite.VocabSQLHelper;
 import java.util.ArrayList;
 
 /**
+ * Allows import of words from other devices
+ *
  * Created by Steven on 9/3/2016.
  */
 public class ImportActivity extends AppCompatActivity {

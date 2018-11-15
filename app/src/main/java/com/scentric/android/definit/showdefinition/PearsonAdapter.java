@@ -201,30 +201,33 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
     public void slideByIdx(int idx) {
         TranslateAnimation translateAnimation = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 20.0f,
                 Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF, 0.0f);
-        translateAnimation.setDuration(SearchAndShowActivity.REMOVE_DURATION + 50);
+        translateAnimation.setDuration(SearchAndShowActivity.REMOVE_DURATION + 250);
+
+        Log.e("slideByIdx", "why");
 
         View rootView = (searchAndShowActivity.defExRecycler.getLayoutManager().findViewByPosition(idx));
         if (rootView != null) {
+            Log.e("rootView", "not null");
             TextView defText = (TextView) rootView.findViewById(R.id.definition_text);
             defText.startAnimation(translateAnimation);
-            defText.setVisibility(View.INVISIBLE);
+//            defText.setVisibility(View.INVISIBLE);
 
             TextView exText = (TextView) rootView.findViewById(R.id.de_example_text);
             if (exText != null) {
                 exText.startAnimation(translateAnimation);
-                exText.setVisibility(View.INVISIBLE);
+//                exText.setVisibility(View.INVISIBLE);
             }
 
             TextView posText = (TextView) rootView.findViewById(R.id.pos_text);
             if (posText != null) {
                 posText.startAnimation(translateAnimation);
-                posText.setVisibility(View.INVISIBLE);
+//                posText.setVisibility(View.INVISIBLE);
             }
 
             TextView headText = (TextView) rootView.findViewById(R.id.wordform_header_text);
             if (headText != null && headText.getVisibility() == View.VISIBLE) {
                 headText.startAnimation(translateAnimation);
-                headText.setVisibility(View.INVISIBLE);
+//                headText.setVisibility(View.INVISIBLE);
             }
         }
 
@@ -257,14 +260,9 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
                 ""
                 : (" (" + sortedPearsonDataSet.get(position).wordForm.trim() + ") "));
 
-//        String abbrev = ((abbr.containsKey(sortedPearsonDataSet.get(position).partOfSpeech)) ?
-//                (" (" + abbr.get(sortedPearsonDataSet.get(position).partOfSpeech.trim()) + ")")
-//                : (" (" + sortedPearsonDataSet.get(position).partOfSpeech + ")"));
         String abbrev = sortedPearsonDataSet.get(position).partOfSpeech.trim(); // lol for now
         String part = ((!(sortedPearsonDataSet.get(position).partOfSpeech.equals("---"))) ? (abbrev) : (""));
 
-
-        String defText = number + form + sortedPearsonDataSet.get(position).definition + part;
         boolean isValid = sortedPearsonDataSet.get(position).definition.trim().equals(PearsonAnswer.DEFAULT_NO_DEFINITION);
 
         String htmlDefText = "<strong> " + ((!isValid) ? number : "") + /*form +*/ "</strong>" + sortedPearsonDataSet.get(position).definition /*+ "<i> " + part + "</i>"*/;
@@ -273,7 +271,6 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
         // new wordformtext
         // if equals mainword, don't show anything
         if (form.equals("")) {
-//            holder.wordformText.setText("wtf");
             holder.wordformText.setVisibility(View.GONE);
         } else {
             holder.wordformText.setVisibility(View.VISIBLE);
@@ -290,8 +287,6 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
             RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
             layoutParams.addRule(RelativeLayout.BELOW, R.id.wordform_header_text);
             int px16 = Math.round(ViewUtility.convertDpToPixel(16, searchAndShowActivity));
-            int px8 = Math.round(ViewUtility.convertDpToPixel(8, searchAndShowActivity));
-//            int px12 = Math.round(ViewUtility.convertDpToPixel(12, searchAndShowActivity));
             layoutParams.setMargins(px16, px16, px16, 0);
             holder.posText.setLayoutParams(layoutParams); // reprogram the margins
             holder.posText.setText(Html.fromHtml("<i>" + part + "</i>"));
@@ -299,7 +294,6 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
 
 
         // if there is a context
-        boolean hasExample = false;
         if (sortedPearsonDataSet.get(position).examples.size() == 0 ||
                 (sortedPearsonDataSet.get(position).examples.get(0).equals(PearsonAnswer.DEFAULT_NO_EXAMPLE))) { // if no example
             ViewGroup parent = ((ViewGroup) (holder.exampleText.getParent()));
@@ -308,15 +302,13 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
             } else {
                 String set = ('"' + sortedPearsonDataSet.get(position).examples.get(0).trim() + '"');
                 holder.exampleText.setText(set);
-                hasExample = true;
             }
         } else {
             String set = ('"' + sortedPearsonDataSet.get(position).examples.get(0).trim() + '"');
             holder.exampleText.setText(set);
-            hasExample = true;
         }
 
-        //todo: fix this viewholder mess  http://androidshenanigans.blogspot.com/2015/02/viewholder-pattern-common-mistakes.html
+        //TODO: fix this viewholder mess  http://androidshenanigans.blogspot.com/2015/02/viewholder-pattern-common-mistakes.html
 //            region holder.exampleText.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View v) {
@@ -325,10 +317,9 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
 //                }
 //            });
 
-        if (sortedPearsonDataSet.get(position).wordForm.trim().equals(mainWord)) { // if they are perfect matches, add more botttom margin
+        if (sortedPearsonDataSet.get(position).wordForm.trim().equals(mainWord)) { // if they are perfect matches, add more bottom margin
 //                setMarginsRelative(0f, 0f, 0f, 200f, holder.defFillerView);
 
-            ///fail
 
             Log.e("equals", "yes "/* + fillerHeight*/);
         } else {
@@ -374,7 +365,6 @@ public class PearsonAdapter extends RecyclerView.Adapter<PearsonAdapter.ViewHold
             if (alphaInt < 0) { // close enough to the actual wor
                  // do nothing
                 if (holder.definitionText != null) {
-//                Log.e("levDis", "setting def alpha " + (.87f) + " " + sortedPearsonDataSet.get(position).wordForm + " vs " + mainWord + "... " + dis);
                 holder.definitionText.setAlpha(.87f);
                 }
                 if (holder.exampleText != null) {

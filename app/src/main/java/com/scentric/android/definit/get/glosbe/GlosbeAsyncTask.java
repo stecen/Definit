@@ -10,7 +10,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.scentric.android.definit.get.sqlite.DictionaryDatabaseHelper;
+//import com.scentric.android.definit.get.sqlite.DictionaryDatabaseHelper;
 import com.scentric.android.definit.settings.PreferencesActivity;
 import com.scentric.android.definit.utility.GlosbePackage;
 import com.scentric.android.definit.utility.PearsonAnswer;
@@ -28,7 +28,6 @@ import java.net.URLEncoder;
 import javax.net.ssl.HttpsURLConnection;
 
 /**
- * Created by Steven on 8/1/2016.
  * <p>
  * <p>
  * <p>
@@ -128,30 +127,30 @@ public class GlosbeAsyncTask extends AsyncTask<String, Void, PearsonAnswer> {
 
     }
 
-    public String getDefinitionLocal(String wordText, Context context) {
-        // Dictionary database
-        DictionaryDatabaseHelper dictDbHelper = new DictionaryDatabaseHelper(context);
-        SQLiteDatabase dictDb = dictDbHelper.getReadableDatabase();
-
-        try {
-            wordText = wordText.toUpperCase();
-            Log.e("db", "wordText = " + wordText);
-            String query = "SELECT * FROM words WHERE word='" + wordText.toUpperCase() + "';";
-            Log.e("db", query);
-            Cursor cursor = dictDb.rawQuery(query, null);
-
-            Log.e("db", "does cursor exist: " + cursor.getCount());
-
-
-            if (cursor.moveToFirst()) {
-                return java.net.URLDecoder.decode(cursor.getString(2), "UTF-8");
-            }
-        } catch (Exception e) {
-            Log.e("db", e.toString());
-        }
-
-        return "";
-    }
+//    public String getDefinitionLocal(String wordText, Context context) {
+//        // Dictionary database
+//        DictionaryDatabaseHelper dictDbHelper = new DictionaryDatabaseHelper(context);
+//        SQLiteDatabase dictDb = dictDbHelper.getReadableDatabase();
+//
+//        try {
+//            wordText = wordText.toUpperCase();
+//            Log.e("db", "wordText = " + wordText);
+//            String query = "SELECT * FROM words WHERE word='" + wordText.toUpperCase() + "';";
+//            Log.e("db", query);
+//            Cursor cursor = dictDb.rawQuery(query, null);
+//
+//            Log.e("db", "does cursor exist: " + cursor.getCount());
+//
+//
+//            if (cursor.moveToFirst()) {
+//                return java.net.URLDecoder.decode(cursor.getString(2), "UTF-8");
+//            }
+//        } catch (Exception e) {
+//            Log.e("db", e.toString());
+//        }
+//
+//        return "";
+//    }
 
 
     public String getDefinitionOnline(String wordText) {
@@ -183,7 +182,7 @@ public class GlosbeAsyncTask extends AsyncTask<String, Void, PearsonAnswer> {
             con.setDoOutput(false);
 
             int rc = con.getResponseCode();
-            Log.d("lol", "response code = " + String.valueOf(rc) + " for " + completeURL);
+            Log.d("glosbe", "response code = " + String.valueOf(rc) + " for " + completeURL);
 
             if (rc == HttpsURLConnection.HTTP_OK) { // http://stackoverflow.com/questions/3432263/java-io-ioexception-server-returned-http-response-code-500
                 StringBuilder sb = new StringBuilder();
@@ -195,7 +194,7 @@ public class GlosbeAsyncTask extends AsyncTask<String, Void, PearsonAnswer> {
                 }
 
                 String jsonString = sb.toString();
-                Log.d("lol", "jsonString: " + jsonString);
+                Log.d("glosbe", "jsonString: " + jsonString);
 
                 // Get the definitions out
                 JSONObject resObj = new JSONObject(jsonString);
@@ -210,7 +209,7 @@ public class GlosbeAsyncTask extends AsyncTask<String, Void, PearsonAnswer> {
                     if (resObj.has("tuc")) { // has a definition
                         JSONArray tuc = resObj.getJSONArray("tuc");
 
-                        Log.d("lol", "tuc count = " + String.valueOf(tuc.length()));
+                        Log.d("glosbe", "tuc count = " + String.valueOf(tuc.length()));
                         if (tuc.length() > 0) {
                             for (int i = 0; i < tuc.length(); i++) {
                                 JSONObject phraseMeaning = tuc.getJSONObject(i);
@@ -219,7 +218,7 @@ public class GlosbeAsyncTask extends AsyncTask<String, Void, PearsonAnswer> {
                                     if (phrase.has("text")) {
                                         String retVal = phrase.getString("text").trim().replace("\"", "").replace("'", "").replace("\\", "");
                                         retVal = retVal.replaceAll("\\[(.*?)\\]", ""); // todo: modularize
-                                        Log.d("lol", "returning (phrase) " + retVal + " for definition of " + wordText);
+                                        Log.d("glosbe", "returning (phrase) " + retVal + " for definition of " + wordText);
                                         return retVal;
                                     }
                                 } else if (phraseMeaning.has("meanings") && !phraseMeaning.isNull("meanings")) {
@@ -263,18 +262,18 @@ public class GlosbeAsyncTask extends AsyncTask<String, Void, PearsonAnswer> {
                     sb.append(line).append("\n");
                 }
 
-                Log.d("lol", "error stream: \n" + sb.toString());
+                Log.d("glosbe", "error stream: \n" + sb.toString());
 
                 throw new IOException();
             }
 
 
         } catch (JSONException e) {
-            Log.d("lol", e.toString());
+            Log.d("glosbe", e.toString());
 
             didFail = true;
         } catch (IOException e) {
-            Log.d("lol", e.toString());
+            Log.d("glosbe", e.toString());
 
             didFail = true;
         } finally {

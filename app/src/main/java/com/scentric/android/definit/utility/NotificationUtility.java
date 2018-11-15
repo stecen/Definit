@@ -7,6 +7,7 @@ import android.app.RemoteInput;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.NotificationCompat;
 
 import com.scentric.android.definit.R;
@@ -39,7 +40,9 @@ public class NotificationUtility {
 //                .addAction(android.R.drawable.arrow_up_float, "Custom", typeWordPendingIntent) // use stop action
                     .setContentIntent(typeWordPendingIntent) // use add pending intent
 //                    .setSmallIcon(R.drawable.definit_icon_bs)
-                    .setSmallIcon(R.drawable.definit_icon)
+//                    .setSmallIcon(R.drawable.definit_icon)
+                    .setSmallIcon(R.drawable.notif)
+//                    .setColor(ContextCompat.getColor(context, R.color.primary)) // todo: fix deprecation
                     .setPriority(Notification.PRIORITY_LOW);
 
 
@@ -80,6 +83,8 @@ public class NotificationUtility {
 
             Notification n = builder.build();
 
+
+
             n.flags = Notification.FLAG_NO_CLEAR | Notification.FLAG_ONGOING_EVENT;
             n.priority = Notification.PRIORITY_MIN;
 
@@ -94,7 +99,9 @@ public class NotificationUtility {
 //                .addAction(android.R.drawable.arrow_up_float, "Custom", typeWordPendingIntent) // use stop action
                     .setContentIntent(typeWordPendingIntent) // use add pending intent
 //                    .setSmallIcon(R.drawable.definit_icon_bs)
-                    .setSmallIcon(R.drawable.definit_icon)
+//                    .setSmallIcon(R.drawable.definit_icon)
+                    .setSmallIcon(R.drawable.notif)
+//                    .setColor(R.color.primary)
                     .setPriority(Notification.PRIORITY_LOW);
 
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {

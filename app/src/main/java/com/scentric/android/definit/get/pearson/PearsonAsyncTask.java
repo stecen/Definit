@@ -24,7 +24,6 @@ import java.net.URLEncoder;
 import javax.net.ssl.HttpsURLConnection;
 
 /**
- * Created by Steven on 8/1/2016.
  * <p>
  * <p>
  * <p>

@@ -25,6 +25,7 @@ import com.scentric.android.definit.utility.RecyclerViewClickListener;
 import java.util.ArrayList;
 
 /**
+ * Secondary tab displaying only favorited words
  * Created by Steven on 8/30/2016.
  */
 public class UserVocabFaveFrag extends Fragment implements RecyclerViewClickListener, FragmentRefresher, FragmentReselected {
@@ -45,13 +46,11 @@ public class UserVocabFaveFrag extends Fragment implements RecyclerViewClickList
         appContext = getActivity().getApplicationContext();
     }
 
-    //Overriden method onCreateView
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
 
-        //Returning the layout file after inflating
-        //Change R.layout.tab1 in you classes
+        // Returning the layout file after inflating
         return inflater.inflate(R.layout.fragment_uservocab_fave, container, false);
     }
 
@@ -66,15 +65,7 @@ public class UserVocabFaveFrag extends Fragment implements RecyclerViewClickList
 
         activityContext = getActivity();
 
-//        dividerItemDecoration = new DividerItemDecoration(appContext);
-
         helper = VocabSQLHelper.getInstance(appContext);
-//        ArrayList<UserVocab> userVocabList = helper.getFaveVocabList();
-//        Log.e("userVocab", "" + userVocabList.size());
-//        adapter = new UserVocabAdapter(userVocabList, this, appContext, true);
-////        recyclerView.addItemDecoration(dividerItemDecoration);
-//        recyclerView.setAdapter(/*new SlideInLeftAnimationAdapter(*/adapter/*)*/);
-////        Log.e("adapter count",""+ adapter.getItemCount());
 
         final RecyclerViewClickListener listener = this;
         helper.getFaveVocabList(new GetAllWordsAsyncInterface() {
@@ -116,9 +107,6 @@ public class UserVocabFaveFrag extends Fragment implements RecyclerViewClickList
 
     @Override
     public void reselect() {
-//        if (linearLayoutManager != null) {
-//            linearLayoutManager.scrollToPosition(0);
-//        }
         if (recyclerView != null) {
             recyclerView.smoothScrollToPosition(0);
         }
@@ -158,14 +146,11 @@ public class UserVocabFaveFrag extends Fragment implements RecyclerViewClickList
         Intent detailIntent = new Intent(appContext, UserDetailsActivity.class);
         dataSet = adapter.sortedDataSet;
 
-
-//        detailIntent.putExtra(UserDetailsActivity.KEY_JSON, userVocabString);
         detailIntent.putExtra(UserDetailsActivity.KEY_POS, position);
         detailIntent.putExtra(UserDetailsActivity.KEY_FAVE, true);
 
         startActivity(detailIntent);
         if (getActivity() != null) {
-//            getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             getActivity().overridePendingTransition(0, 0);
         }
     }

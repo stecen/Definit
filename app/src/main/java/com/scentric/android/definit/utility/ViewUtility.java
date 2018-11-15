@@ -143,6 +143,8 @@ public class ViewUtility {
 
             myView.setVisibility(View.VISIBLE);
 
+
+            //todo: re-enable circle
             // get the center for the clipping circle
             int cx = myView.getMeasuredWidth() / 2;
             int cy = myView.getMeasuredHeight() / 2;

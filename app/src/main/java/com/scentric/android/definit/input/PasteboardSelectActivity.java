@@ -61,23 +61,18 @@ public class PasteboardSelectActivity extends AppCompatActivity {
         BreakIterator tokenIterator = BreakIterator.getWordInstance(Locale.US); // finds word blocks in the textbox
         tokenIterator.setText(pasteStr);
 
-//        int startIdx = tokenIterator.first();
         for (int beginIdx = tokenIterator.first(), endIdx = tokenIterator.next();
                 beginIdx != pasteStr.length();
                 beginIdx = endIdx, endIdx = tokenIterator.next()) {
 
             if (isWordStart(pasteStr.charAt(beginIdx))) {
                 Log.e("paste", String.format("%d, %d -- %d", beginIdx, endIdx, pasteStr.length()));
-//                Log.e("paste", String.format("%c, %c\n", pasteStr.charAt(beginIdx), pasteStr.charAt(endIdx), pasteStr.length()));
                 String clickedWord = pasteStr.substring(beginIdx, endIdx);
                 pasteSpan.setSpan(getClickTokenSpan(clickedWord, origPasteStr, beginIdx), // todo: include endIdx?
                         beginIdx, endIdx, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE);
                 pasteSpan.setSpan(new UnderlineSpan(), beginIdx, endIdx, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }
-
-
-
     }
 
     private boolean isWordStart(char c) {
@@ -179,80 +174,11 @@ public class PasteboardSelectActivity extends AppCompatActivity {
 
             // todo: after viewing the text that the user copied, let them touch individual words to define
             // todo: redefine singletask, singletop -- connect the two activities together
-
-//            pasteText.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    Intent displayDefIntent = new Intent(getApplicationContext(), SearchAndShowActivity.class);
-//                    displayDefIntent.putExtra(SearchAndShowActivity.SENT_TEXT, copiedText);
-////                    displayDefIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                    startActivity(displayDefIntent);
-//                }
-//            });
         }
 
-        //region modify reference (try 2)
 
-//        pasteText.setText("My serendipity depends on the ephemeral disillusionment of the set of floral arrangements.");
-////        pasteText.setMovementMethod(LinkMovementMethod.getInstance());
-//        Spannable spannable = (Spannable) pasteText.getText();
-////        SpannableString ss = new SpannableString("My serendipity depends on the ephemeral disillusionment of the set of floral arrangements.");
-//        ClickableSpan clickableSpan = new ClickableSpan() {
-//            @Override
-//            public void onClick(View textView) {
-//                Log.e("spannable", "clicked:");
-//                Intent displayDefIntent = new Intent(getApplicationContext(), SearchAndShowActivity.class);
-//                displayDefIntent.putExtra(SearchAndShowActivity.SENT_TEXT, "My awesome serendipity depends on the ephemeral disillusionment of the set of floral arrangements.");
-//                startActivity(displayDefIntent);
-//            }
-//            @Override
-//            public void updateDrawState(TextPaint ds) {
-//                super.updateDrawState(ds);
-//                ds.setUnderlineText(false);
-//            }
-//        };
-//        spannable.setSpan(clickableSpan, 0, 28, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        // endregion
-
-        //region set text (try 1)
-
-//        SpannableString ss = new SpannableString("My serendipity depends on the ephemeral disillusionment of the set of floral arrangements.");
-//        ClickableSpan clickableSpan = new ClickableSpan() {
-//            @Override
-//            public void onClick(View textView) {
-//                Log.e("spannable", "clicked:");
-//                Intent displayDefIntent = new Intent(getApplicationContext(), SearchAndShowActivity.class);
-//                displayDefIntent.putExtra(SearchAndShowActivity.SENT_TEXT, "My serendipity depends on the ephemeral disillusionment of the set of floral arrangements.");
-//                startActivity(displayDefIntent);
-//            }
-//            @Override
-//            public void updateDrawState(TextPaint ds) {
-//                super.updateDrawState(ds);
-//                ds.setUnderlineText(false);
-//            }
-//        };
-//        ss.setSpan(clickableSpan, 2, 5, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//
-//        pasteText.setText(ss);
-//        pasteText.setMovementMethod(LinkMovementMethod.getInstance());
-//        pasteText.setHighlightColor(Color.TRANSPARENT);
-
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        if (toolbar != null) {
-//            Log.e("tool", "Setting support toolbar...");
-//            setSupportActionBar(toolbar);
-//            if (getSupportActionBar() != null) {
-//                getSupportActionBar().setDisplayShowTitleEnabled(false);
-//                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-//            }
-//            toolbar.setTitle(null);
-//        }
-
-        // endregion
 
 //        circle animation, to be consistent
-//        final WindowManager windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         final ScrollView fview = (ScrollView) findViewById(R.id.pasteboard_scroll);
         final ViewTreeObserver vto = fview.getViewTreeObserver();
         vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -279,7 +205,7 @@ public class PasteboardSelectActivity extends AppCompatActivity {
         Log.e("measuredHeight", "onResume called " + this.origFrameHeight);
         super.onResume(); // if not, this dialog will not move, which is okay
         frame.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        // NOTE: instead of moveDialog downwords, I just set to wrap content. voila!
+        // NOTE: instead of moveDialog downwords, I just set to wrap content. viola!
 //        if (this.origFrameHeight != BEFORE_DRAWN) {
 //            moveDialog(frameHeightDelta, 0); // animate dialog back into place (assuming this is resuming from the showdefinition activity)
 //        }
@@ -289,6 +215,7 @@ public class PasteboardSelectActivity extends AppCompatActivity {
     // and outside, in attempt in quit
     public void touchHandler(int source) {
         if (source == TOUCH_SEND) {
+            // TODO: special activity for send touch
 //            Log.e("touch", "touched sent " + String.format(Locale.US, "%d, %d", fab.getWidth(), fab.getHeight()));
 //
 //            recyclerAdapter.animateSlidesAndInsertUserVocab();
@@ -304,6 +231,7 @@ public class PasteboardSelectActivity extends AppCompatActivity {
 
 
         } else {
+            // TODO: Beyond outside touch
 //            else if (source == TOUCH_OUTSIDE) {
                 Log.e("touch", "2 touching outside");
                 finish();
@@ -312,7 +240,7 @@ public class PasteboardSelectActivity extends AppCompatActivity {
 
     }
 
-    // adjusting the height of the frame moves the dialog vertically
+    // Adjusting the height of the frame moves the dialog vertically
     // note: I do not need this to reset the frame's height, as I just reset it to wrap_content for now
     private void moveDialog(int from, int to) {
         final View finalFrame = frame;

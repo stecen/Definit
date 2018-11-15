@@ -13,6 +13,8 @@ import com.scentric.android.definit.utility.PearsonAnswer;
 import java.util.ArrayList;
 
 /**
+ * Export words to a format readable to Quizlet
+ *
  * Created by Steven on 9/3/2016.
  */
 public class QuizletExportActivity extends AppCompatActivity /*implements GetAllWordsAsyncInterface*/ {

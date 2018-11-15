@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 /**
+ * Collects speech information from the user, to send to SearchAndShow activity
+ *
  * Created by Steven on 8/21/2016.
  */
 public class RelaySpeechActivity extends Activity {
