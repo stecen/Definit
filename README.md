@@ -1,6 +1,8 @@
 # <img src="imgs/definit.png" height="3%" width="3%"> Definit
 
-Note: I started development of this app, and released it onto the Play Store in 2016, before I found that iOS also had the feature of convenient look-ups -- I realize this iOS feature makes this app seem a bit useless (😟), even though there is no feature to save look-ups and their context, and view look-up history on iOS.
+Note: I started development of this app, and released it onto the Play Store in 2016, before I found that iOS also had the feature of convenient look-ups -- I realize this iOS feature makes this app seem a bit useless (😟), even though there is no feature to save look-ups and their context, and view look-up history on iOS, ie. the design is not made for vocabulary review and growth. 
+
+Currently working on a smarter way to pick out the best definitions based on the context of the word select.
 
 Definit is an native Android app I created out of desire to help myself improve my measly vocabulary. I'd always heard from teachers that one of the best ways to expand one's vocabulary was by reading things and keeping track of the unknown words, and this context-based is what this app aims to automate.
 
